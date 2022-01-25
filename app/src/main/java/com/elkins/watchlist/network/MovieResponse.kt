@@ -1,8 +1,15 @@
 package com.elkins.watchlist.network
 
+import android.util.Log
 import com.elkins.watchlist.model.Movie
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import java.text.ParseException
+import java.text.SimpleDateFormat
+import java.util.*
+
+
+private val inputFormat = SimpleDateFormat("yyyy-MM-dd")
 
 @JsonClass(generateAdapter = false)
 data class MovieResponse (
@@ -22,13 +29,22 @@ data class MovieResponse (
 
     ) {
 
+    private fun parseDate(inDate: String): Date? {
+        try {
+            return inputFormat.parse(inDate)
+        } catch (e: ParseException) {
+            Log.e("Parse", e.message.toString())
+        }
+        return null
+    }
+
     fun toDataBaseModel(): Movie {
         return Movie(
             id = id,
             title = title,
             fullTitle = fullTitle,
             imageUrl = imageUrl,
-            releaseDate = releaseDate,
+            releaseDate = parseDate(releaseDate),
             runtime = runtime,
             plot = plot,
             directors = directors,

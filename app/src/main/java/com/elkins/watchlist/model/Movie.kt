@@ -2,6 +2,7 @@ package com.elkins.watchlist.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.util.*
 
 @Entity(tableName = "movies_table")
 data class Movie(
@@ -9,7 +10,7 @@ data class Movie(
     val title: String,
     val fullTitle: String,
     val imageUrl: String,
-    val releaseDate: String,
+    val releaseDate: Date?,
     val runtime: String,
     val plot: String,
     val directors: String,
