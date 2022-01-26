@@ -15,6 +15,14 @@ class MovieListViewModel(private val repository: MovieRepository) : ViewModel() 
         get() = _movies
 
 
+    // Update a movie if its rating or seen status has changed
+    fun updateMovieScore(newScore: Int, id: String) {
+        viewModelScope.launch {
+            repository.updateMovieScore(newScore, id)
+        }
+    }
+
+
     init {
         viewModelScope.launch {
             // Get movies saved to local database

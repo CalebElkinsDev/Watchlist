@@ -19,6 +19,12 @@ class MovieRepository(private val dataSource: MovieDao) {
         }
     }
 
+    suspend fun updateMovieScore(newScore: Int, id: String) {
+        withContext(Dispatchers.IO) {
+            dataSource.updateMovieScore(newScore, id)
+        }
+    }
+
     suspend fun clear() {
         withContext(Dispatchers.IO) {
             dataSource.clearDatabase()

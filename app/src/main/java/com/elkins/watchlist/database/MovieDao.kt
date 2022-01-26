@@ -19,6 +19,9 @@ interface MovieDao {
     @Query("SELECT * FROM movies_table WHERE id = :id")
     fun getMovie(id: Int): LiveData<Movie>
 
+    @Query("UPDATE movies_table SET userScore=:newScore WHERE id=:id")
+    fun updateMovieScore(newScore: Int, id: String)
+
     @Query("DELETE FROM movies_table WHERE id = :id")
     fun deleteMovie(id: Int)
 

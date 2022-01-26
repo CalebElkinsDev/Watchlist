@@ -8,20 +8,28 @@ import androidx.recyclerview.widget.RecyclerView
 import com.elkins.watchlist.databinding.MovieListItemBinding
 import com.elkins.watchlist.model.Movie
 
-class MovieListAdapter : ListAdapter<Movie, MovieListAdapter.MovieListViewHolder>(MovieDiffCallback()) {
+class MovieListAdapter(private val updateMovieClickListener: UpdateMovieClickListener)
+    : ListAdapter<Movie, MovieListAdapter.MovieListViewHolder>(MovieDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieListViewHolder {
         return MovieListViewHolder.from(parent)
     }
 
     override fun onBindViewHolder(holder: MovieListViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        holder.bind(getItem(position), updateMovieClickListener)
     }
 
     class MovieListViewHolder(private val binding: MovieListItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: Movie) {
+        fun bind(item: Movie, updateMovieClickListener: UpdateMovieClickListener) {
             binding.movie = item
+
+            // Update the user's score for the movie
+            binding.itemRatingBar.setOnRatingBarChangeListener { _, score, _ ->
+                item.userScore = score.toInt()
+                updateMovieClickListener.onClick(item)
+            }
+
             binding.executePendingBindings()
         }
 
@@ -44,7 +52,11 @@ class MovieListAdapter : ListAdapter<Movie, MovieListAdapter.MovieListViewHolder
         }
 
         override fun areContentsTheSame(oldItem: Movie, newItem: Movie): Boolean {
-            return oldItem == newItem
+            return oldItem.id == newItem.id
         }
     }
+}
+
+class UpdateMovieClickListener(val clickListener: (movie: Movie) -> Unit) {
+    fun onClick(movie: Movie) = clickListener(movie)
 }
