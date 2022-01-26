@@ -8,21 +8,24 @@ import androidx.recyclerview.widget.RecyclerView
 import com.elkins.watchlist.databinding.SearchListItemBinding
 import com.elkins.watchlist.network.SearchResult
 
-class SearchResultListAdapter : ListAdapter<SearchResult, SearchResultListAdapter
-        .SearchResultViewHolder>(MovieSearchDiffCallback()) {
+class SearchResultListAdapter(private val clickListener: AddClickListener) : ListAdapter<SearchResult,
+        SearchResultListAdapter.SearchResultViewHolder>(MovieSearchDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchResultViewHolder {
         return SearchResultViewHolder.from(parent)
     }
 
     override fun onBindViewHolder(holder: SearchResultViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        holder.bind(getItem(position), clickListener)
     }
 
     class SearchResultViewHolder(private val binding: SearchListItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: SearchResult) {
+        fun bind(item: SearchResult, clickListener: AddClickListener) {
             binding.movie = item
+            binding.searchItemAddToDatabaseButton.setOnClickListener {
+                clickListener.onClick(item) // Attempt to add item to the repository
+            }
             binding.executePendingBindings()
         }
 
@@ -44,4 +47,9 @@ class SearchResultListAdapter : ListAdapter<SearchResult, SearchResultListAdapte
             return oldItem == newItem
         }
     }
+
+
+}
+class AddClickListener(val clickListener: (searchResult: SearchResult) -> Unit) {
+    fun onClick(searchResult: SearchResult) = clickListener(searchResult)
 }

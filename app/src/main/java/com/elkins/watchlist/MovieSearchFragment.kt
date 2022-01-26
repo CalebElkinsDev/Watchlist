@@ -1,6 +1,7 @@
 package com.elkins.watchlist
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -33,7 +34,11 @@ class MovieSearchFragment() : Fragment() {
         binding.lifecycleOwner = this
 
         // Create and assign a new adapter for the search results list
-        val adapter = SearchResultListAdapter()
+        val adapter = SearchResultListAdapter(AddClickListener {
+            Log.d("Click", "Search Result: ${it}")
+            viewModel.addMovieToRepository(it)
+        })
+
         binding.searchResultsRecycler.adapter = adapter
 
         // Update the recycler view once the search response returns
@@ -46,7 +51,9 @@ class MovieSearchFragment() : Fragment() {
         // Testing for search bar
         binding.searchSearchButton.setOnClickListener {
             val searchString = binding.searchSearchEditText.text.toString()
-            viewModel.searchForMovie(searchString)
+            if(searchString.isNotBlank()) {
+                viewModel.searchForMovie(searchString)
+            }
         }
 
         return binding.root

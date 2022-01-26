@@ -26,8 +26,8 @@ data class MovieResponse (
     @Json(name = "stars") val stars: String,
     @Json(name = "genres") val genres: String,
     @Json(name = "contentRating") val contentRating: String,
-    @Json(name = "imDbRating") val imdbRating: Double,
-    @Json(name = "metacriticRating") val metacriticRating: Int
+    @Json(name = "imDbRating") val imdbRating: String,
+    @Json(name = "metacriticRating") val metacriticRating: String
 
     ) {
 

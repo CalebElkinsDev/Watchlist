@@ -31,6 +31,9 @@ interface ApiServices {
     @GET("SearchMovie/$API_KEY/{search}")
     suspend fun searchForMovie(@Path("search") search: String) : SearchResponse
 
+    @GET("Title/$API_KEY/{id}")
+    suspend fun getMovieFromId(@Path("id") id: String) : MovieResponse
+
     // https://imdb-api.com/en/API/SearchMovie/k_akzini69/inception 2010
 }
 
