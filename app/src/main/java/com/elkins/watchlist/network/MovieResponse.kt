@@ -9,7 +9,9 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-private val inputFormat = SimpleDateFormat("yyyy-MM-dd")
+private val inputFormat by lazy {
+    SimpleDateFormat("yyyy-MM-dd")
+}
 
 @JsonClass(generateAdapter = false)
 data class MovieResponse (

@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.elkins.watchlist.database.MovieDatabase
 import com.elkins.watchlist.databinding.FragmentMovieListBinding
 
@@ -42,7 +43,17 @@ class MovieListFragment : Fragment() {
             }
         })
 
+
+        binding.listAddNewMovieButton.setOnClickListener {
+            openNewMovieSearchFragment()
+        }
+
         return binding.root
     }
 
+
+    private fun openNewMovieSearchFragment() {
+        findNavController().navigate(MovieListFragmentDirections
+            .actionMovieListFragmentToMovieSearchFragment())
+    }
 }
