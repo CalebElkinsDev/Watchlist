@@ -30,7 +30,7 @@ class MovieListFragment : Fragment() {
         val viewModelFactory = MovieListViewModelFactory(repository)
         viewModel = ViewModelProvider(this, viewModelFactory).get(MovieListViewModel::class.java)
 
-        binding.lifecycleOwner = this
+        binding.lifecycleOwner = viewLifecycleOwner
 
         // Create and assign a new adapter for the saved movie list
         val adapter = MovieListAdapter(UpdateMovieClickListener {

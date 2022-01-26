@@ -31,11 +31,11 @@ class MovieSearchFragment() : Fragment() {
         val viewModelFactory = MovieSearchViewModelFactory(repository)
         viewModel = ViewModelProvider(this, viewModelFactory).get(MovieSearchViewModel::class.java)
 
-        binding.lifecycleOwner = this
+        binding.lifecycleOwner = viewLifecycleOwner
 
         // Create and assign a new adapter for the search results list
         val adapter = SearchResultListAdapter(AddClickListener {
-            Log.d("Click", "Search Result: ${it}")
+            Log.d("Click", "Search Result: $it")
             viewModel.addMovieToRepository(it)
         })
 
