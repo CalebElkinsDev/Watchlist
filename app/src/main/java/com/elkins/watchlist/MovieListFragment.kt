@@ -1,20 +1,24 @@
 package com.elkins.watchlist
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.elkins.watchlist.MovieRepository.MovieFilter
 import com.elkins.watchlist.database.MovieDatabase
 import com.elkins.watchlist.databinding.FragmentMovieListBinding
 
 
 class MovieListFragment : Fragment() {
 
-    private lateinit var binding: FragmentMovieListBinding
+    lateinit var binding: FragmentMovieListBinding
     private lateinit var viewModel: MovieListViewModel
 
     override fun onCreateView(
@@ -28,7 +32,7 @@ class MovieListFragment : Fragment() {
         val database = MovieDatabase.getInstance(requireContext())
         val repository = MovieRepository(database.movieDao)
         val viewModelFactory = MovieListViewModelFactory(repository)
-        viewModel = ViewModelProvider(this, viewModelFactory).get(MovieListViewModel::class.java)
+        viewModel = ViewModelProvider(requireActivity(), viewModelFactory).get(MovieListViewModel::class.java)
 
         binding.lifecycleOwner = viewLifecycleOwner
 
@@ -45,12 +49,46 @@ class MovieListFragment : Fragment() {
         viewModel.movies.observe(viewLifecycleOwner, { movies ->
             if(movies != null) {
                 adapter.submitList(movies)
+                Log.d("Filter", "observe data change")
             }
         })
 
         binding.listAddNewMovieButton.setOnClickListener {
             openNewMovieSearchFragment()
         }
+
+        /* Setup spinners for filtering and sorting the list */
+        val filterAdapter = ArrayAdapter.createFromResource(requireContext(),
+            R.array.filter_types,
+            android.R.layout.simple_spinner_item).also {
+                it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        }
+        binding.listFilterSpinner.adapter = filterAdapter
+        binding.listFilterSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parentView: AdapterView<*>?, selectedItemView: View?,
+                                        position: Int, id: Long) {
+                Log.d("Filter", "Filter Changed: pos = $position")
+                val filter = when(position) {
+                    0 -> MovieFilter.ALL
+                    1 -> MovieFilter.UNSEEN
+                    else -> MovieFilter.SEEN
+                }
+                viewModel.updateFilter(filter)
+            }
+
+            override fun onNothingSelected(parentView: AdapterView<*>?) {
+                // your code here
+            }
+        }
+
+
+        val sortAdapter = ArrayAdapter.createFromResource(requireContext(),
+            R.array.sort_type,
+            android.R.layout.simple_spinner_item).also {
+                it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        }
+        binding.listTypeSpinner.adapter = sortAdapter
+
 
         return binding.root
     }

@@ -20,6 +20,11 @@ class MovieListViewModel(private val repository: MovieRepository) : ViewModel() 
     val movies: LiveData<List<Movie>>
         get() = _movies
 
+
+    init {
+        getMovies() // Get filter, sort, and order from user preferences
+    }
+
     // Update a movie if its rating or seen status has changed
     fun updateMovieScore(newScore: Int, id: String) {
         viewModelScope.launch {
@@ -33,14 +38,29 @@ class MovieListViewModel(private val repository: MovieRepository) : ViewModel() 
         }
     }
 
-
-    init {
-        // Get filter, sort, and order from user preferences
-
+    private fun getMovies() {
         viewModelScope.launch {
             // Get movies saved to local database
-            _movies = repository.getMovies(currentMovieFilter, currentSortType, sortAscending)
+            //_movies = repository.getMovies(currentMovieFilter, currentSortType, sortAscending)
+            _movies = repository.getMovies(currentMovieFilter)
         }
+    }
+
+    fun updateFilter(newFilter: MovieFilter) {
+        viewModelScope.launch {
+            currentMovieFilter = newFilter
+            getMovies()
+        }
+    }
+
+    fun updateSortType(newSort: SortType) {
+        currentSortType = newSort
+        getMovies()
+    }
+
+    fun updateSortOrder(sortAscending: Boolean) {
+        this.sortAscending = sortAscending
+        getMovies()
     }
 }
 

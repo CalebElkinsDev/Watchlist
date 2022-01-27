@@ -1,7 +1,18 @@
 <resources>
-    <string name="app_name">Watchlist</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="app_name">Watch List</string>
 
     <string name="api_key">k_akzini69</string>
+
+    <string-array name="filter_types">
+        <item>All</item>
+        <item>Not seen</item>
+        <item>Seen</item>
+    </string-array>
+
+    <string-array name="sort_type">
+        <item>Title</item>
+        <item>Release Date</item>
+        <item>Date Added</item>
+    </string-array>
+
 </resources>
