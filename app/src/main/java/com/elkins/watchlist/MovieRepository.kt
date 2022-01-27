@@ -25,6 +25,12 @@ class MovieRepository(private val dataSource: MovieDao) {
         }
     }
 
+    suspend fun updateFollowingMovie(following: Boolean, id: String) {
+        withContext(Dispatchers.IO) {
+            dataSource.updateFollowingMovie(following, id)
+        }
+    }
+
     suspend fun clear() {
         withContext(Dispatchers.IO) {
             dataSource.clearDatabase()

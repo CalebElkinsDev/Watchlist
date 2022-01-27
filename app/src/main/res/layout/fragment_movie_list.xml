@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".MovieListFragment"
-        android:background="@drawable/curtains">
+        android:background="@color/black">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/movieListRecycler"

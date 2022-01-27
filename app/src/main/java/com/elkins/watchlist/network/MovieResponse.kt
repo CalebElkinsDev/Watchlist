@@ -15,19 +15,19 @@ private val inputFormat by lazy {
 
 @JsonClass(generateAdapter = false)
 data class MovieResponse (
-    @Json(name = "id") val id: String,
-    @Json(name = "title") val title: String,
-    @Json(name = "fullTitle") val fullTitle: String,
+    val id: String,
+    val title: String,
+    val fullTitle: String,
     @Json(name = "image") val imageUrl: String,
-    @Json(name = "releaseDate") val releaseDate: String,
+    val releaseDate: String,
     @Json(name = "runtimeStr") val runtime: String,
-    @Json(name = "plot") val plot: String,
-    @Json(name = "directors") val directors: String,
-    @Json(name = "stars") val stars: String,
-    @Json(name = "genres") val genres: String,
-    @Json(name = "contentRating") val contentRating: String,
+    val plot: String,
+    val directors: String,
+    val stars: String,
+    val genres: String,
+    val contentRating: String,
     @Json(name = "imDbRating") val imdbRating: String,
-    @Json(name = "metacriticRating") val metacriticRating: String
+    val metacriticRating: String
 
     ) {
 

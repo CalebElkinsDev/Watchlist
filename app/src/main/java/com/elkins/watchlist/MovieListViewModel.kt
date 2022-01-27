@@ -22,6 +22,12 @@ class MovieListViewModel(private val repository: MovieRepository) : ViewModel() 
         }
     }
 
+    fun updateFollowingMovie(following: Boolean, id: String) {
+        viewModelScope.launch {
+            repository.updateFollowingMovie(following, id)
+        }
+    }
+
 
     init {
         viewModelScope.launch {

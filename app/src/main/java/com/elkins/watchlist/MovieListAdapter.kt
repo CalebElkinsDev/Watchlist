@@ -8,7 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.elkins.watchlist.databinding.MovieListItemBinding
 import com.elkins.watchlist.model.Movie
 
-class MovieListAdapter(private val updateMovieClickListener: UpdateMovieClickListener)
+class MovieListAdapter(private val updateScoreListener: UpdateMovieClickListener,
+                       private val updateFollowingListener: UpdateMovieClickListener)
     : ListAdapter<Movie, MovieListAdapter.MovieListViewHolder>(MovieDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieListViewHolder {
@@ -16,18 +17,24 @@ class MovieListAdapter(private val updateMovieClickListener: UpdateMovieClickLis
     }
 
     override fun onBindViewHolder(holder: MovieListViewHolder, position: Int) {
-        holder.bind(getItem(position), updateMovieClickListener)
+        holder.bind(getItem(position), updateScoreListener, updateFollowingListener)
     }
 
     class MovieListViewHolder(private val binding: MovieListItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: Movie, updateMovieClickListener: UpdateMovieClickListener) {
+        fun bind(item: Movie, updateScoreListener: UpdateMovieClickListener,
+                 updateFollowingListener: UpdateMovieClickListener) {
             binding.movie = item
 
             // Update the user's score for the movie
             binding.itemRatingBar.setOnRatingBarChangeListener { _, score, _ ->
                 item.userScore = score.toInt()
-                updateMovieClickListener.onClick(item)
+                updateScoreListener.onClick(item)
+            }
+
+            binding.itemSeenCheckBox.setOnCheckedChangeListener { _, checked ->
+                item.following = checked
+                updateFollowingListener.onClick(item)
             }
 
             binding.executePendingBindings()
@@ -48,7 +55,6 @@ class MovieListAdapter(private val updateMovieClickListener: UpdateMovieClickLis
         override fun areItemsTheSame(oldItem: Movie, newItem: Movie): Boolean {
             // Compare the Imdb Id used as the primary key
             return oldItem.id == newItem.id
-
         }
 
         override fun areContentsTheSame(oldItem: Movie, newItem: Movie): Boolean {
