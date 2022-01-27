@@ -27,10 +27,6 @@ class MovieListViewModel(private val repository: MovieRepository) : ViewModel() 
         viewModelScope.launch {
             // Get movies saved to local database
             _movies = repository.getMovies()
-
-//            val response: MovieResponse = retrofitService.getInception()
-//            Log.d("Network", "Response: = $response")
-//            repository.addMovie(response.toDataBaseModel())
         }
     }
 }

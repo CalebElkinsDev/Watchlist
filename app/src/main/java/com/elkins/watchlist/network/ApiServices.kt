@@ -13,8 +13,7 @@ private const val BASE_URL = "https://imdb-api.com/en/API/"
 private const val API_KEY = "k_akzini69"
 
 private val moshi = Moshi.Builder()
-    //.add(Date::class.java, Rfc3339DateJsonAdapter())
-    .add(KotlinJsonAdapterFactory())
+    .addLast(KotlinJsonAdapterFactory())
     .build()
 
 private val retrofit = Retrofit.Builder()
@@ -25,16 +24,11 @@ private val retrofit = Retrofit.Builder()
 
 interface ApiServices {
 
-    @GET("Title/k_akzini69/tt1375666")
-    suspend fun getInception() : MovieResponse
-
     @GET("SearchMovie/$API_KEY/{search}")
     suspend fun searchForMovie(@Path("search") search: String) : SearchResponse
 
     @GET("Title/$API_KEY/{id}")
     suspend fun getMovieFromId(@Path("id") id: String) : MovieResponse
-
-    // https://imdb-api.com/en/API/SearchMovie/k_akzini69/inception 2010
 }
 
 object ImdbApi {

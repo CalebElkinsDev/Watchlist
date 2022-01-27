@@ -19,10 +19,8 @@ class MovieSearchViewModel(private val repository: MovieRepository) : ViewModel(
 
     fun searchForMovie(searchString: String) {
         viewModelScope.launch {
-            // Get movies saved to local database
             val response = retrofitService.searchForMovie(searchString)
             _results.value = response
-
             Log.d("Network", "Response: Search=${response.expression}, results=${response.results.size}")
         }
     }

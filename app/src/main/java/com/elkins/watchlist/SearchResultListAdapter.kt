@@ -47,9 +47,8 @@ class SearchResultListAdapter(private val clickListener: AddClickListener) : Lis
             return oldItem == newItem
         }
     }
-
-
 }
+
 class AddClickListener(val clickListener: (searchResult: SearchResult) -> Unit) {
     fun onClick(searchResult: SearchResult) = clickListener(searchResult)
 }
