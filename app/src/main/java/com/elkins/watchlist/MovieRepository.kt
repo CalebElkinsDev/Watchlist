@@ -22,7 +22,8 @@ class MovieRepository(private val dataSource: MovieDao) {
                                             else dataSource.getAllMovies_Title_DESC()
                 SortType.RELEASE_DATE -> if(sortAscending) dataSource.getAllMovies_ReleaseDate_ASC()
                                             else dataSource.getAllMovies_ReleaseDate_DESC()
-                SortType.DATE_ADDED -> TODO()
+                SortType.DATE_ADDED -> if(sortAscending) dataSource.getAllMovies_DateAdded_ASC()
+                                             else dataSource.getAllMovies_DateAdded_DESC()
             }
 
             MovieFilter.UNSEEN -> when(sortType) {
@@ -30,7 +31,8 @@ class MovieRepository(private val dataSource: MovieDao) {
                                             else dataSource.getUnseenMovies_Title_DESC()
                 SortType.RELEASE_DATE -> if(sortAscending) dataSource.getUnseenMovies_ReleaseDate_ASC()
                                             else dataSource.getUnseenMovies_ReleaseDate_DESC()
-                SortType.DATE_ADDED -> TODO()
+                SortType.DATE_ADDED -> if(sortAscending) dataSource.getUnseenMovies_DateAdded_ASC()
+                                            else dataSource.getUnseenMovies_DateAdded_DESC()
             }
 
             MovieFilter.SEEN -> when(sortType) {
@@ -38,10 +40,10 @@ class MovieRepository(private val dataSource: MovieDao) {
                                             else dataSource.getSeenMovies_Title_DESC()
                 SortType.RELEASE_DATE -> if (sortAscending) dataSource.getSeenMovies_ReleaseDate_ASC()
                                             else dataSource.getSeenMovies_ReleaseDate_DESC()
-                SortType.DATE_ADDED -> TODO()
+                SortType.DATE_ADDED -> if(sortAscending) dataSource.getSeenMovies_DateAdded_ASC()
+                                            else dataSource.getSeenMovies_DateAdded_DESC()
             }
         }
-
     }
 
     suspend fun addMovie(movie: Movie) {

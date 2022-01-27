@@ -20,6 +20,7 @@ data class Movie(
     val imdbRating: String = "N/A", // TODO Convert ratings to numeric types with custom moshi adapters
     val metacriticRating: String = "N/A",
 
+    var dateAdded: Date? = null,
     var haveSeen: Boolean = false,
     var following: Boolean = false,
     var userScore: Int = 0

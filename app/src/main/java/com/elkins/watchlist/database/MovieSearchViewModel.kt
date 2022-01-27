@@ -8,6 +8,7 @@ import com.elkins.watchlist.network.MovieResponse
 import com.elkins.watchlist.network.SearchResponse
 import com.elkins.watchlist.network.SearchResult
 import kotlinx.coroutines.launch
+import java.util.*
 
 class MovieSearchViewModel(private val repository: MovieRepository) : ViewModel() {
 
@@ -29,7 +30,9 @@ class MovieSearchViewModel(private val repository: MovieRepository) : ViewModel(
         viewModelScope.launch {
             val response: MovieResponse = retrofitService.getMovieFromId(searchResult.id)
             Log.d("Network", "Response: = $response")
-            repository.addMovie(response.toDataBaseModel())
+            val newMovie = response.toDataBaseModel() // Convert network object to database model
+            newMovie.dateAdded = Calendar.getInstance().time // Set the dateAdded to be the current time
+            repository.addMovie(newMovie) // Add the new movie to the repo after setting the time
         }
     }
 }

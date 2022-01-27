@@ -27,6 +27,12 @@ interface MovieDao {
     @Query("SELECT * FROM movies_table ORDER BY releaseDate DESC")
     fun getAllMovies_ReleaseDate_DESC(): LiveData<List<Movie>>
 
+    @Query("SELECT * FROM movies_table ORDER BY dateAdded")
+    fun getAllMovies_DateAdded_ASC(): LiveData<List<Movie>>
+
+    @Query("SELECT * FROM movies_table ORDER BY dateAdded DESC")
+    fun getAllMovies_DateAdded_DESC(): LiveData<List<Movie>>
+
 
     /* Queries for getting unseen movies */
     @Query("SELECT * FROM movies_table WHERE haveSeen = 0 ORDER BY title")
@@ -40,6 +46,12 @@ interface MovieDao {
 
     @Query("SELECT * FROM movies_table WHERE haveSeen = 0 ORDER BY releaseDate DESC")
     fun getUnseenMovies_ReleaseDate_DESC(): LiveData<List<Movie>>
+
+    @Query("SELECT * FROM movies_table WHERE haveSeen = 0 ORDER BY dateAdded")
+    fun getUnseenMovies_DateAdded_ASC(): LiveData<List<Movie>>
+
+    @Query("SELECT * FROM movies_table WHERE haveSeen = 0 ORDER BY dateAdded DESC")
+    fun getUnseenMovies_DateAdded_DESC(): LiveData<List<Movie>>
 
 
     /* Queries for getting seen movies */
@@ -55,6 +67,11 @@ interface MovieDao {
     @Query("SELECT * FROM movies_table WHERE haveSeen = 1 ORDER BY releaseDate DESC")
     fun getSeenMovies_ReleaseDate_DESC(): LiveData<List<Movie>>
 
+    @Query("SELECT * FROM movies_table WHERE haveSeen = 1 ORDER BY dateAdded")
+    fun getSeenMovies_DateAdded_ASC(): LiveData<List<Movie>>
+
+    @Query("SELECT * FROM movies_table WHERE haveSeen = 1 ORDER BY dateAdded DESC")
+    fun getSeenMovies_DateAdded_DESC(): LiveData<List<Movie>>
 
 
 
