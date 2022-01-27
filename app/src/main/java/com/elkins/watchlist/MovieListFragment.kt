@@ -36,7 +36,7 @@ class MovieListFragment : Fragment() {
         val adapter = MovieListAdapter(UpdateMovieClickListener {
             viewModel.updateMovieScore(it.userScore, it.id)
         }, UpdateMovieClickListener {
-            viewModel.updateFollowingMovie(it.following, it.id)
+            viewModel.updateHaveSeenMovie(it.haveSeen, it.id)
         })
 
         binding.movieListRecycler.adapter = adapter

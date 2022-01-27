@@ -9,8 +9,39 @@ import kotlinx.coroutines.withContext
 // Mediator between the user and the local database.
 class MovieRepository(private val dataSource: MovieDao) {
 
-    fun getMovies(): LiveData<List<Movie>> {
-        return dataSource.getMovies()
+    enum class SortType { TITLE, RELEASE_DATE, DATE_ADDED}
+    enum class MovieFilter { ALL, UNSEEN, SEEN}
+
+    fun getMovies(filter: MovieFilter = MovieFilter.ALL,
+                  sortType: SortType = SortType.TITLE,
+                  sortAscending: Boolean = true): LiveData<List<Movie>> {
+
+        return when(filter) {
+            MovieFilter.ALL -> when(sortType) {
+                SortType.TITLE -> if(sortAscending) dataSource.getAllMovies_Title_ASC()
+                                            else dataSource.getAllMovies_Title_DESC()
+                SortType.RELEASE_DATE -> if(sortAscending) dataSource.getAllMovies_ReleaseDate_ASC()
+                                            else dataSource.getAllMovies_ReleaseDate_DESC()
+                SortType.DATE_ADDED -> TODO()
+            }
+
+            MovieFilter.UNSEEN -> when(sortType) {
+                SortType.TITLE -> if(sortAscending) dataSource.getUnseenMovies_Title_ASC()
+                                            else dataSource.getUnseenMovies_Title_DESC()
+                SortType.RELEASE_DATE -> if(sortAscending) dataSource.getUnseenMovies_ReleaseDate_ASC()
+                                            else dataSource.getUnseenMovies_ReleaseDate_DESC()
+                SortType.DATE_ADDED -> TODO()
+            }
+
+            MovieFilter.SEEN -> when(sortType) {
+                SortType.TITLE -> if (sortAscending) dataSource.getSeenMovies_Title_ASC()
+                                            else dataSource.getSeenMovies_Title_DESC()
+                SortType.RELEASE_DATE -> if (sortAscending) dataSource.getSeenMovies_ReleaseDate_ASC()
+                                            else dataSource.getSeenMovies_ReleaseDate_DESC()
+                SortType.DATE_ADDED -> TODO()
+            }
+        }
+
     }
 
     suspend fun addMovie(movie: Movie) {
@@ -25,9 +56,9 @@ class MovieRepository(private val dataSource: MovieDao) {
         }
     }
 
-    suspend fun updateFollowingMovie(following: Boolean, id: String) {
+    suspend fun updateHaveSeenMovie(haveSeen: Boolean, id: String) {
         withContext(Dispatchers.IO) {
-            dataSource.updateFollowingMovie(following, id)
+            dataSource.updateHaveSeenMovie(haveSeen, id)
         }
     }
 

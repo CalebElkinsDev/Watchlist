@@ -4,16 +4,21 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.elkins.watchlist.MovieRepository.MovieFilter
+import com.elkins.watchlist.MovieRepository.SortType
 import com.elkins.watchlist.model.Movie
 import kotlinx.coroutines.launch
 
 class MovieListViewModel(private val repository: MovieRepository) : ViewModel() {
 
+    var currentSortType: SortType = SortType.TITLE
+    var currentMovieFilter: MovieFilter = MovieFilter.ALL
+    var sortAscending: Boolean = true
+
     // Live data list of movies from the local database
     private lateinit var _movies: LiveData<List<Movie>>
     val movies: LiveData<List<Movie>>
         get() = _movies
-
 
     // Update a movie if its rating or seen status has changed
     fun updateMovieScore(newScore: Int, id: String) {
@@ -22,17 +27,19 @@ class MovieListViewModel(private val repository: MovieRepository) : ViewModel() 
         }
     }
 
-    fun updateFollowingMovie(following: Boolean, id: String) {
+    fun updateHaveSeenMovie(following: Boolean, id: String) {
         viewModelScope.launch {
-            repository.updateFollowingMovie(following, id)
+            repository.updateHaveSeenMovie(following, id)
         }
     }
 
 
     init {
+        // Get filter, sort, and order from user preferences
+
         viewModelScope.launch {
             // Get movies saved to local database
-            _movies = repository.getMovies()
+            _movies = repository.getMovies(currentMovieFilter, currentSortType, sortAscending)
         }
     }
 }

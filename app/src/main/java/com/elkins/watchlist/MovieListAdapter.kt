@@ -33,7 +33,7 @@ class MovieListAdapter(private val updateScoreListener: UpdateMovieClickListener
             }
 
             binding.itemSeenCheckBox.setOnCheckedChangeListener { _, checked ->
-                item.following = checked
+                item.haveSeen = checked
                 updateFollowingListener.onClick(item)
             }
 
