@@ -85,7 +85,7 @@ interface MovieDao {
     fun updateHaveSeenMovie(haveSeen: Boolean, id: String)
 
     @Query("DELETE FROM movies_table WHERE id = :id")
-    fun deleteMovie(id: Int)
+    fun deleteMovie(id: String)
 
     @Query("DELETE FROM movies_table")
     fun clearDatabase()

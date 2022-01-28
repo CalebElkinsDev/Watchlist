@@ -64,6 +64,12 @@ class MovieRepository(private val dataSource: MovieDao) {
         }
     }
 
+    suspend fun deleteMovie(id: String) {
+        withContext(Dispatchers.IO) {
+            dataSource.deleteMovie(id)
+        }
+    }
+
     suspend fun clear() {
         withContext(Dispatchers.IO) {
             dataSource.clearDatabase()

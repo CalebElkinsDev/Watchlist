@@ -11,14 +11,16 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import com.elkins.watchlist.MovieRepository.MovieFilter
 import com.elkins.watchlist.database.MovieDatabase
 import com.elkins.watchlist.databinding.FragmentMovieListBinding
+import com.elkins.watchlist.utility.SwipeMovieCallback
 
 
 class MovieListFragment : Fragment() {
 
-    lateinit var binding: FragmentMovieListBinding
+    private lateinit var binding: FragmentMovieListBinding
     private lateinit var viewModel: MovieListViewModel
 
     override fun onCreateView(
@@ -27,6 +29,7 @@ class MovieListFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_movie_list, container, false)
+        binding.lifecycleOwner = viewLifecycleOwner
 
         // Get a reference to the database and setup the viewmodel with the dao
         val database = MovieDatabase.getInstance(requireContext())
@@ -34,16 +37,16 @@ class MovieListFragment : Fragment() {
         val viewModelFactory = MovieListViewModelFactory(repository)
         viewModel = ViewModelProvider(requireActivity(), viewModelFactory).get(MovieListViewModel::class.java)
 
-        binding.lifecycleOwner = viewLifecycleOwner
-
         // Create and assign a new adapter for the saved movie list
-        val adapter = MovieListAdapter(UpdateMovieClickListener {
-            viewModel.updateMovieScore(it.userScore, it.id)
-        }, UpdateMovieClickListener {
-            viewModel.updateHaveSeenMovie(it.haveSeen, it.id)
-        })
+        val adapter = MovieListAdapter(UpdateMovieClickListener { viewModel.updateMovieScore(it.userScore, it.id) },
+            UpdateMovieClickListener {viewModel.updateHaveSeenMovie(it.haveSeen, it.id) })
 
+        // Assign the list adapter to the recycler view
         binding.movieListRecycler.adapter = adapter
+
+        // Create a callback for deleting movies when swiped
+        val swipeCallback = ItemTouchHelper(SwipeMovieCallback(adapter, repository))
+        swipeCallback.attachToRecyclerView(binding.movieListRecycler)
 
         // Observe the viewmodel's movie list and submit it to the adapter when changed
         viewModel.movies.observe(viewLifecycleOwner, { movies ->
@@ -53,21 +56,28 @@ class MovieListFragment : Fragment() {
             }
         })
 
+        // Navigate to Movie Search fragment when FAB is clicked
         binding.listAddNewMovieButton.setOnClickListener {
             openNewMovieSearchFragment()
         }
 
         /* Setup spinners for filtering and sorting the list */
+        initializeFilterSpinner()
+        initializeSortSpinner()
+
+        return binding.root
+    }
+
+    private fun initializeFilterSpinner() {
         val filterAdapter = ArrayAdapter.createFromResource(requireContext(),
             R.array.filter_types,
             android.R.layout.simple_spinner_item).also {
-                it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         }
         binding.listFilterSpinner.adapter = filterAdapter
         binding.listFilterSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parentView: AdapterView<*>?, selectedItemView: View?,
                                         position: Int, id: Long) {
-                Log.d("Filter", "Filter Changed: pos = $position")
                 val filter = when(position) {
                     0 -> MovieFilter.ALL
                     1 -> MovieFilter.UNSEEN
@@ -76,23 +86,18 @@ class MovieListFragment : Fragment() {
                 viewModel.updateFilter(filter)
             }
 
-            override fun onNothingSelected(parentView: AdapterView<*>?) {
-                // your code here
-            }
+            override fun onNothingSelected(parentView: AdapterView<*>?) {}
         }
+    }
 
-
+    private fun initializeSortSpinner() {
         val sortAdapter = ArrayAdapter.createFromResource(requireContext(),
             R.array.sort_type,
             android.R.layout.simple_spinner_item).also {
-                it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         }
         binding.listTypeSpinner.adapter = sortAdapter
-
-
-        return binding.root
     }
-
 
     private fun openNewMovieSearchFragment() {
         findNavController().navigate(MovieListFragmentDirections
