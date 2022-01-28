@@ -10,7 +10,7 @@ import java.util.*
 
 private const val DATABASE_NAME = "movie_database"
 
-@Database(entities = [Movie::class], version = 9, exportSchema = false)
+@Database(entities = [Movie::class], version = 10, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class MovieDatabase : RoomDatabase() {
 
@@ -47,7 +47,11 @@ class Converters {
 
     @TypeConverter
     fun fromDate(value: Date?): String {
-        return inputFormat.format(value)
+        if(value != null) {
+            return inputFormat.format(value)
+        } else {
+            return "N/A"
+        }
     }
 
     @TypeConverter
@@ -56,7 +60,7 @@ class Converters {
             return inputFormat.parse(value)
         } catch (e: ParseException) {
             Log.e("Parse", e.message.toString())
+            return null
         }
-        return null
     }
 }
