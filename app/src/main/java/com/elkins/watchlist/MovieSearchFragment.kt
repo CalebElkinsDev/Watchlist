@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -16,6 +17,9 @@ import com.elkins.watchlist.database.MovieDatabase
 import com.elkins.watchlist.database.MovieSearchViewModel
 import com.elkins.watchlist.database.MovieSearchViewModelFactory
 import com.elkins.watchlist.databinding.FragmentMovieSearchBinding
+import com.elkins.watchlist.network.SearchResponse
+import com.elkins.watchlist.utility.Resource
+import com.elkins.watchlist.utility.Status
 
 
 class MovieSearchFragment() : Fragment() {
@@ -47,12 +51,9 @@ class MovieSearchFragment() : Fragment() {
 
         binding.searchResultsRecycler.adapter = searchAdapter
 
-        // Update the recycler view once the search response returns
-        viewModel.results.observe(viewLifecycleOwner, { searchResponse ->
-            if(searchResponse.results.isNotEmpty()) {
-                binding.loadingBar.visibility = View.INVISIBLE
-                searchAdapter.submitList(searchResponse.results)
-            }
+        // Observe the Resource ive data of the view model
+        viewModel.results.observe(viewLifecycleOwner, { resource ->
+            handleResourceSearchResponses(resource)
         })
 
         // Begin searching and hide the keyboard if it is visible
@@ -70,6 +71,32 @@ class MovieSearchFragment() : Fragment() {
         }
 
         return binding.root
+    }
+
+    // Helper function for handling the different response types(Success, Error) of the search live data
+    private fun handleResourceSearchResponses(resource: Resource<SearchResponse>) {
+        when(resource.status) {
+            Status.SUCCESS ->  {
+                val results = resource.data?.results
+                if(!results.isNullOrEmpty()) {
+                    // Submit the results to the recycler view
+                    binding.loadingBar.visibility = View.INVISIBLE
+                    searchAdapter.submitList(resource.data.results)
+                } else {
+                    // If no results were found, display message to user
+                    binding.loadingBar.visibility = View.INVISIBLE
+                    Toast.makeText(context, R.string.network_no_results, Toast.LENGTH_LONG).show()
+                }
+            }
+            Status.ERROR -> {
+                binding.loadingBar.visibility = View.INVISIBLE
+                // Show error message
+                Log.d("Error", "Observe Status ERROR. ${resource.message}")
+            }
+            Status.LOADING -> {
+                Log.d("Loading", "Should not see. Case not utilized")
+            }
+        }
     }
 
     /* Called by search button and edit text keyboard. Gets the search field text and begins

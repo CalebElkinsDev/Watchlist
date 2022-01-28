@@ -31,10 +31,13 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
                 android:ems="10"
-                android:hint="Search"
+                android:hint="@string/searchbar_hint"
+                android:importantForAutofill="no"
                 android:inputType="textPersonName"
+                android:minHeight="48dp"
                 android:textColor="@color/primaryTextColor"
-                android:textColorHint="@color/secondaryTextColor" />
+                android:textColorHint="@color/secondaryTextColor"
+                tools:ignore="DuplicateSpeakableTextCheck" />
 
             <Button
                 android:id="@+id/search_searchButton"
@@ -42,7 +45,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:backgroundTint="@color/primaryDarkColor"
-                android:text="Search" />
+                android:text="@string/search_button" />
 
         </FrameLayout>
 

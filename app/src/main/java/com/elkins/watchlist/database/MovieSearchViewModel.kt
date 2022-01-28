@@ -5,24 +5,37 @@ import androidx.lifecycle.*
 import com.elkins.watchlist.MovieRepository
 import com.elkins.watchlist.network.ImdbApi.retrofitService
 import com.elkins.watchlist.network.MovieResponse
+import com.elkins.watchlist.network.NetworkResponseHandler
 import com.elkins.watchlist.network.SearchResponse
 import com.elkins.watchlist.network.SearchResult
+import com.elkins.watchlist.utility.Resource
 import kotlinx.coroutines.launch
 import java.util.*
 
 class MovieSearchViewModel(private val repository: MovieRepository) : ViewModel() {
 
     // Live data list of movies found from search
-    private var _results = MutableLiveData<SearchResponse>()
-    val results: LiveData<SearchResponse>
+    private var _results = MutableLiveData<Resource<SearchResponse>>()
+    val results: LiveData<Resource<SearchResponse>>
         get() = _results
 
 
     fun searchForMovie(searchString: String) {
         viewModelScope.launch {
-            val response = retrofitService.searchForMovie(searchString)
-            _results.value = response
-            Log.d("Network", "Response: Search=${response.expression}, results=${response.results.size}")
+            try {
+                val response: SearchResponse = retrofitService.searchForMovie(searchString)
+                _results.value = NetworkResponseHandler.handleSuccess(response)
+//                if(response.results!!.isEmpty()) {
+//                    Log.d("Network", "In Try, empty results")
+//                    _results.value = NetworkResponseHandler.handleEmptyResults()
+//                } else {
+//                    Log.d("Network", "In try, handle success")
+//                    _results.value = NetworkResponseHandler.handleSuccess(response)
+//                }
+            } catch (e: Exception) {
+                Log.e("Network", "${e.printStackTrace()}")
+                _results.value = NetworkResponseHandler.handleException(e)
+            }
         }
     }
 
