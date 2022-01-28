@@ -11,6 +11,7 @@
     <color name="primaryColor">#37474f</color>
     <color name="primaryLightColor">#62727b</color>
     <color name="primaryDarkColor">#102027</color>
+    <color name="backgroundColor">#07111B</color>
     <color name="secondaryColor">#b71c1c</color>
     <color name="secondaryLightColor">#f05545</color>
     <color name="secondaryDarkColor">#7f0000</color>
