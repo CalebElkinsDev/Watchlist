@@ -19,12 +19,21 @@ class SearchResultListAdapter(private val clickListener: AddClickListener) : Lis
         holder.bind(getItem(position), clickListener)
     }
 
+    // Remove item from the list if it is being added to the user's movie list
+    fun removeItem(position: Int) {
+        currentList.toMutableList().removeAt(position)
+        notifyItemRemoved(position)
+    }
+
     class SearchResultViewHolder(private val binding: SearchListItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: SearchResult, clickListener: AddClickListener) {
             binding.movie = item
             binding.searchItemAddToDatabaseButton.setOnClickListener {
-                clickListener.onClick(item) // Attempt to add item to the repository
+                // Attempt to add item to the repository
+                clickListener.onClick(item)
+                // Remove the newly added item from the search results list
+                (bindingAdapter as SearchResultListAdapter).removeItem(absoluteAdapterPosition)
             }
             binding.executePendingBindings()
         }
