@@ -19,6 +19,10 @@ class MovieSearchViewModel(private val repository: MovieRepository) : ViewModel(
     val results: LiveData<Resource<SearchResponse>>
         get() = _results
 
+    // Live data used for notifying when an item has been removed from the list
+    private var _lastRemovedIndex = MutableLiveData<Int>()
+    val lastRemovedIndex: LiveData<Int>
+        get() = _lastRemovedIndex
 
     fun searchForMovie(searchString: String) {
         viewModelScope.launch {
@@ -39,7 +43,7 @@ class MovieSearchViewModel(private val repository: MovieRepository) : ViewModel(
         }
     }
 
-    fun addMovieToRepository(searchResult: SearchResult) {
+    fun addMovieToRepository(searchResult: SearchResult, position: Int) {
         viewModelScope.launch {
             val response: MovieResponse = retrofitService.getMovieFromId(searchResult.id)
             Log.d("Network", "Response: = $response")
@@ -51,6 +55,8 @@ class MovieSearchViewModel(private val repository: MovieRepository) : ViewModel(
             val editedSearchResponse = _results.value?.data
             editedSearchResponse?.results!!.remove(searchResult)
             _results.value = Resource.success(editedSearchResponse)
+
+            _lastRemovedIndex.value = position // Notify observers that an item has been removed
         }
     }
 }

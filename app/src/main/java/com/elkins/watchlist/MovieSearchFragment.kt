@@ -51,9 +51,8 @@ class MovieSearchFragment() : Fragment() {
         binding.lifecycleOwner = viewLifecycleOwner
 
         // Create and assign a new adapter for the search results list
-        searchAdapter = SearchResultListAdapter(AddClickListener {
-            Log.d("Click", "Search Result: $it")
-            viewModel.addMovieToRepository(it)
+        searchAdapter = SearchResultListAdapter(AddClickListener { searchResult, position ->
+            viewModel.addMovieToRepository(searchResult, position)
         })
 
         binding.searchResultsRecycler.adapter = searchAdapter
@@ -61,7 +60,11 @@ class MovieSearchFragment() : Fragment() {
         // Observe the Resource ive data of the view model
         viewModel.results.observe(viewLifecycleOwner, { resource ->
             handleResourceSearchResponses(resource)
-            searchAdapter.notifyDataSetChanged() // Refresh list
+        })
+
+        // Observer for notifying adapter when an item has been removed
+        viewModel.lastRemovedIndex.observe(viewLifecycleOwner, {
+            searchAdapter.notifyItemRemoved(it)
         })
 
         // Begin searching and hide the keyboard if it is visible
