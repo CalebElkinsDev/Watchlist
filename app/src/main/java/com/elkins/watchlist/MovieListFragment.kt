@@ -1,7 +1,6 @@
 package com.elkins.watchlist
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,6 +23,7 @@ class MovieListFragment : Fragment() {
 
     private lateinit var binding: FragmentMovieListBinding
     private lateinit var viewModel: MovieListViewModel
+    private lateinit var movieListAdapter: MovieListAdapter
 
     // Update app bar title on resume to override changes in other fragments
     override fun onResume() {
@@ -46,22 +46,25 @@ class MovieListFragment : Fragment() {
         viewModel = ViewModelProvider(requireActivity(), viewModelFactory).get(MovieListViewModel::class.java)
 
         // Create and assign a new adapter for the saved movie list
-        val adapter = MovieListAdapter(UpdateMovieClickListener { viewModel.updateMovieScore(it.userScore, it.id) },
+        movieListAdapter = MovieListAdapter(UpdateMovieClickListener { viewModel.updateMovieScore(it.userScore, it.id) },
             UpdateMovieClickListener { viewModel.updateHaveSeenMovie(it.haveSeen, it.id) },
             UpdateMovieClickListener { openMovieDetails(it) })
 
         // Assign the list adapter to the recycler view
-        binding.movieListRecycler.adapter = adapter
+        binding.movieListRecycler.adapter = movieListAdapter
 
         // Create a callback for deleting movies when swiped
-        val swipeCallback = ItemTouchHelper(SwipeMovieCallback(adapter, repository))
+        val swipeCallback = ItemTouchHelper(SwipeMovieCallback(movieListAdapter, repository))
         swipeCallback.attachToRecyclerView(binding.movieListRecycler)
 
         // Observe the viewmodel's movie list and submit it to the adapter when changed
-        viewModel.movies.observe(viewLifecycleOwner, { movies ->
-            if(movies != null) {
-                adapter.submitList(movies)
-                Log.d("Filter", "observe data change")
+        setObserverForCurrentList()
+
+        viewModel.listRefreshEvent.observe(viewLifecycleOwner, { listRefreshed ->
+            if(listRefreshed) {
+                // Reset the observer to match the new query's LiveData result
+                setObserverForCurrentList()
+                viewModel.listRefreshEventHandled()
             }
         })
 
@@ -75,6 +78,15 @@ class MovieListFragment : Fragment() {
         initializeSortSpinner()
 
         return binding.root
+    }
+
+    /* Function to (re)initialize observation of the current movie list LiveData of the view model*/
+    private fun setObserverForCurrentList() {
+        viewModel.movies.observe(viewLifecycleOwner, { movies ->
+            if(movies != null) {
+                movieListAdapter.submitList(movies)
+            }
+        })
     }
 
     private fun initializeFilterSpinner() {

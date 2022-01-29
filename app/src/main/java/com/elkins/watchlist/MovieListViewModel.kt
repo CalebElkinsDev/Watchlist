@@ -1,9 +1,6 @@
 package com.elkins.watchlist
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.elkins.watchlist.MovieRepository.MovieFilter
 import com.elkins.watchlist.MovieRepository.SortType
 import com.elkins.watchlist.model.Movie
@@ -20,6 +17,13 @@ class MovieListViewModel(private val repository: MovieRepository) : ViewModel() 
     val movies: LiveData<List<Movie>>
         get() = _movies
 
+    private var _listRefreshEvent = MutableLiveData(false)
+    val listRefreshEvent: LiveData<Boolean>
+        get() = _listRefreshEvent
+
+    fun listRefreshEventHandled() {
+        _listRefreshEvent.value = false
+    }
 
     init {
         getMovies() // Get filter, sort, and order from user preferences
@@ -43,6 +47,7 @@ class MovieListViewModel(private val repository: MovieRepository) : ViewModel() 
             // Get movies saved to local database
             //_movies = repository.getMovies(currentMovieFilter, currentSortType, sortAscending)
             _movies = repository.getMovies(currentMovieFilter)
+            _listRefreshEvent.value = true
         }
     }
 
