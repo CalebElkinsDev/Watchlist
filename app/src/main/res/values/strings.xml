@@ -3,10 +3,22 @@
 
     <string name="api_key">k_akzini69</string>
 
+    <!-- Search Fragment-->
     <string name="searchbar_hint">Search</string>
     <string name="search_button">Search</string>
+    <string name="search_fragment_title">Find New Movies</string>
+    <string name="search_no_results">No Results</string>
 
-    <string name="network_no_results">No Results</string>
+
+    <!-- Details Fragment -->
+    <string name="details_imdbRatingLabel">IMDb Rating</string>
+    <string name="details_metacriticRatingLabel">MetaCritic Score</string>
+    <string name="details_userScoreLabel">Your Rating</string>
+    <string name="details_haveSeenLabel">Watched?</string>
+    <string name="details_directorsLabel">Director: </string>
+    <string name="details_starringLabel">Starring: </string>
+    <string name="details_genresLabel">Genres: </string>
+    <string name="details_posterImageViewDescription">Movie Poster Image</string>
 
     <string-array name="filter_types">
         <item>All</item>

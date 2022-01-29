@@ -15,13 +15,21 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import com.elkins.watchlist.MovieRepository.MovieFilter
 import com.elkins.watchlist.database.MovieDatabase
 import com.elkins.watchlist.databinding.FragmentMovieListBinding
+import com.elkins.watchlist.model.Movie
 import com.elkins.watchlist.utility.SwipeMovieCallback
+import com.elkins.watchlist.utility.setSupportBarTitle
 
 
 class MovieListFragment : Fragment() {
 
     private lateinit var binding: FragmentMovieListBinding
     private lateinit var viewModel: MovieListViewModel
+
+    // Update app bar title on resume to override changes in other fragments
+    override fun onResume() {
+        super.onResume()
+        setSupportBarTitle(requireActivity(), getString(R.string.app_name))
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,7 +47,8 @@ class MovieListFragment : Fragment() {
 
         // Create and assign a new adapter for the saved movie list
         val adapter = MovieListAdapter(UpdateMovieClickListener { viewModel.updateMovieScore(it.userScore, it.id) },
-            UpdateMovieClickListener {viewModel.updateHaveSeenMovie(it.haveSeen, it.id) })
+            UpdateMovieClickListener { viewModel.updateHaveSeenMovie(it.haveSeen, it.id) },
+            UpdateMovieClickListener { openMovieDetails(it) })
 
         // Assign the list adapter to the recycler view
         binding.movieListRecycler.adapter = adapter
@@ -102,5 +111,10 @@ class MovieListFragment : Fragment() {
     private fun openNewMovieSearchFragment() {
         findNavController().navigate(MovieListFragmentDirections
             .actionMovieListFragmentToMovieSearchFragment())
+    }
+
+    private fun openMovieDetails(movie: Movie) {
+        findNavController().navigate(MovieListFragmentDirections
+            .actionMovieListFragmentToMovieDetailsFragment(movie))
     }
 }

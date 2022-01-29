@@ -9,7 +9,8 @@ import com.elkins.watchlist.databinding.MovieListItemBinding
 import com.elkins.watchlist.model.Movie
 
 class MovieListAdapter(private val updateScoreListener: UpdateMovieClickListener,
-                       private val updateFollowingListener: UpdateMovieClickListener)
+                       private val updateFollowingListener: UpdateMovieClickListener,
+                       private val movieDetailsListener: UpdateMovieClickListener)
     : ListAdapter<Movie, MovieListAdapter.MovieListViewHolder>(MovieDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieListViewHolder {
@@ -18,6 +19,9 @@ class MovieListAdapter(private val updateScoreListener: UpdateMovieClickListener
 
     override fun onBindViewHolder(holder: MovieListViewHolder, position: Int) {
         holder.bind(getItem(position), updateScoreListener, updateFollowingListener)
+        holder.itemView.setOnClickListener {
+            movieDetailsListener.onClick(currentList[position])
+        }
     }
 
     class MovieListViewHolder(private val binding: MovieListItemBinding) : RecyclerView.ViewHolder(binding.root) {

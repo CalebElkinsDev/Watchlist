@@ -17,4 +17,8 @@
     <color name="secondaryDarkColor">#7f0000</color>
     <color name="primaryTextColor">#E9E9E9</color>
     <color name="secondaryTextColor">#BFBFBF</color>
+
+    <color name="metacriticGreen">#66CC33</color>
+    <color name="metacriticYellow">#FFCC33</color>
+    <color name="metacriticRed">#FF0000</color>
 </resources>

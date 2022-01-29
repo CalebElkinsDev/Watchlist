@@ -1,5 +1,7 @@
 package com.elkins.watchlist
 
+import android.annotation.SuppressLint
+import android.content.res.ColorStateList
 import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
@@ -37,4 +39,32 @@ fun formatDate(view: TextView, date: Date?) {
         Log.e("Parse Error", "Could not parse date: ${e.message}")
     }
     return view.setText(dateString)
+}
+
+@SuppressLint("ResourceAsColor")
+@BindingAdapter("metacriticColor")
+fun getScoreColor(view: TextView, score: String? = "N/A") {
+    if(score == "N/A") {
+        view.backgroundTintList = ColorStateList.valueOf(R.color.backgroundColor)
+    } else {
+        try {
+            val color = when (score?.toInt()) {
+                in 0..39 -> R.color.metacriticRed
+                in 40..60 -> R.color.metacriticYellow
+                else -> R.color.metacriticGreen
+            }
+            view.backgroundTintList = ColorStateList.valueOf(color)
+        } catch (e: Exception) {
+            view.backgroundTintList = ColorStateList.valueOf(R.color.backgroundColor)
+        }
+    }
+}
+
+@BindingAdapter("userScore")
+fun convertUserScore(view: TextView, score: Int) {
+    if(score == 0) {
+        view.text = "N/A"
+    } else {
+        view.text = score.toString()
+    }
 }
