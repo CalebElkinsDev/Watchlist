@@ -45,8 +45,8 @@ class MovieListViewModel(private val repository: MovieRepository) : ViewModel() 
     private fun getMovies() {
         viewModelScope.launch {
             // Get movies saved to local database
-            //_movies = repository.getMovies(currentMovieFilter, currentSortType, sortAscending)
-            _movies = repository.getMovies(currentMovieFilter)
+            _movies = repository.getMovies(currentMovieFilter, currentSortType, sortAscending)
+            //_movies = repository.getMovies(currentMovieFilter)
             _listRefreshEvent.value = true
         }
     }

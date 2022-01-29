@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.elkins.watchlist.MovieRepository.MovieFilter
+import com.elkins.watchlist.MovieRepository.SortType
 import com.elkins.watchlist.database.MovieDatabase
 import com.elkins.watchlist.databinding.FragmentMovieListBinding
 import com.elkins.watchlist.model.Movie
@@ -76,6 +77,7 @@ class MovieListFragment : Fragment() {
         /* Setup spinners for filtering and sorting the list */
         initializeFilterSpinner()
         initializeSortSpinner()
+        initializeSortOrderButton()
 
         return binding.root
     }
@@ -118,6 +120,26 @@ class MovieListFragment : Fragment() {
             it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         }
         binding.listTypeSpinner.adapter = sortAdapter
+        binding.listTypeSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parentView: AdapterView<*>?, selectedItemView: View?,
+                                        position: Int, id: Long) {
+                val sortType = when(position) {
+                    0 -> SortType.TITLE
+                    1 -> SortType.RELEASE_DATE
+                    else -> SortType.DATE_ADDED
+                }
+                viewModel.updateSortType(sortType)
+            }
+
+            override fun onNothingSelected(parentView: AdapterView<*>?) {}
+        }
+    }
+
+    private fun initializeSortOrderButton() {
+        binding.listSortOrderToggleButton.setOnCheckedChangeListener { _, ascending ->
+            // on == ascending
+            viewModel.updateSortOrder(ascending)
+        }
     }
 
     private fun openNewMovieSearchFragment() {

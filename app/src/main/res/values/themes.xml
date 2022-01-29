@@ -29,8 +29,8 @@
     </style>
 
     <style name="SortingSpinnerItemStyle" parent="TextAppearance.AppCompat.Widget.TextView.SpinnerItem">
-        <item name="android:textColor">?attr/colorOnSecondary</item>
-        <item name="android:textSize">@dimen/text_small</item>
+        <item name="android:textColor">?attr/colorOnPrimary</item>
+        <item name="android:textSize">@dimen/text_medium</item>
     </style>
 
     <style name="DetailsLabelTextView" parent="Widget.AppCompat.TextView">

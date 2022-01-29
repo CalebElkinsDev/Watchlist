@@ -41,14 +41,19 @@
                 android:gravity="end"
                 android:textAlignment="viewEnd"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/list_sortArrowImage"
+                app:layout_constraintEnd_toStartOf="@id/list_sortOrderToggleButton"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
-                android:id="@+id/list_sortArrowImage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="32dp"
+            <ToggleButton
+                android:id="@+id/list_sortOrderToggleButton"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginEnd="8dp"
+                android:backgroundTint="?attr/colorOnPrimary"
+                android:checked="true"
+                android:textOff=""
+                android:textOn=""
+                android:background="@drawable/sort_arrow_toggle"
                 app:layout_constraintBottom_toBottomOf="@id/list_typeSpinner"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/list_typeSpinner"
