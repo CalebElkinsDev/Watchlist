@@ -19,14 +19,15 @@ class MovieDetailsFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_movie_details, container, false)
 
         if(arguments != null) {
             val movie: Movie = MovieDetailsFragmentArgs.fromBundle(requireArguments()).movie
             binding.movie = movie
-            setSupportBarTitle(requireActivity(), movie.title)
+            val title = movie.fullTitle ?: movie.title ?: getString(R.string.details_appbar_placeholder_title)
+            setSupportBarTitle(requireActivity(), title)
         } else {
             // TODO: Handle null movie
             Log.e("Navigation Error", "ERROR ERROR ERROR")

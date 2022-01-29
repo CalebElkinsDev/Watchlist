@@ -61,6 +61,7 @@ class MovieSearchFragment() : Fragment() {
         // Observe the Resource ive data of the view model
         viewModel.results.observe(viewLifecycleOwner, { resource ->
             handleResourceSearchResponses(resource)
+            searchAdapter.notifyDataSetChanged() // Refresh list
         })
 
         // Begin searching and hide the keyboard if it is visible

@@ -9,8 +9,8 @@
     <string name="search_fragment_title">Find New Movies</string>
     <string name="search_no_results">No Results</string>
 
-
     <!-- Details Fragment -->
+    <string name="details_appbar_placeholder_title">Movie Details</string>
     <string name="details_imdbRatingLabel">IMDb Rating</string>
     <string name="details_metacriticRatingLabel">MetaCritic Score</string>
     <string name="details_userScoreLabel">Your Rating</string>

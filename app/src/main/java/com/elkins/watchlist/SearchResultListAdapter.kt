@@ -23,6 +23,8 @@ class SearchResultListAdapter(private val clickListener: AddClickListener) : Lis
     fun removeItem(position: Int) {
         currentList.toMutableList().removeAt(position)
         notifyItemRemoved(position)
+        submitList(currentList)
+        //notifyDataSetChanged()
     }
 
     class SearchResultViewHolder(private val binding: SearchListItemBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -33,7 +35,7 @@ class SearchResultListAdapter(private val clickListener: AddClickListener) : Lis
                 // Attempt to add item to the repository
                 clickListener.onClick(item)
                 // Remove the newly added item from the search results list
-                (bindingAdapter as SearchResultListAdapter).removeItem(absoluteAdapterPosition)
+                //(bindingAdapter as SearchResultListAdapter).removeItem(absoluteAdapterPosition)
             }
             binding.executePendingBindings()
         }

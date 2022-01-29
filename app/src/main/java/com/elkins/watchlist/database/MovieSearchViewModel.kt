@@ -46,6 +46,11 @@ class MovieSearchViewModel(private val repository: MovieRepository) : ViewModel(
             val newMovie = response.toDataBaseModel() // Convert network object to database model
             newMovie.dateAdded = Calendar.getInstance().time // Set the dateAdded to be the current time
             repository.addMovie(newMovie) // Add the new movie to the repo after setting the time
+
+            // Remove the added movie from the results and resubmit
+            val editedSearchResponse = _results.value?.data
+            editedSearchResponse?.results!!.remove(searchResult)
+            _results.value = Resource.success(editedSearchResponse)
         }
     }
 }

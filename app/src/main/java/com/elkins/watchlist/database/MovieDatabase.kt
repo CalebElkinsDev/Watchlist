@@ -10,7 +10,7 @@ import java.util.*
 
 private const val DATABASE_NAME = "movie_database"
 
-@Database(entities = [Movie::class], version = 10, exportSchema = false)
+@Database(entities = [Movie::class], version = 11, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class MovieDatabase : RoomDatabase() {
 
