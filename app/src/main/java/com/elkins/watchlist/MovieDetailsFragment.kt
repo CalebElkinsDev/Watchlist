@@ -9,6 +9,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.elkins.watchlist.databinding.FragmentMovieDetailsBinding
 import com.elkins.watchlist.model.Movie
+import com.elkins.watchlist.utility.setSupportBarTitle
 
 
 class MovieDetailsFragment : Fragment() {
@@ -25,6 +26,7 @@ class MovieDetailsFragment : Fragment() {
         if(arguments != null) {
             val movie: Movie = MovieDetailsFragmentArgs.fromBundle(requireArguments()).movie
             binding.movie = movie
+            setSupportBarTitle(requireActivity(), movie.title)
         } else {
             // TODO: Handle null movie
             Log.e("Navigation Error", "ERROR ERROR ERROR")

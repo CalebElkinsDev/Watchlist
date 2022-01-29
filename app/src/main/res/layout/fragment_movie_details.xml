@@ -10,11 +10,15 @@
             type="com.elkins.watchlist.model.Movie" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fillViewport="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:background="@color/backgroundColor"
-        android:paddingHorizontal="16dp"
         android:paddingVertical="16dp">
 
 
@@ -68,11 +72,11 @@
             android:id="@+id/imdbRatingLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toEndOf="@id/posterImageView"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/posterImageView"
+            android:text="Imdb Rating"
             android:textColor="@color/secondaryTextColor"
-            android:text="Imdb Rating"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/posterImageView"
+            app:layout_constraintTop_toTopOf="@id/posterImageView" />
 
         <TextView
             android:id="@+id/imdbRatingTextView"
@@ -115,11 +119,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            app:layout_constraintStart_toEndOf="@id/posterImageView"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/metacriticTextView"
+            android:text="Your Score"
             android:textColor="@color/secondaryTextColor"
-            android:text="Your Score"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/posterImageView"
+            app:layout_constraintTop_toBottomOf="@id/metacriticTextView" />
 
         <TextView
             android:id="@+id/userRatingTextView"
@@ -133,6 +137,7 @@
             tools:text="0"/>
 
         <TextView
+            android:id="@+id/haveSeenLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -140,9 +145,74 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/userRatingTextView"
             android:textColor="@color/secondaryTextColor"
-            android:text="Have Seen?"/>
+            android:text="Seen?"/>
 
+        <CheckBox
+            android:id="@+id/item_seenCheckBox"
+            android:layout_width="33dp"
+            android:layout_height="32dp"
+            android:checked="@{movie.haveSeen}"
+            android:gravity="center_vertical"
+            android:scaleX="1"
+            android:scaleY="1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/posterImageView"
+            app:layout_constraintTop_toBottomOf="@id/haveSeenLabel" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/directorLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Director: "
+            android:textColor="@color/primaryTextColor"
+            app:layout_constraintStart_toStartOf="@id/posterImageView"
+            app:layout_constraintTop_toBottomOf="@id/posterImageView" />
 
+        <TextView
+            android:id="@+id/directorTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{movie.directors}"
+            android:textColor="@color/primaryTextColor"
+            app:layout_constraintStart_toEndOf="@id/directorLabel"
+            app:layout_constraintTop_toTopOf="@id/directorLabel"
+            tools:text="Director Name"/>
+
+        <TextView
+            android:id="@+id/starringLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Starring: "
+            android:textColor="@color/primaryTextColor"
+            app:layout_constraintStart_toStartOf="@id/directorLabel"
+            app:layout_constraintTop_toBottomOf="@id/directorLabel" />
+        <TextView
+            android:id="@+id/starringTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@{movie.stars}"
+            android:textColor="@color/primaryTextColor"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintStart_toEndOf="@id/starringLabel"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/starringLabel"
+            tools:text="Actor A, Actor B"/>
+
+        <TextView
+            android:id="@+id/plotTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="16dp"
+            android:text="@{movie.plot}"
+            android:textColor="@color/primaryTextColor"
+            app:layout_constraintStart_toStartOf="@id/starringLabel"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/starringTextView"
+            tools:text="Long Description of the movie"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 </layout>

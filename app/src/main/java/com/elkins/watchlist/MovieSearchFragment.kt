@@ -20,6 +20,7 @@ import com.elkins.watchlist.databinding.FragmentMovieSearchBinding
 import com.elkins.watchlist.network.SearchResponse
 import com.elkins.watchlist.utility.Resource
 import com.elkins.watchlist.utility.Status
+import com.elkins.watchlist.utility.setSupportBarTitle
 
 
 class MovieSearchFragment() : Fragment() {
@@ -27,6 +28,12 @@ class MovieSearchFragment() : Fragment() {
     private lateinit var binding: FragmentMovieSearchBinding
     private lateinit var viewModel: MovieSearchViewModel
     private lateinit var searchAdapter: SearchResultListAdapter
+
+    // Update app bar title on resume to override changes in other fragments
+    override fun onResume() {
+        super.onResume()
+        setSupportBarTitle(requireActivity(), getString(R.string.search_fragment_title))
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

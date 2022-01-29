@@ -17,12 +17,19 @@ import com.elkins.watchlist.database.MovieDatabase
 import com.elkins.watchlist.databinding.FragmentMovieListBinding
 import com.elkins.watchlist.model.Movie
 import com.elkins.watchlist.utility.SwipeMovieCallback
+import com.elkins.watchlist.utility.setSupportBarTitle
 
 
 class MovieListFragment : Fragment() {
 
     private lateinit var binding: FragmentMovieListBinding
     private lateinit var viewModel: MovieListViewModel
+
+    // Update app bar title on resume to override changes in other fragments
+    override fun onResume() {
+        super.onResume()
+        setSupportBarTitle(requireActivity(), getString(R.string.app_name))
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
