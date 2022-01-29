@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import com.elkins.watchlist.MovieRepository.MovieFilter
 import com.elkins.watchlist.database.MovieDatabase
 import com.elkins.watchlist.databinding.FragmentMovieListBinding
+import com.elkins.watchlist.model.Movie
 import com.elkins.watchlist.utility.SwipeMovieCallback
 
 
@@ -39,7 +40,8 @@ class MovieListFragment : Fragment() {
 
         // Create and assign a new adapter for the saved movie list
         val adapter = MovieListAdapter(UpdateMovieClickListener { viewModel.updateMovieScore(it.userScore, it.id) },
-            UpdateMovieClickListener {viewModel.updateHaveSeenMovie(it.haveSeen, it.id) })
+            UpdateMovieClickListener { viewModel.updateHaveSeenMovie(it.haveSeen, it.id) },
+            UpdateMovieClickListener { openMovieDetails(it) })
 
         // Assign the list adapter to the recycler view
         binding.movieListRecycler.adapter = adapter
@@ -102,5 +104,10 @@ class MovieListFragment : Fragment() {
     private fun openNewMovieSearchFragment() {
         findNavController().navigate(MovieListFragmentDirections
             .actionMovieListFragmentToMovieSearchFragment())
+    }
+
+    private fun openMovieDetails(movie: Movie) {
+        findNavController().navigate(MovieListFragmentDirections
+            .actionMovieListFragmentToMovieDetailsFragment(movie))
     }
 }

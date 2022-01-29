@@ -1,6 +1,148 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MovieDetailsFragment"/>
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".MovieDetailsFragment">
+
+    <data>
+        <variable
+            name="movie"
+            type="com.elkins.watchlist.model.Movie" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/backgroundColor"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="16dp">
+
+
+        <TextView
+            android:id="@+id/releaseDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/primaryTextColor"
+            app:layout_constraintEnd_toStartOf="@+id/contentRating"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:releaseDate="@{movie.releaseDate}"
+            tools:text="1-1-1900" />
+
+        <TextView
+            android:id="@+id/contentRating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="PG-13"
+            android:textColor="@color/primaryTextColor"
+            app:layout_constraintEnd_toStartOf="@+id/runtime"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/releaseDate"
+            app:layout_constraintTop_toTopOf="@+id/releaseDate" />
+
+        <TextView
+            android:id="@+id/runtime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{movie.runtime}"
+            android:textColor="@color/primaryTextColor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/contentRating"
+            app:layout_constraintTop_toTopOf="@+id/contentRating"
+            tools:text="1 hr 20 min" />
+
+        <ImageView
+            android:id="@+id/posterImageView"
+            android:layout_width="220dp"
+            android:layout_height="330dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/releaseDate"
+            app:thumbnail="@{movie.imageUrl}"
+            tools:src="@drawable/curtains" />
+
+        <TextView
+            android:id="@+id/imdbRatingLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@id/posterImageView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/posterImageView"
+            android:textColor="@color/secondaryTextColor"
+            android:text="Imdb Rating"/>
+
+        <TextView
+            android:id="@+id/imdbRatingTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@id/posterImageView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/imdbRatingLabel"
+            android:textColor="@color/secondaryTextColor"
+            android:text="@{movie.imdbRating}"
+            tools:text="0.0"/>
+
+        <TextView
+            android:id="@+id/metacriticLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:layout_constraintStart_toEndOf="@id/posterImageView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/imdbRatingTextView"
+            android:textColor="@color/secondaryTextColor"
+            android:text="MetaCritic Score"/>
+
+        <TextView
+            android:id="@+id/metacriticTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:metacriticColor="@{movie.metacriticRating}"
+            android:paddingHorizontal="4dp"
+            android:paddingVertical="2dp"
+            app:layout_constraintStart_toEndOf="@id/posterImageView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/metacriticLabel"
+            android:textColor="@color/primaryTextColor"
+            android:text="@{movie.metacriticRating}"
+            tools:text="10"/>
+
+        <TextView
+            android:id="@+id/userRatingLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:layout_constraintStart_toEndOf="@id/posterImageView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/metacriticTextView"
+            android:textColor="@color/secondaryTextColor"
+            android:text="Your Score"/>
+
+        <TextView
+            android:id="@+id/userRatingTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@id/posterImageView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/userRatingLabel"
+            android:textColor="@color/secondaryTextColor"
+            app:userScore="@{movie.userScore}"
+            tools:text="0"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:layout_constraintStart_toEndOf="@id/posterImageView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/userRatingTextView"
+            android:textColor="@color/secondaryTextColor"
+            android:text="Have Seen?"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

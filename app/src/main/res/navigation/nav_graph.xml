@@ -21,7 +21,11 @@
         android:id="@+id/movieDetailsFragment"
         android:name="com.elkins.watchlist.MovieDetailsFragment"
         android:label="fragment_movie_details"
-        tools:layout="@layout/fragment_movie_details" />
+        tools:layout="@layout/fragment_movie_details" >
+        <argument
+            android:name="movie"
+            app:argType="com.elkins.watchlist.model.Movie" />
+    </fragment>
     <fragment
         android:id="@+id/movieSearchFragment"
         android:name="com.elkins.watchlist.MovieSearchFragment"
