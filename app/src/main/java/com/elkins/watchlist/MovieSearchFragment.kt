@@ -92,7 +92,7 @@ class MovieSearchFragment() : Fragment() {
                 } else {
                     // If no results were found, display message to user
                     binding.loadingBar.visibility = View.INVISIBLE
-                    Toast.makeText(context, R.string.network_no_results, Toast.LENGTH_LONG).show()
+                    Toast.makeText(context, R.string.search_no_results, Toast.LENGTH_LONG).show()
                 }
             }
             Status.ERROR -> {

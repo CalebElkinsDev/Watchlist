@@ -33,4 +33,16 @@
         <item name="android:textSize">@dimen/text_small</item>
     </style>
 
+    <style name="DetailsLabelTextView" parent="Widget.AppCompat.TextView">
+        <item name="android:textSize">@dimen/text_medium</item>
+        <item name="android:textColor">?attr/colorOnPrimary</item>
+    </style>
+
+    <style name="DetailsTextView" parent="Widget.AppCompat.TextView">
+        <item name="android:textSize">@dimen/text_medium</item>
+        <item name="android:textColor">?attr/colorOnSecondary</item>
+    </style>
+
+
+
 </resources>

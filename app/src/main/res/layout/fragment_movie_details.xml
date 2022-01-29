@@ -15,203 +15,270 @@
         android:layout_height="match_parent"
         android:fillViewport="true">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/backgroundColor"
-        android:paddingVertical="16dp">
-
-
-        <TextView
-            android:id="@+id/releaseDate"
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/primaryTextColor"
-            app:layout_constraintEnd_toStartOf="@+id/contentRating"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:releaseDate="@{movie.releaseDate}"
-            tools:text="1-1-1900" />
+            android:background="@color/backgroundColor"
+            android:paddingVertical="8dp">
 
-        <TextView
-            android:id="@+id/contentRating"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="PG-13"
-            android:textColor="@color/primaryTextColor"
-            app:layout_constraintEnd_toStartOf="@+id/runtime"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/releaseDate"
-            app:layout_constraintTop_toTopOf="@+id/releaseDate" />
+            <TextView
+                android:id="@+id/releaseDate"
+                style="@style/DetailsLabelTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/primaryTextColor"
+                app:layout_constraintEnd_toStartOf="@+id/contentRating"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:releaseDate="@{movie.releaseDate}"
+                tools:text="1-1-1900" />
 
-        <TextView
-            android:id="@+id/runtime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@{movie.runtime}"
-            android:textColor="@color/primaryTextColor"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/contentRating"
-            app:layout_constraintTop_toTopOf="@+id/contentRating"
-            tools:text="1 hr 20 min" />
+            <TextView
+                android:id="@+id/contentRating"
+                style="@style/DetailsLabelTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{movie.contentRating}"
+                android:textColor="@color/primaryTextColor"
+                app:layout_constraintEnd_toStartOf="@+id/runtime"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/releaseDate"
+                app:layout_constraintTop_toTopOf="@+id/releaseDate"
+                tools:text="PG-13" />
 
-        <ImageView
-            android:id="@+id/posterImageView"
-            android:layout_width="220dp"
-            android:layout_height="330dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginStart="16dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/releaseDate"
-            app:thumbnail="@{movie.imageUrl}"
-            tools:src="@drawable/curtains" />
+            <TextView
+                android:id="@+id/runtime"
+                style="@style/DetailsLabelTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{movie.runtime}"
+                android:textColor="@color/primaryTextColor"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/contentRating"
+                app:layout_constraintTop_toTopOf="@+id/contentRating"
+                tools:text="1 hr 20 min" />
 
-        <TextView
-            android:id="@+id/imdbRatingLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Imdb Rating"
-            android:textColor="@color/secondaryTextColor"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/posterImageView"
-            app:layout_constraintTop_toTopOf="@id/posterImageView" />
+            <View
+                android:id="@+id/topDivider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@drawable/divider_fade"
+                android:layout_marginTop="8dp"
+                android:layout_marginHorizontal="24dp"
+                app:layout_constraintTop_toBottomOf="@id/releaseDate"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
-        <TextView
-            android:id="@+id/imdbRatingTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toEndOf="@id/posterImageView"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/imdbRatingLabel"
-            android:textColor="@color/secondaryTextColor"
-            android:text="@{movie.imdbRating}"
-            tools:text="0.0"/>
+            <ImageView
+                android:id="@+id/posterImageView"
+                android:layout_width="220dp"
+                android:layout_height="330dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:contentDescription="@string/details_posterImageViewDescription"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/topDivider"
+                app:thumbnail="@{movie.imageUrl}"
+                tools:src="@drawable/ic_launcher_foreground" />
 
-        <TextView
-            android:id="@+id/metacriticLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            app:layout_constraintStart_toEndOf="@id/posterImageView"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/imdbRatingTextView"
-            android:textColor="@color/secondaryTextColor"
-            android:text="MetaCritic Score"/>
+            <TextView
+                android:id="@+id/imdbRatingLabel"
+                style="@style/DetailsLabelTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/details_imdbRatingLabel"
+                app:layout_constraintBottom_toTopOf="@+id/imdbRatingTextView"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@id/posterImageView"
+                app:layout_constraintTop_toTopOf="@+id/posterImageView"
+                app:layout_constraintVertical_chainStyle="packed" />
 
-        <TextView
-            android:id="@+id/metacriticTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:metacriticColor="@{movie.metacriticRating}"
-            android:paddingHorizontal="4dp"
-            android:paddingVertical="2dp"
-            app:layout_constraintStart_toEndOf="@id/posterImageView"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/metacriticLabel"
-            android:textColor="@color/primaryTextColor"
-            android:text="@{movie.metacriticRating}"
-            tools:text="10"/>
+            <TextView
+                android:id="@+id/imdbRatingTextView"
+                style="@style/DetailsTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{movie.imdbRating}"
+                app:layout_constraintBottom_toTopOf="@+id/metacriticLabel"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@id/posterImageView"
+                app:layout_constraintTop_toBottomOf="@+id/imdbRatingLabel"
+                tools:text="0.0" />
 
-        <TextView
-            android:id="@+id/userRatingLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Your Score"
-            android:textColor="@color/secondaryTextColor"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/posterImageView"
-            app:layout_constraintTop_toBottomOf="@id/metacriticTextView" />
+            <TextView
+                android:id="@+id/metacriticLabel"
+                style="@style/DetailsLabelTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/details_metacriticRatingLabel"
+                app:layout_constraintBottom_toTopOf="@+id/metacriticTextView"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@id/posterImageView"
+                app:layout_constraintTop_toBottomOf="@+id/imdbRatingTextView" />
 
-        <TextView
-            android:id="@+id/userRatingTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toEndOf="@id/posterImageView"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/userRatingLabel"
-            android:textColor="@color/secondaryTextColor"
-            app:userScore="@{movie.userScore}"
-            tools:text="0"/>
+            <TextView
+                android:id="@+id/metacriticTextView"
+                style="@style/DetailsTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="4dp"
+                android:paddingVertical="2dp"
+                android:text="@{movie.metacriticRating}"
+                app:layout_constraintBottom_toTopOf="@+id/userRatingLabel"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@id/posterImageView"
+                app:layout_constraintTop_toBottomOf="@+id/metacriticLabel"
+                app:metacriticColor="@{movie.metacriticRating}"
+                tools:text="10" />
 
-        <TextView
-            android:id="@+id/haveSeenLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            app:layout_constraintStart_toEndOf="@id/posterImageView"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/userRatingTextView"
-            android:textColor="@color/secondaryTextColor"
-            android:text="Seen?"/>
+            <TextView
+                android:id="@+id/userRatingLabel"
+                style="@style/DetailsLabelTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/details_userScoreLabel"
+                app:layout_constraintBottom_toTopOf="@+id/userRatingTextView"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@id/posterImageView"
+                app:layout_constraintTop_toBottomOf="@+id/metacriticTextView" />
 
-        <CheckBox
-            android:id="@+id/item_seenCheckBox"
-            android:layout_width="33dp"
-            android:layout_height="32dp"
-            android:checked="@{movie.haveSeen}"
-            android:gravity="center_vertical"
-            android:scaleX="1"
-            android:scaleY="1"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/posterImageView"
-            app:layout_constraintTop_toBottomOf="@id/haveSeenLabel" />
+            <TextView
+                android:id="@+id/userRatingTextView"
+                style="@style/DetailsTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toTopOf="@+id/haveSeenLabel"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@id/posterImageView"
+                app:layout_constraintTop_toBottomOf="@+id/userRatingLabel"
+                app:userScore="@{movie.userScore}"
+                tools:text="0" />
 
-        <TextView
-            android:id="@+id/directorLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Director: "
-            android:textColor="@color/primaryTextColor"
-            app:layout_constraintStart_toStartOf="@id/posterImageView"
-            app:layout_constraintTop_toBottomOf="@id/posterImageView" />
+            <TextView
+                android:id="@+id/haveSeenLabel"
+                style="@style/DetailsLabelTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/details_haveSeenLabel"
+                app:layout_constraintBottom_toTopOf="@+id/item_seenCheckBox"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@id/posterImageView"
+                app:layout_constraintTop_toBottomOf="@+id/userRatingTextView" />
 
-        <TextView
-            android:id="@+id/directorTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@{movie.directors}"
-            android:textColor="@color/primaryTextColor"
-            app:layout_constraintStart_toEndOf="@id/directorLabel"
-            app:layout_constraintTop_toTopOf="@id/directorLabel"
-            tools:text="Director Name"/>
+            <CheckBox
+                android:id="@+id/item_seenCheckBox"
+                android:layout_width="33dp"
+                android:layout_height="32dp"
+                android:checked="@{movie.haveSeen}"
+                android:gravity="center_vertical"
+                android:scaleX="1"
+                android:scaleY="1"
+                app:layout_constraintBottom_toBottomOf="@+id/posterImageView"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@id/posterImageView"
+                app:layout_constraintTop_toBottomOf="@+id/haveSeenLabel" />
 
-        <TextView
-            android:id="@+id/starringLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:text="Starring: "
-            android:textColor="@color/primaryTextColor"
-            app:layout_constraintStart_toStartOf="@id/directorLabel"
-            app:layout_constraintTop_toBottomOf="@id/directorLabel" />
-        <TextView
-            android:id="@+id/starringTextView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="@{movie.stars}"
-            android:textColor="@color/primaryTextColor"
-            android:layout_marginEnd="16dp"
-            app:layout_constraintStart_toEndOf="@id/starringLabel"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/starringLabel"
-            tools:text="Actor A, Actor B"/>
+            <TextView
+                android:id="@+id/directorLabel"
+                style="@style/DetailsLabelTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/details_directorsLabel"
+                app:layout_constraintStart_toStartOf="@id/posterImageView"
+                app:layout_constraintTop_toBottomOf="@id/posterImageView" />
 
-        <TextView
-            android:id="@+id/plotTextView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginTop="16dp"
-            android:text="@{movie.plot}"
-            android:textColor="@color/primaryTextColor"
-            app:layout_constraintStart_toStartOf="@id/starringLabel"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/starringTextView"
-            tools:text="Long Description of the movie"/>
+            <TextView
+                android:id="@+id/directorTextView"
+                style="@style/DetailsTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:text="@{movie.directors}"
+                app:layout_constraintStart_toEndOf="@id/directorLabel"
+                app:layout_constraintTop_toTopOf="@id/directorLabel"
+                tools:text="Director Name" />
+
+            <TextView
+                android:id="@+id/starringLabel"
+                style="@style/DetailsLabelTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="@string/details_starringLabel"
+                app:layout_constraintStart_toStartOf="@id/directorLabel"
+                app:layout_constraintTop_toBottomOf="@id/directorLabel" />
+
+            <TextView
+                android:id="@+id/starringTextView"
+                style="@style/DetailsTextView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:text="@{movie.stars}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/directorTextView"
+                app:layout_constraintTop_toTopOf="@id/starringLabel"
+                tools:text="Actor A, Actor B" />
+
+            <TextView
+                android:id="@+id/genresLabel"
+                style="@style/DetailsLabelTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="@string/details_genresLabel"
+                app:layout_constraintStart_toStartOf="@id/directorLabel"
+                app:layout_constraintTop_toBottomOf="@id/starringTextView" />
+
+            <TextView
+                android:id="@+id/genresTextView"
+                style="@style/DetailsTextView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:text="@{movie.genres}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/starringTextView"
+                app:layout_constraintTop_toTopOf="@id/genresLabel"
+                tools:text="Genre 1, Genre 2" />
+
+            <View
+                android:id="@+id/bottomDivider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginHorizontal="24dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/divider_fade"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/genresTextView" />
+
+            <TextView
+                android:id="@+id/plotTextView"
+                style="@style/DetailsTextView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:text="@{movie.plot}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/starringLabel"
+                app:layout_constraintTop_toBottomOf="@id/bottomDivider"
+                tools:text="Long Description of the movie" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
