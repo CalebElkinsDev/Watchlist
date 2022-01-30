@@ -4,7 +4,6 @@ import android.content.Context
 import android.util.Log
 import androidx.room.*
 import com.elkins.watchlist.model.Movie
-import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -58,8 +57,8 @@ class Converters {
     fun toDate(value: String?): Date? {
         try {
             return inputFormat.parse(value)
-        } catch (e: ParseException) {
-            Log.e("Parse", e.message.toString())
+        } catch (e: Exception) {
+            Log.e("Parse Date", "${e.printStackTrace()}")
             return null
         }
     }

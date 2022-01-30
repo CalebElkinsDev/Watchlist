@@ -21,16 +21,16 @@
             android:paddingBottom="2dp"
             android:background="@color/primaryColor">
 
-            <Spinner
-                android:id="@+id/list_filterSpinner"
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/list_filterSwitch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@null"
-                android:gravity="end"
-                android:textAlignment="viewEnd"
-                android:layout_marginEnd="8dp"
+                android:layout_marginStart="16dp"
+                android:textColor="?attr/colorOnPrimary"
+                android:checked="true"
+                android:text="Watched"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/list_typeSpinner"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <Spinner
@@ -40,6 +40,7 @@
                 android:background="@null"
                 android:gravity="end"
                 android:textAlignment="viewEnd"
+                android:layout_marginEnd="4dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/list_sortOrderToggleButton"
                 app:layout_constraintTop_toTopOf="parent" />

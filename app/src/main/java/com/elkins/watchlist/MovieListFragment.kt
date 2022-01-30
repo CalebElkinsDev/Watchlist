@@ -11,7 +11,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
-import com.elkins.watchlist.MovieRepository.MovieFilter
 import com.elkins.watchlist.MovieRepository.SortType
 import com.elkins.watchlist.database.MovieDatabase
 import com.elkins.watchlist.databinding.FragmentMovieListBinding
@@ -75,7 +74,7 @@ class MovieListFragment : Fragment() {
         }
 
         /* Setup spinners for filtering and sorting the list */
-        initializeFilterSpinner()
+        initializeFilterSwitch()
         initializeSortSpinner()
         initializeSortOrderButton()
 
@@ -91,25 +90,9 @@ class MovieListFragment : Fragment() {
         })
     }
 
-    private fun initializeFilterSpinner() {
-        val filterAdapter = ArrayAdapter.createFromResource(requireContext(),
-            R.array.filter_types,
-            android.R.layout.simple_spinner_item).also {
-            it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        }
-        binding.listFilterSpinner.adapter = filterAdapter
-        binding.listFilterSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parentView: AdapterView<*>?, selectedItemView: View?,
-                                        position: Int, id: Long) {
-                val filter = when(position) {
-                    0 -> MovieFilter.ALL
-                    1 -> MovieFilter.UNSEEN
-                    else -> MovieFilter.SEEN
-                }
-                viewModel.updateFilter(filter)
-            }
-
-            override fun onNothingSelected(parentView: AdapterView<*>?) {}
+    private fun initializeFilterSwitch() {
+        binding.listFilterSwitch.setOnCheckedChangeListener { _, on ->
+            viewModel.updateFilter(on)
         }
     }
 

@@ -1,7 +1,6 @@
 package com.elkins.watchlist
 
 import androidx.lifecycle.*
-import com.elkins.watchlist.MovieRepository.MovieFilter
 import com.elkins.watchlist.MovieRepository.SortType
 import com.elkins.watchlist.model.Movie
 import kotlinx.coroutines.launch
@@ -9,7 +8,7 @@ import kotlinx.coroutines.launch
 class MovieListViewModel(private val repository: MovieRepository) : ViewModel() {
 
     var currentSortType: SortType = SortType.TITLE
-    var currentMovieFilter: MovieFilter = MovieFilter.ALL
+    var showWatchedMovies: Boolean = true
     var sortAscending: Boolean = true
 
     // Live data list of movies from the local database
@@ -45,15 +44,15 @@ class MovieListViewModel(private val repository: MovieRepository) : ViewModel() 
     private fun getMovies() {
         viewModelScope.launch {
             // Get movies saved to local database
-            _movies = repository.getMovies(currentMovieFilter, currentSortType, sortAscending)
+            _movies = repository.getMovies(showWatchedMovies, currentSortType, sortAscending)
             //_movies = repository.getMovies(currentMovieFilter)
             _listRefreshEvent.value = true
         }
     }
 
-    fun updateFilter(newFilter: MovieFilter) {
+    fun updateFilter(showWatched: Boolean) {
         viewModelScope.launch {
-            currentMovieFilter = newFilter
+            showWatchedMovies = showWatched
             getMovies()
         }
     }
