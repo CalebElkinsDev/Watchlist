@@ -49,16 +49,31 @@
                 android:id="@+id/list_sortOrderToggleButton"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:layout_marginEnd="8dp"
+                android:layout_marginEnd="32dp"
+                android:background="@drawable/sort_arrow_toggle"
                 android:backgroundTint="?attr/colorOnPrimary"
                 android:checked="true"
                 android:textOff=""
                 android:textOn=""
-                android:background="@drawable/sort_arrow_toggle"
-                app:layout_constraintBottom_toBottomOf="@id/list_typeSpinner"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/list_layoutChangeButton"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@android:drawable/arrow_down_float"
+                tools:ignore="TouchTargetSizeCheck" />
+
+            <ImageButton
+                android:id="@+id/list_layoutChangeButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/ic_layout_normal"
+                android:backgroundTint="?attr/colorOnPrimary"
+                android:scaleX="1.25"
+                android:scaleY="1.25"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/list_typeSpinner"
-                app:srcCompat="@android:drawable/arrow_down_float" />
+                app:layout_constraintTop_toTopOf="parent" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

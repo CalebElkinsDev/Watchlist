@@ -2,9 +2,12 @@ package com.elkins.watchlist
 
 import android.os.Bundle
 import android.util.Log
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -16,6 +19,7 @@ import com.elkins.watchlist.MovieRepository.SortType
 import com.elkins.watchlist.database.MovieDatabase
 import com.elkins.watchlist.databinding.FragmentMovieListBinding
 import com.elkins.watchlist.model.Movie
+import com.elkins.watchlist.utility.MovieLayoutType
 import com.elkins.watchlist.utility.SwipeMovieCallback
 import com.elkins.watchlist.utility.setSupportBarTitle
 
@@ -56,7 +60,7 @@ class MovieListFragment : Fragment() {
             },
             UpdateMovieClickListener {
                 openMovieDetails(it)
-            })
+         })
 
         // Assign the list adapter to the recycler view
         binding.movieListRecycler.adapter = movieListAdapter
@@ -68,6 +72,22 @@ class MovieListFragment : Fragment() {
         // Observe the viewmodel's movie list and submit it to the adapter when changed
         setObserverForCurrentList()
 
+        // Set the view model's listType live data to the next enum value and trigger a observer change
+        binding.listLayoutChangeButton.setOnClickListener {
+            viewModel.cycleListType()
+        }
+
+        // Handle updates to listType live data by updating the UI and updating the recycler view
+        // Handled with view model live data to survive configuration changes
+        viewModel.currentListType.observe(viewLifecycleOwner, {
+            binding.listLayoutChangeButton.background = when(it) {
+                MovieLayoutType.SIMPLE -> ContextCompat.getDrawable(requireActivity(), R.drawable.ic_layout_simple)
+                MovieLayoutType.POSTER -> ContextCompat.getDrawable(requireActivity(), R.drawable.ic_layout_poster)
+                else -> ContextCompat.getDrawable(requireActivity(), R.drawable.ic_layout_normal)
+            }
+            setListLayout(it)
+        })
+
         // Navigate to Movie Search fragment when FAB is clicked
         binding.listAddNewMovieButton.setOnClickListener {
             openNewMovieSearchFragment()
@@ -78,44 +98,7 @@ class MovieListFragment : Fragment() {
         initializeSortSpinner()
         initializeSortOrderButton()
 
-        setHasOptionsMenu(true)
-
         return binding.root
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-
-        menu.clear()
-        inflater.inflate(R.menu.layout_menu, menu)
-
-        viewModel.currentListType.observe(viewLifecycleOwner, {
-            Log.d("Layout", "Layout LiveData change")
-            when(it) {
-                MovieListAdapter.MovieLayout.FULL -> {
-                    setListLayout(0)
-                    menu.findItem(R.id.layoutButton).icon = resources.getDrawable(R.drawable.ic_layout_normal)
-                }
-                MovieListAdapter.MovieLayout.SIMPLE -> {
-                    setListLayout(1)
-                    menu.findItem(R.id.layoutButton).icon = resources.getDrawable(R.drawable.ic_layout_simple)
-                }
-                MovieListAdapter.MovieLayout.POSTER -> {
-                    setListLayout(2)
-                    menu.findItem(R.id.layoutButton).icon = resources.getDrawable(R.drawable.ic_layout_poster)
-                }
-            }
-        })
-
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-
-        if(item.itemId == R.id.layoutButton) {
-            viewModel.cycleListType()
-        }
-
-        return super.onOptionsItemSelected(item)
     }
 
     /* Function to (re)initialize observation of the current movie list LiveData of the view model*/
@@ -161,23 +144,22 @@ class MovieListFragment : Fragment() {
         }
     }
 
-    // TODO: Control with menu option
-    private fun setListLayout(testInt: Int = 0) {
+    private fun setListLayout(layoutType: MovieLayoutType) {
 
-        when(testInt) {
-            0 -> {
+        when(layoutType) {
+            MovieLayoutType.FULL -> {
                 binding.movieListRecycler.layoutManager = LinearLayoutManager(requireActivity())
-                movieListAdapter.setMovieLayoutType(MovieListAdapter.MovieLayout.FULL)
+                movieListAdapter.setMovieLayoutType(MovieLayoutType.FULL)
                 binding.movieListRecycler.adapter = movieListAdapter
             }
-            1 -> {
+            MovieLayoutType.SIMPLE -> {
                 binding.movieListRecycler.layoutManager = LinearLayoutManager(requireActivity())
-                movieListAdapter.setMovieLayoutType(MovieListAdapter.MovieLayout.SIMPLE)
+                movieListAdapter.setMovieLayoutType(MovieLayoutType.SIMPLE)
                 binding.movieListRecycler.adapter = movieListAdapter
             }
-            2 -> {
+            MovieLayoutType.POSTER -> {
                 binding.movieListRecycler.layoutManager = GridLayoutManager(requireActivity(), 2)
-                movieListAdapter.setMovieLayoutType(MovieListAdapter.MovieLayout.POSTER)
+                movieListAdapter.setMovieLayoutType(MovieLayoutType.POSTER)
                 binding.movieListRecycler.adapter = movieListAdapter
             }
         }

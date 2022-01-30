@@ -10,20 +10,17 @@ import com.elkins.watchlist.databinding.MovieListItemBinding
 import com.elkins.watchlist.databinding.MovieListItemPosterBinding
 import com.elkins.watchlist.databinding.MovieListItemSimpleBinding
 import com.elkins.watchlist.model.Movie
+import com.elkins.watchlist.utility.MovieLayoutType
 
 class MovieListAdapter(private val updateScoreListener: UpdateMovieClickListener,
                        private val updateFollowingListener: UpdateMovieClickListener,
                        private val movieDetailsListener: UpdateMovieClickListener)
     : ListAdapter<Movie, MovieListAdapter.MovieListViewHolder>(MovieDiffCallback()) {
 
-    enum class MovieLayout {
-        FULL, SIMPLE, POSTER
-    }
+    private var currentMovieLayout = MovieLayoutType.FULL
 
-    private var currentMovieLayout = MovieLayout.FULL
-
-    fun setMovieLayoutType(layout: MovieLayout) {
-        currentMovieLayout = layout
+    fun setMovieLayoutType(layoutType: MovieLayoutType) {
+        currentMovieLayout = layoutType
     }
 
 
@@ -63,7 +60,6 @@ class MovieListAdapter(private val updateScoreListener: UpdateMovieClickListener
 
                 is MovieListItemSimpleBinding -> binding.apply {
                     binding.movie = item
-
                     binding.itemSeenCheckBox.setOnCheckedChangeListener { _, checked ->
                         item.haveSeen = checked
                         updateFollowingListener.onClick(item)
@@ -73,13 +69,6 @@ class MovieListAdapter(private val updateScoreListener: UpdateMovieClickListener
 
                 is MovieListItemPosterBinding -> binding.apply {
                     binding.movie = item
-
-                    // Update the user's score for the movie
-                    binding.itemRatingBar.setOnRatingBarChangeListener { _, score, _ ->
-                        item.userScore = score.toInt()
-                        updateScoreListener.onClick(item)
-                    }
-
                     binding.itemSeenCheckBox.setOnCheckedChangeListener { _, checked ->
                         item.haveSeen = checked
                         updateFollowingListener.onClick(item)
@@ -92,13 +81,13 @@ class MovieListAdapter(private val updateScoreListener: UpdateMovieClickListener
 
         companion object {
 
-            fun from(parent: ViewGroup, movieLayout: MovieLayout) : MovieListViewHolder {
+            fun from(parent: ViewGroup, movieLayoutType: MovieLayoutType) : MovieListViewHolder {
 
                 val inflater = LayoutInflater.from(parent.context)
                 // Determine what type of layout to inflate based on the movieLayout parameter
-                val binding = when(movieLayout) {
-                    MovieLayout.POSTER -> MovieListItemPosterBinding.inflate(inflater, parent, false)
-                    MovieLayout.SIMPLE -> MovieListItemSimpleBinding.inflate(inflater, parent, false)
+                val binding = when(movieLayoutType) {
+                    MovieLayoutType.POSTER -> MovieListItemPosterBinding.inflate(inflater, parent, false)
+                    MovieLayoutType.SIMPLE -> MovieListItemSimpleBinding.inflate(inflater, parent, false)
                     else -> MovieListItemBinding.inflate(inflater, parent, false)
                 }
                 return MovieListViewHolder(binding)

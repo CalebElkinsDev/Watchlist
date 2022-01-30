@@ -3,6 +3,7 @@ package com.elkins.watchlist
 import androidx.lifecycle.*
 import com.elkins.watchlist.MovieRepository.SortType
 import com.elkins.watchlist.model.Movie
+import com.elkins.watchlist.utility.MovieLayoutType
 import kotlinx.coroutines.launch
 
 class MovieListViewModel(private val repository: MovieRepository) : ViewModel() {
@@ -16,8 +17,8 @@ class MovieListViewModel(private val repository: MovieRepository) : ViewModel() 
     val movies: LiveData<List<Movie>>
         get() = _movies
 
-    private var _currentListType = MutableLiveData(MovieListAdapter.MovieLayout.FULL)
-    val currentListType: LiveData<MovieListAdapter.MovieLayout>
+    private var _currentListType = MutableLiveData(MovieLayoutType.FULL)
+    val currentListType: LiveData<MovieLayoutType>
         get() = _currentListType
 
     private var sortAscending = true
@@ -71,10 +72,10 @@ class MovieListViewModel(private val repository: MovieRepository) : ViewModel() 
 
     fun cycleListType() {
         _currentListType.value = when(_currentListType.value) {
-            MovieListAdapter.MovieLayout.FULL -> MovieListAdapter.MovieLayout.SIMPLE
-            MovieListAdapter.MovieLayout.SIMPLE -> MovieListAdapter.MovieLayout.POSTER
-            MovieListAdapter.MovieLayout.POSTER -> MovieListAdapter.MovieLayout.FULL
-            else -> MovieListAdapter.MovieLayout.FULL
+            MovieLayoutType.FULL -> MovieLayoutType.SIMPLE
+            MovieLayoutType.SIMPLE -> MovieLayoutType.POSTER
+            MovieLayoutType.POSTER -> MovieLayoutType.FULL
+            else -> MovieLayoutType.FULL
         }
     }
 }
