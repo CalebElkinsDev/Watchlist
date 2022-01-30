@@ -11,7 +11,9 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.elkins.watchlist.MovieRepository.SortType
 import com.elkins.watchlist.database.MovieDatabase
 import com.elkins.watchlist.databinding.FragmentMovieListBinding
@@ -121,6 +123,28 @@ class MovieListFragment : Fragment() {
         binding.listSortOrderToggleButton.setOnCheckedChangeListener { _, ascending ->
             // on == ascending
             viewModel.setSortAscending(ascending)
+        }
+    }
+
+    // TODO: Control with menu option
+    private fun setListLayout(testInt: Int = 0) {
+
+        when(testInt) {
+            0 -> {
+                binding.movieListRecycler.layoutManager = LinearLayoutManager(requireActivity())
+                movieListAdapter.setMovieLayoutType(MovieListAdapter.MovieLayout.FULL)
+                binding.movieListRecycler.adapter = movieListAdapter
+            }
+            1 -> {
+                binding.movieListRecycler.layoutManager = LinearLayoutManager(requireActivity())
+                movieListAdapter.setMovieLayoutType(MovieListAdapter.MovieLayout.SIMPLE)
+                binding.movieListRecycler.adapter = movieListAdapter
+            }
+            2 -> {
+                binding.movieListRecycler.layoutManager = GridLayoutManager(requireActivity(), 2)
+                movieListAdapter.setMovieLayoutType(MovieListAdapter.MovieLayout.POSTER)
+                binding.movieListRecycler.adapter = movieListAdapter
+            }
         }
     }
 
