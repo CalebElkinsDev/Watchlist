@@ -16,6 +16,10 @@ class MovieListViewModel(private val repository: MovieRepository) : ViewModel() 
     val movies: LiveData<List<Movie>>
         get() = _movies
 
+    private var _currentListType = MutableLiveData(MovieListAdapter.MovieLayout.FULL)
+    val currentListType: LiveData<MovieListAdapter.MovieLayout>
+        get() = _currentListType
+
     private var sortAscending = true
     private var showWatched = true
     private var sortType = SortType.TITLE
@@ -62,6 +66,15 @@ class MovieListViewModel(private val repository: MovieRepository) : ViewModel() 
     fun updateHaveSeenMovie(following: Boolean, id: String) {
         viewModelScope.launch {
             repository.updateHaveSeenMovie(following, id)
+        }
+    }
+
+    fun cycleListType() {
+        _currentListType.value = when(_currentListType.value) {
+            MovieListAdapter.MovieLayout.FULL -> MovieListAdapter.MovieLayout.SIMPLE
+            MovieListAdapter.MovieLayout.SIMPLE -> MovieListAdapter.MovieLayout.POSTER
+            MovieListAdapter.MovieLayout.POSTER -> MovieListAdapter.MovieLayout.FULL
+            else -> MovieListAdapter.MovieLayout.FULL
         }
     }
 }

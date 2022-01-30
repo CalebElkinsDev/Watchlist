@@ -2,9 +2,7 @@ package com.elkins.watchlist
 
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.databinding.DataBindingUtil
@@ -80,7 +78,44 @@ class MovieListFragment : Fragment() {
         initializeSortSpinner()
         initializeSortOrderButton()
 
+        setHasOptionsMenu(true)
+
         return binding.root
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+
+        menu.clear()
+        inflater.inflate(R.menu.layout_menu, menu)
+
+        viewModel.currentListType.observe(viewLifecycleOwner, {
+            Log.d("Layout", "Layout LiveData change")
+            when(it) {
+                MovieListAdapter.MovieLayout.FULL -> {
+                    setListLayout(0)
+                    menu.findItem(R.id.layoutButton).icon = resources.getDrawable(R.drawable.ic_layout_normal)
+                }
+                MovieListAdapter.MovieLayout.SIMPLE -> {
+                    setListLayout(1)
+                    menu.findItem(R.id.layoutButton).icon = resources.getDrawable(R.drawable.ic_layout_simple)
+                }
+                MovieListAdapter.MovieLayout.POSTER -> {
+                    setListLayout(2)
+                    menu.findItem(R.id.layoutButton).icon = resources.getDrawable(R.drawable.ic_layout_poster)
+                }
+            }
+        })
+
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        if(item.itemId == R.id.layoutButton) {
+            viewModel.cycleListType()
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 
     /* Function to (re)initialize observation of the current movie list LiveData of the view model*/
