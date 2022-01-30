@@ -72,14 +72,15 @@
                 tools:text="2h 15m" />
 
             <TextView
-                android:id="@+id/item_dateAddedTextView"
+                android:id="@+id/item_contentRatingTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:releaseDate="@{movie.dateAdded}"
+                android:text="@{movie.contentRating}"
                 android:textColor="@color/secondaryTextColor"
+                android:layout_marginTop="8dp"
                 app:layout_constraintStart_toStartOf="@+id/item_dateTextView"
                 app:layout_constraintTop_toBottomOf="@+id/item_runtimeTextView"
-                tools:text="Date Added" />
+                tools:text="NR" />
 
             <RatingBar
                 android:id="@+id/item_ratingBar"
