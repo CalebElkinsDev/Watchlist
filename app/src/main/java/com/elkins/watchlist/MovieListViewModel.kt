@@ -7,25 +7,49 @@ import kotlinx.coroutines.launch
 
 class MovieListViewModel(private val repository: MovieRepository) : ViewModel() {
 
-    var currentSortType: SortType = SortType.TITLE
-    var showWatchedMovies: Boolean = true
-    var sortAscending: Boolean = true
+    private class SortOptions(var sortAscending: Boolean,
+                              var sortType: SortType,
+                              var showWatched: Boolean)
 
-    // Live data list of movies from the local database
-    private lateinit var _movies: LiveData<List<Movie>>
+    // Live data observed by fragment for updating thw recycler view
+    private val _movies: LiveData<List<Movie>>
     val movies: LiveData<List<Movie>>
         get() = _movies
 
-    private var _listRefreshEvent = MutableLiveData(false)
-    val listRefreshEvent: LiveData<Boolean>
-        get() = _listRefreshEvent
+    private var sortAscending = true
+    private var showWatched = true
+    private var sortType = SortType.TITLE
 
-    fun listRefreshEventHandled() {
-        _listRefreshEvent.value = false
-    }
+    /* Live data containing sort and filter options. Used for mapping the observed _movies LiveData
+     * with filtered data from the repository */
+    private var sortOptions = MutableLiveData(SortOptions(sortAscending, sortType, showWatched))
 
     init {
-        getMovies() // Get filter, sort, and order from user preferences
+        _movies = Transformations.switchMap(sortOptions) {
+            repository.getMovies(it.sortAscending, it.sortType, it.showWatched)
+        }
+    }
+
+
+    // Called whenever any of the sort/filter options are changed to trigger database query
+    private fun updateSortOptions() {
+        sortOptions.postValue(SortOptions(sortAscending, sortType, showWatched))
+    }
+
+    /* Public functions for updating sorting/filtering options. Each one triggers a database query */
+    fun setSortAscending(ascending: Boolean) {
+        sortAscending = ascending
+        updateSortOptions()
+    }
+
+    fun setSortType(type: SortType) {
+        sortType = type
+        updateSortOptions()
+    }
+
+    fun setShowWatched(show: Boolean) {
+        showWatched = show
+        updateSortOptions()
     }
 
     // Update a movie if its rating or seen status has changed
@@ -39,32 +63,6 @@ class MovieListViewModel(private val repository: MovieRepository) : ViewModel() 
         viewModelScope.launch {
             repository.updateHaveSeenMovie(following, id)
         }
-    }
-
-    private fun getMovies() {
-        viewModelScope.launch {
-            // Get movies saved to local database
-            _movies = repository.getMovies(showWatchedMovies, currentSortType, sortAscending)
-            //_movies = repository.getMovies(currentMovieFilter)
-            _listRefreshEvent.value = true
-        }
-    }
-
-    fun updateFilter(showWatched: Boolean) {
-        viewModelScope.launch {
-            showWatchedMovies = showWatched
-            getMovies()
-        }
-    }
-
-    fun updateSortType(newSort: SortType) {
-        currentSortType = newSort
-        getMovies()
-    }
-
-    fun updateSortOrder(sortAscending: Boolean) {
-        this.sortAscending = sortAscending
-        getMovies()
     }
 }
 

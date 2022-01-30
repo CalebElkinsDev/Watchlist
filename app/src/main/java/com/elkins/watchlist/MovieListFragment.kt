@@ -1,6 +1,7 @@
 package com.elkins.watchlist
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -46,9 +47,16 @@ class MovieListFragment : Fragment() {
         viewModel = ViewModelProvider(requireActivity(), viewModelFactory).get(MovieListViewModel::class.java)
 
         // Create and assign a new adapter for the saved movie list
-        movieListAdapter = MovieListAdapter(UpdateMovieClickListener { viewModel.updateMovieScore(it.userScore, it.id) },
-            UpdateMovieClickListener { viewModel.updateHaveSeenMovie(it.haveSeen, it.id) },
-            UpdateMovieClickListener { openMovieDetails(it) })
+        movieListAdapter = MovieListAdapter(
+            UpdateMovieClickListener {
+                viewModel.updateMovieScore(it.userScore, it.id)
+            },
+            UpdateMovieClickListener {
+                viewModel.updateHaveSeenMovie(it.haveSeen, it.id)
+            },
+            UpdateMovieClickListener {
+                openMovieDetails(it)
+            })
 
         // Assign the list adapter to the recycler view
         binding.movieListRecycler.adapter = movieListAdapter
@@ -59,14 +67,6 @@ class MovieListFragment : Fragment() {
 
         // Observe the viewmodel's movie list and submit it to the adapter when changed
         setObserverForCurrentList()
-
-        viewModel.listRefreshEvent.observe(viewLifecycleOwner, { listRefreshed ->
-            if(listRefreshed) {
-                // Reset the observer to match the new query's LiveData result
-                setObserverForCurrentList()
-                viewModel.listRefreshEventHandled()
-            }
-        })
 
         // Navigate to Movie Search fragment when FAB is clicked
         binding.listAddNewMovieButton.setOnClickListener {
@@ -84,15 +84,14 @@ class MovieListFragment : Fragment() {
     /* Function to (re)initialize observation of the current movie list LiveData of the view model*/
     private fun setObserverForCurrentList() {
         viewModel.movies.observe(viewLifecycleOwner, { movies ->
-            if(movies != null) {
-                movieListAdapter.submitList(movies)
-            }
+            Log.d("Database", "View model observer fired")
+            movieListAdapter.submitList(movies)
         })
     }
 
     private fun initializeFilterSwitch() {
         binding.listFilterSwitch.setOnCheckedChangeListener { _, on ->
-            viewModel.updateFilter(on)
+            viewModel.setShowWatched(on)
         }
     }
 
@@ -111,7 +110,7 @@ class MovieListFragment : Fragment() {
                     1 -> SortType.RELEASE_DATE
                     else -> SortType.DATE_ADDED
                 }
-                viewModel.updateSortType(sortType)
+                viewModel.setSortType(sortType)
             }
 
             override fun onNothingSelected(parentView: AdapterView<*>?) {}
@@ -121,7 +120,7 @@ class MovieListFragment : Fragment() {
     private fun initializeSortOrderButton() {
         binding.listSortOrderToggleButton.setOnCheckedChangeListener { _, ascending ->
             // on == ascending
-            viewModel.updateSortOrder(ascending)
+            viewModel.setSortAscending(ascending)
         }
     }
 

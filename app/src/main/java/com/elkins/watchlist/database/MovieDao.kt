@@ -14,65 +14,18 @@ interface MovieDao {
     fun insert(movie: Movie)
 
 
-    /* Queries for getting all movies */
-    @Query("SELECT * FROM movies_table ORDER BY title")
-    fun getAllMovies_Title_ASC(): LiveData<List<Movie>>
-
-    @Query("SELECT * FROM movies_table ORDER BY title DESC")
-    fun getAllMovies_Title_DESC(): LiveData<List<Movie>>
-
-    @Query("SELECT * FROM movies_table ORDER BY releaseDate")
-    fun getAllMovies_ReleaseDate_ASC(): LiveData<List<Movie>>
-
-    @Query("SELECT * FROM movies_table ORDER BY releaseDate DESC")
-    fun getAllMovies_ReleaseDate_DESC(): LiveData<List<Movie>>
-
-    @Query("SELECT * FROM movies_table ORDER BY dateAdded")
-    fun getAllMovies_DateAdded_ASC(): LiveData<List<Movie>>
-
-    @Query("SELECT * FROM movies_table ORDER BY dateAdded DESC")
-    fun getAllMovies_DateAdded_DESC(): LiveData<List<Movie>>
-
-
-    /* Queries for getting unseen movies */
-    @Query("SELECT * FROM movies_table WHERE haveSeen = 0 ORDER BY title")
-    fun getUnseenMovies_Title_ASC(): LiveData<List<Movie>>
-
-    @Query("SELECT * FROM movies_table WHERE haveSeen = 0 ORDER BY title DESC")
-    fun getUnseenMovies_Title_DESC(): LiveData<List<Movie>>
-
-    @Query("SELECT * FROM movies_table WHERE haveSeen = 0 ORDER BY releaseDate")
-    fun getUnseenMovies_ReleaseDate_ASC(): LiveData<List<Movie>>
-
-    @Query("SELECT * FROM movies_table WHERE haveSeen = 0 ORDER BY releaseDate DESC")
-    fun getUnseenMovies_ReleaseDate_DESC(): LiveData<List<Movie>>
-
-    @Query("SELECT * FROM movies_table WHERE haveSeen = 0 ORDER BY dateAdded")
-    fun getUnseenMovies_DateAdded_ASC(): LiveData<List<Movie>>
-
-    @Query("SELECT * FROM movies_table WHERE haveSeen = 0 ORDER BY dateAdded DESC")
-    fun getUnseenMovies_DateAdded_DESC(): LiveData<List<Movie>>
-
-
-    /* Queries for getting seen movies */
-    @Query("SELECT * FROM movies_table WHERE haveSeen = 1 ORDER BY title")
-    fun getSeenMovies_Title_ASC(): LiveData<List<Movie>>
-
-    @Query("SELECT * FROM movies_table WHERE haveSeen = 1 ORDER BY title DESC")
-    fun getSeenMovies_Title_DESC(): LiveData<List<Movie>>
-
-    @Query("SELECT * FROM movies_table WHERE haveSeen = 1 ORDER BY releaseDate")
-    fun getSeenMovies_ReleaseDate_ASC(): LiveData<List<Movie>>
-
-    @Query("SELECT * FROM movies_table WHERE haveSeen = 1 ORDER BY releaseDate DESC")
-    fun getSeenMovies_ReleaseDate_DESC(): LiveData<List<Movie>>
-
-    @Query("SELECT * FROM movies_table WHERE haveSeen = 1 ORDER BY dateAdded")
-    fun getSeenMovies_DateAdded_ASC(): LiveData<List<Movie>>
-
-    @Query("SELECT * FROM movies_table WHERE haveSeen = 1 ORDER BY dateAdded DESC")
-    fun getSeenMovies_DateAdded_DESC(): LiveData<List<Movie>>
-
+    @Query("SELECT * FROM movies_table " +
+            "WHERE CASE " +
+            "WHEN :showWatched = 0 THEN haveSeen = 0 " +
+            "WHEN :showWatched = 1 THEN haveSeen = 1 OR haveSeen = 0 END " +
+            "ORDER BY " +
+            "CASE WHEN :sortType = 0 AND :sortAscending = true THEN title END ASC, " +
+            "CASE WHEN :sortType = 0 AND :sortAscending = false THEN title END DESC, " +
+            "CASE WHEN :sortType = 1 AND :sortAscending = true THEN releaseDate END ASC, " +
+            "CASE WHEN :sortType = 1 AND :sortAscending = false THEN releaseDate END DESC, " +
+            "CASE WHEN :sortType = 2 AND :sortAscending = true THEN dateAdded END ASC, " +
+            "CASE WHEN :sortType = 2 AND :sortAscending = false THEN dateAdded END DESC")
+    fun getMovies(sortAscending: Boolean, sortType: Int = 0, showWatched: Boolean) : LiveData<List<Movie>>
 
 
     @Query("SELECT * FROM movies_table WHERE id = :id")
