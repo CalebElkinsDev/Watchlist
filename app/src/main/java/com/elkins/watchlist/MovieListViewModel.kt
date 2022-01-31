@@ -21,6 +21,14 @@ class MovieListViewModel(private val repository: MovieRepository) : ViewModel() 
     val currentListType: LiveData<MovieLayoutType>
         get() = _currentListType
 
+    private lateinit var _watchedMoviesCount: LiveData<Int?>
+    val watchedMoviesCount: LiveData<Int?>
+        get() = _watchedMoviesCount
+
+    private lateinit var _notWatchedMoviesCount: LiveData<Int?>
+    val notWatchedMoviesCount: LiveData<Int?>
+        get() = _notWatchedMoviesCount
+
     private var sortAscending = true
     private var showWatched = true
     private var sortType = SortType.TITLE
@@ -32,6 +40,10 @@ class MovieListViewModel(private val repository: MovieRepository) : ViewModel() 
     init {
         _movies = Transformations.switchMap(sortOptions) {
             repository.getMovies(it.sortAscending, it.sortType, it.showWatched)
+        }
+        viewModelScope.launch {
+            _watchedMoviesCount = repository.getWatchedMovieCount()
+            _notWatchedMoviesCount = repository.getNotWatchedMovieCount()
         }
     }
 

@@ -59,7 +59,7 @@ class MovieSearchViewModel(private val repository: MovieRepository) : ViewModel(
             // Determine if movie is already in the user's watchlist
             val existingMovie = repository.getMovie(searchResult.id)
             if(existingMovie != null) {
-                _toastMessageEvent.postValue(R.string.search_itemAlreadyAdded) // TODO
+                _toastMessageEvent.postValue(R.string.search_itemAlreadyAdded)
                 return@launch
             }
 

@@ -14,75 +14,132 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
+            android:id="@+id/controlsAndStatsLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="2dp"
-            android:paddingBottom="2dp"
-            android:background="@color/primaryColor">
+            android:orientation="vertical">
 
-            <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/list_filterSwitch"
-                android:layout_width="wrap_content"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:textColor="?attr/colorOnPrimary"
-                android:checked="true"
-                android:text="Watched"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:paddingVertical="4dp"
+                android:background="@color/primaryColor">
 
-            <Spinner
-                android:id="@+id/list_typeSpinner"
-                android:layout_width="wrap_content"
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/list_filterSwitch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="16dp"
+                    android:layout_marginStart="16dp"
+                    android:textColor="?attr/colorOnPrimary"
+                    android:checked="true"
+                    android:text="Watched"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Spinner
+                    android:id="@+id/list_typeSpinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:gravity="end"
+                    android:textAlignment="viewEnd"
+                    android:layout_marginEnd="4dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/list_sortOrderToggleButton"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ToggleButton
+                    android:id="@+id/list_sortOrderToggleButton"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_marginEnd="32dp"
+                    android:background="@drawable/sort_arrow_toggle"
+                    android:backgroundTint="?attr/colorOnPrimary"
+                    android:checked="true"
+                    android:textOff=""
+                    android:textOn=""
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/list_layoutChangeButton"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@android:drawable/arrow_down_float"
+                    tools:ignore="TouchTargetSizeCheck" />
+
+                <ImageButton
+                    android:id="@+id/list_layoutChangeButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/ic_layout_normal"
+                    android:backgroundTint="?attr/colorOnPrimary"
+                    android:scaleX="1.25"
+                    android:scaleY="1.25"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@null"
-                android:gravity="end"
-                android:textAlignment="viewEnd"
-                android:layout_marginEnd="4dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/list_sortOrderToggleButton"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:paddingVertical="2dp"
+                android:background="@color/primaryLightColor">
 
-            <ToggleButton
-                android:id="@+id/list_sortOrderToggleButton"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_marginEnd="32dp"
-                android:background="@drawable/sort_arrow_toggle"
-                android:backgroundTint="?attr/colorOnPrimary"
-                android:checked="true"
-                android:textOff=""
-                android:textOn=""
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/list_layoutChangeButton"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@android:drawable/arrow_down_float"
-                tools:ignore="TouchTargetSizeCheck" />
+                <TextView
+                    android:id="@+id/list_unseenMoviesLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:textSize="@dimen/text_small"
+                    android:textColor="?attr/colorOnSecondary"
+                    android:text="Not Watched: "
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent" />
 
-            <ImageButton
-                android:id="@+id/list_layoutChangeButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:background="@drawable/ic_layout_normal"
-                android:backgroundTint="?attr/colorOnPrimary"
-                android:scaleX="1.25"
-                android:scaleY="1.25"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                <TextView
+                    android:id="@+id/list_unseenMoviesTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/text_small"
+                    android:textColor="?attr/colorOnPrimary"
+                    app:layout_constraintStart_toEndOf="@id/list_unseenMoviesLabel"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    tools:text="45"/>
 
+                <TextView
+                    android:id="@+id/list_seenMoviesTotalLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="32dp"
+                    android:text="Watched: "
+                    android:textSize="@dimen/text_small"
+                    android:textColor="?attr/colorOnSecondary"
+                    app:layout_constraintStart_toEndOf="@id/list_unseenMoviesTextView"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                <TextView
+                    android:id="@+id/list_seenMovieTotalTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/text_small"
+                    android:textColor="?attr/colorOnPrimary"
+                    app:layout_constraintStart_toEndOf="@id/list_seenMoviesTotalLabel"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    tools:text="100"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </LinearLayout>
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             tools:context=".MovieListFragment"
             android:background="?attr/backgroundColor">
-
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/movieListRecycler"
@@ -104,8 +161,7 @@
                 android:focusable="true"
                 app:layout_constraintBottom_toTopOf="@+id/movieListRecycler"
                 app:maxImageSize="36dp"
-                app:srcCompat="@android:drawable/ic_input_add"
-                tools:layout_editor_absoluteX="352dp" />
+                app:srcCompat="@android:drawable/ic_input_add" />
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

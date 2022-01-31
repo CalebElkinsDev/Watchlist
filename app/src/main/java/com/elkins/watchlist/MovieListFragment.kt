@@ -88,6 +88,18 @@ class MovieListFragment : Fragment() {
             setListLayout(it)
         })
 
+        viewModel.watchedMoviesCount.observe(viewLifecycleOwner, {
+            it?.let {
+                binding.listSeenMovieTotalTextView.text = it.toString()
+            }
+        })
+
+        viewModel.notWatchedMoviesCount.observe(viewLifecycleOwner, {
+            it?.let {
+                binding.listUnseenMoviesTextView.text = it.toString()
+            }
+        })
+
         // Navigate to Movie Search fragment when FAB is clicked
         binding.listAddNewMovieButton.setOnClickListener {
             openNewMovieSearchFragment()

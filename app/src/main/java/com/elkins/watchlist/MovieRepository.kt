@@ -19,6 +19,14 @@ class MovieRepository(private val dataSource: MovieDao) {
         return dataSource.getMovies(ascending,sortType. sqlValue, showWatched)
     }
 
+    fun getWatchedMovieCount() : LiveData<Int?> {
+        return dataSource.getWatchedMovieCount()
+    }
+
+    fun getNotWatchedMovieCount() : LiveData<Int?> {
+        return dataSource.getNotWatchedMovieCount()
+    }
+
     suspend fun getMovie(id: String) : Movie? {
         return dataSource.getMovie(id)
     }
