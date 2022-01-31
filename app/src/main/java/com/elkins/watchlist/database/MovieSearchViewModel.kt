@@ -27,7 +27,7 @@ class MovieSearchViewModel(private val repository: MovieRepository) : ViewModel(
     fun searchForMovie(searchString: String) {
         viewModelScope.launch {
             try {
-                val response: SearchResponse = retrofitService.searchForMovie(searchString)
+                val response: SearchResponse = retrofitService.searchForMovie(searchString, "feature")
                 _results.value = NetworkResponseHandler.handleSuccess(response)
 //                if(response.results!!.isEmpty()) {
 //                    Log.d("Network", "In Try, empty results")

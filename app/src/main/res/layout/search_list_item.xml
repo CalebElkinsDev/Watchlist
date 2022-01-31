@@ -65,7 +65,7 @@
                 android:id="@+id/search_decriptionTextView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@{movie.description}"
+                android:text="@{movie.plot}"
                 android:textColor="@color/secondaryTextColor"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/search_titleTextView"
