@@ -25,10 +25,18 @@
         <argument
             android:name="movie"
             app:argType="com.elkins.watchlist.model.Movie" />
+        <argument
+            android:name="fromListFragment"
+            app:argType="boolean"
+            android:defaultValue="true" />
     </fragment>
     <fragment
         android:id="@+id/movieSearchFragment"
         android:name="com.elkins.watchlist.MovieSearchFragment"
         android:label="fragment_movie_search"
-        tools:layout="@layout/fragment_movie_search" />
+        tools:layout="@layout/fragment_movie_search" >
+        <action
+            android:id="@+id/action_movieSearchFragment_to_movieDetailsFragment"
+            app:destination="@id/movieDetailsFragment" />
+    </fragment>
 </navigation>

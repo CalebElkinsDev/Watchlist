@@ -8,15 +8,19 @@ import androidx.recyclerview.widget.RecyclerView
 import com.elkins.watchlist.databinding.SearchListItemBinding
 import com.elkins.watchlist.network.SearchResult
 
-class SearchResultListAdapter(private val clickListener: AddClickListener) : ListAdapter<SearchResult,
-        SearchResultListAdapter.SearchResultViewHolder>(MovieSearchDiffCallback()) {
+class SearchResultListAdapter(private val addClickListener: AddClickListener,
+                              private val detailsClickListener: DetailsClickListener)
+    : ListAdapter<SearchResult, SearchResultListAdapter.SearchResultViewHolder>(MovieSearchDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchResultViewHolder {
         return SearchResultViewHolder.from(parent)
     }
 
     override fun onBindViewHolder(holder: SearchResultViewHolder, position: Int) {
-        holder.bind(getItem(position), clickListener)
+        holder.bind(getItem(position), addClickListener)
+        holder.itemView.setOnClickListener {
+            detailsClickListener.onClick(currentList[position])
+        }
     }
 
     class SearchResultViewHolder(private val binding: SearchListItemBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -51,4 +55,8 @@ class SearchResultListAdapter(private val clickListener: AddClickListener) : Lis
 
 class AddClickListener(val clickListener: (searchResult: SearchResult, position: Int) -> Unit) {
     fun onClick(searchResult: SearchResult, position: Int) = clickListener(searchResult, position)
+}
+
+class DetailsClickListener(val clickListener: (searchResult: SearchResult) -> Unit) {
+    fun onClick(searchResult: SearchResult) = clickListener(searchResult)
 }

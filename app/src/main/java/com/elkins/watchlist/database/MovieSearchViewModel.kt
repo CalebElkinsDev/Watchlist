@@ -3,6 +3,7 @@ package com.elkins.watchlist.database
 import android.util.Log
 import androidx.lifecycle.*
 import com.elkins.watchlist.MovieRepository
+import com.elkins.watchlist.model.Movie
 import com.elkins.watchlist.network.ImdbApi.retrofitService
 import com.elkins.watchlist.network.MovieResponse
 import com.elkins.watchlist.network.NetworkResponseHandler
@@ -23,6 +24,11 @@ class MovieSearchViewModel(private val repository: MovieRepository) : ViewModel(
     private var _lastRemovedIndex = MutableLiveData<Int>()
     val lastRemovedIndex: LiveData<Int>
         get() = _lastRemovedIndex
+
+    private var _movieDetailsObject = MutableLiveData<Movie?>(null)
+    val movieDetailsObject: LiveData<Movie?>
+        get() = _movieDetailsObject
+
 
     fun searchForMovie(searchString: String) {
         viewModelScope.launch {
@@ -58,6 +64,20 @@ class MovieSearchViewModel(private val repository: MovieRepository) : ViewModel(
 
             _lastRemovedIndex.value = position // Notify observers that an item has been removed
         }
+    }
+
+    // Get a Movie object from the selected SearchResult object and update the LiveData to fire navigation from observer
+    fun getMovieDetailsAndBeginNavigation(searchResult: SearchResult){
+        viewModelScope.launch {
+            val response: MovieResponse = retrofitService.getMovieFromId(searchResult.id)
+            val newMovie = response.toDataBaseModel() // Convert network object to database model
+            _movieDetailsObject.value = newMovie // Change to this notifies a navigation change
+        }
+    }
+
+    // Nullify the LiveData once navigation is handled to prevent repeated observer notifies
+    fun navigationToDetailsComplete() {
+        _movieDetailsObject.value = null
     }
 }
 

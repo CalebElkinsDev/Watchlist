@@ -24,8 +24,14 @@ class MovieDetailsFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_movie_details, container, false)
 
         if(arguments != null) {
+            // Get the navigation arguments and pass them to the data binding layout
             val movie: Movie = MovieDetailsFragmentArgs.fromBundle(requireArguments()).movie
             binding.movie = movie
+
+            val navigatedFromList: Boolean = MovieDetailsFragmentArgs.fromBundle(requireArguments()).fromListFragment
+            binding.navigatedFromList = navigatedFromList
+
+            // Set the title of the app bar as the title or a placeholder
             val title = movie.fullTitle ?: movie.title ?: getString(R.string.details_appbar_placeholder_title)
             setSupportBarTitle(requireActivity(), title)
         } else {

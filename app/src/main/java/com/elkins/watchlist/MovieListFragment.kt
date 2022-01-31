@@ -59,7 +59,7 @@ class MovieListFragment : Fragment() {
                 viewModel.updateHaveSeenMovie(it.haveSeen, it.id)
             },
             UpdateMovieClickListener {
-                openMovieDetails(it)
+                navigateToMovieDetails(it)
          })
 
         // Assign the list adapter to the recycler view
@@ -170,8 +170,8 @@ class MovieListFragment : Fragment() {
             .actionMovieListFragmentToMovieSearchFragment())
     }
 
-    private fun openMovieDetails(movie: Movie) {
+    private fun navigateToMovieDetails(movie: Movie) {
         findNavController().navigate(MovieListFragmentDirections
-            .actionMovieListFragmentToMovieDetailsFragment(movie))
+            .actionMovieListFragmentToMovieDetailsFragment(movie, true))
     }
 }

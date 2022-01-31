@@ -13,10 +13,12 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.elkins.watchlist.database.MovieDatabase
 import com.elkins.watchlist.database.MovieSearchViewModel
 import com.elkins.watchlist.database.MovieSearchViewModelFactory
 import com.elkins.watchlist.databinding.FragmentMovieSearchBinding
+import com.elkins.watchlist.model.Movie
 import com.elkins.watchlist.network.SearchResponse
 import com.elkins.watchlist.utility.Resource
 import com.elkins.watchlist.utility.Status
@@ -53,6 +55,8 @@ class MovieSearchFragment() : Fragment() {
         // Create and assign a new adapter for the search results list
         searchAdapter = SearchResultListAdapter(AddClickListener { searchResult, position ->
             viewModel.addMovieToRepository(searchResult, position)
+        }, DetailsClickListener {
+            viewModel.getMovieDetailsAndBeginNavigation(it)
         })
 
         binding.searchResultsRecycler.adapter = searchAdapter
@@ -60,6 +64,14 @@ class MovieSearchFragment() : Fragment() {
         // Observe the Resource ive data of the view model
         viewModel.results.observe(viewLifecycleOwner, { resource ->
             handleResourceSearchResponses(resource)
+        })
+
+        // Observe the LiveData Movie object that is created when navigation is requested
+        viewModel.movieDetailsObject.observe(viewLifecycleOwner, {
+            it?.let {
+                navigateToMovieDetails(it)
+                viewModel.navigationToDetailsComplete() // Let view model know navigation is handled
+            }
         })
 
         // Observer for notifying adapter when an item has been removed
@@ -126,5 +138,10 @@ class MovieSearchFragment() : Fragment() {
     private fun hideKeyboard(activity: Activity) {
         val inputManager = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputManager.hideSoftInputFromWindow(activity.currentFocus?.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
+    }
+
+    private fun navigateToMovieDetails(movie: Movie) {
+        findNavController().navigate(MovieSearchFragmentDirections
+            .actionMovieSearchFragmentToMovieDetailsFragment(movie, false))
     }
 }

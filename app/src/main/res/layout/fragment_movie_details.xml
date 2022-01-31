@@ -5,9 +5,13 @@
     tools:context=".MovieDetailsFragment">
 
     <data>
+        <import type="android.view.View"/>
         <variable
             name="movie"
             type="com.elkins.watchlist.model.Movie" />
+        <variable
+            name="navigatedFromList"
+            type="Boolean" />
     </data>
 
     <ScrollView
@@ -145,6 +149,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="@string/details_userScoreLabel"
+                android:visibility="@{navigatedFromList ? View.VISIBLE : View.GONE}"
                 app:layout_constraintBottom_toTopOf="@+id/userRatingTextView"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -156,6 +161,7 @@
                 style="@style/DetailsTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:visibility="@{navigatedFromList ? View.VISIBLE : View.GONE}"
                 app:layout_constraintBottom_toTopOf="@+id/haveSeenLabel"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -171,6 +177,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="@string/details_haveSeenLabel"
+                android:visibility="@{navigatedFromList ? View.VISIBLE : View.GONE}"
                 app:layout_constraintBottom_toTopOf="@+id/item_seenCheckBox"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -182,6 +189,7 @@
                 android:layout_width="33dp"
                 android:layout_height="32dp"
                 android:checked="@{movie.haveSeen}"
+                android:visibility="@{navigatedFromList ? View.VISIBLE : View.GONE}"
                 android:gravity="center_vertical"
                 android:scaleX="1"
                 android:scaleY="1"
