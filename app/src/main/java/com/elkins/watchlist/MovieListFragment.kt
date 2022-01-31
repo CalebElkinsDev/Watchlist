@@ -29,6 +29,7 @@ class MovieListFragment : Fragment() {
     private lateinit var binding: FragmentMovieListBinding
     private lateinit var viewModel: MovieListViewModel
     private lateinit var movieListAdapter: MovieListAdapter
+    private lateinit var repository: MovieRepository
 
     // Update app bar title on resume to override changes in other fragments
     override fun onResume() {
@@ -44,12 +45,37 @@ class MovieListFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_movie_list, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
 
+        initializeViewModel()
+        initializeRecyclerView()
+        initializeLiveDataObservers()
+
+        /* Setup spinners for filtering and sorting the list */
+        initializeFilterSwitch()
+        initializeSortSpinner()
+        initializeSortOrderButton()
+
+        // Set the view model's listType live data to the next enum value and trigger a observer change
+        binding.listLayoutChangeButton.setOnClickListener {
+            viewModel.cycleListType()
+        }
+
+        // Navigate to Movie Search fragment when FAB is clicked
+        binding.listAddNewMovieButton.setOnClickListener {
+            openNewMovieSearchFragment()
+        }
+
+        return binding.root
+    }
+
+    private fun initializeViewModel() {
         // Get a reference to the database and setup the viewmodel with the dao
         val database = MovieDatabase.getInstance(requireContext())
-        val repository = MovieRepository(database.movieDao)
+        repository = MovieRepository(database.movieDao)
         val viewModelFactory = MovieListViewModelFactory(repository)
         viewModel = ViewModelProvider(requireActivity(), viewModelFactory).get(MovieListViewModel::class.java)
+    }
 
+    private fun initializeRecyclerView() {
         // Create and assign a new adapter for the saved movie list
         movieListAdapter = MovieListAdapter(
             UpdateMovieClickListener {
@@ -60,7 +86,7 @@ class MovieListFragment : Fragment() {
             },
             UpdateMovieClickListener {
                 navigateToMovieDetails(it)
-         })
+            })
 
         // Assign the list adapter to the recycler view
         binding.movieListRecycler.adapter = movieListAdapter
@@ -68,15 +94,9 @@ class MovieListFragment : Fragment() {
         // Create a callback for deleting movies when swiped
         val swipeCallback = ItemTouchHelper(SwipeMovieCallback(movieListAdapter, repository))
         swipeCallback.attachToRecyclerView(binding.movieListRecycler)
+    }
 
-        // Observe the viewmodel's movie list and submit it to the adapter when changed
-        setObserverForCurrentList()
-
-        // Set the view model's listType live data to the next enum value and trigger a observer change
-        binding.listLayoutChangeButton.setOnClickListener {
-            viewModel.cycleListType()
-        }
-
+    private fun initializeLiveDataObservers() {
         // Handle updates to listType live data by updating the UI and updating the recycler view
         // Handled with view model live data to survive configuration changes
         viewModel.currentListType.observe(viewLifecycleOwner, {
@@ -88,29 +108,21 @@ class MovieListFragment : Fragment() {
             setListLayout(it)
         })
 
+        // Observe the total seen movies count
         viewModel.watchedMoviesCount.observe(viewLifecycleOwner, {
             it?.let {
                 binding.listSeenMovieTotalTextView.text = it.toString()
             }
         })
 
+        // Observe the total non sen movies count
         viewModel.notWatchedMoviesCount.observe(viewLifecycleOwner, {
             it?.let {
                 binding.listUnseenMoviesTextView.text = it.toString()
             }
         })
 
-        // Navigate to Movie Search fragment when FAB is clicked
-        binding.listAddNewMovieButton.setOnClickListener {
-            openNewMovieSearchFragment()
-        }
-
-        /* Setup spinners for filtering and sorting the list */
-        initializeFilterSwitch()
-        initializeSortSpinner()
-        initializeSortOrderButton()
-
-        return binding.root
+        setObserverForCurrentList()
     }
 
     /* Function to (re)initialize observation of the current movie list LiveData of the view model*/

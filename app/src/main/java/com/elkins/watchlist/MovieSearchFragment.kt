@@ -30,6 +30,7 @@ class MovieSearchFragment() : Fragment() {
     private lateinit var binding: FragmentMovieSearchBinding
     private lateinit var viewModel: MovieSearchViewModel
     private lateinit var searchAdapter: SearchResultListAdapter
+    private lateinit var repository: MovieRepository
 
     // Update app bar title on resume to override changes in other fragments
     override fun onResume() {
@@ -43,15 +44,38 @@ class MovieSearchFragment() : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_movie_search, container, false)
-
-        // Get a reference to the database and setup the viewmodel with the dao
-        val database = MovieDatabase.getInstance(requireContext())
-        val repository = MovieRepository(database.movieDao)
-        val viewModelFactory = MovieSearchViewModelFactory(repository)
-        viewModel = ViewModelProvider(this, viewModelFactory).get(MovieSearchViewModel::class.java)
-
         binding.lifecycleOwner = viewLifecycleOwner
 
+        initializeViewModel()
+        initializeRecyclerView()
+        initializeLiveDataObservers()
+
+        // Begin searching and hide the keyboard if it is visible
+        binding.searchSearchButton.setOnClickListener {
+            hideKeyboard(requireActivity())
+            getQueryAndSearch()
+        }
+
+        // begin searching if the enter key is pressed on the virtual keyboard
+        binding.searchSearchEditText.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                getQueryAndSearch()
+            }
+            false
+        }
+
+        return binding.root
+    }
+
+    private fun initializeViewModel() {
+        // Get a reference to the database and setup the viewmodel with the dao
+        val database = MovieDatabase.getInstance(requireContext())
+        repository = MovieRepository(database.movieDao)
+        val viewModelFactory = MovieSearchViewModelFactory(repository)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(MovieSearchViewModel::class.java)
+    }
+
+    private fun initializeRecyclerView() {
         // Create and assign a new adapter for the search results list
         searchAdapter = SearchResultListAdapter(AddClickListener { searchResult, position ->
             // Get movie details and add the Movie to the watchlist
@@ -61,7 +85,9 @@ class MovieSearchFragment() : Fragment() {
         })
 
         binding.searchResultsRecycler.adapter = searchAdapter
+    }
 
+    private fun initializeLiveDataObservers() {
         // Observe the Resource ive data of the view model
         viewModel.results.observe(viewLifecycleOwner, { resource ->
             handleResourceSearchResponses(resource)
@@ -84,25 +110,9 @@ class MovieSearchFragment() : Fragment() {
         viewModel.toastMessageEvent.observe(viewLifecycleOwner, { resourceId ->
             resourceId?.let {
                 Toast.makeText(requireActivity(), getString(it), Toast.LENGTH_LONG).show()
-                viewModel.toastMessageEventComplete() // Notifiy view model that event was handled
+                viewModel.toastMessageEventComplete() // Notify view model that event was handled
             }
         })
-
-        // Begin searching and hide the keyboard if it is visible
-        binding.searchSearchButton.setOnClickListener {
-            hideKeyboard(requireActivity())
-            getQueryAndSearch()
-        }
-
-        // begin searching if the enter key is pressed on the virtual keyboard
-        binding.searchSearchEditText.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                getQueryAndSearch()
-            }
-            false
-        }
-
-        return binding.root
     }
 
     // Helper function for handling the different response types(Success, Error) of the search live data

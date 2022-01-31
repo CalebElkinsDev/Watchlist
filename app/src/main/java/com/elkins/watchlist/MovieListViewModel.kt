@@ -12,7 +12,7 @@ class MovieListViewModel(private val repository: MovieRepository) : ViewModel() 
                               var sortType: SortType,
                               var showWatched: Boolean)
 
-    // Live data observed by fragment for updating thw recycler view
+    // Live data observed by fragment for updating the recycler view
     private val _movies: LiveData<List<Movie>>
     val movies: LiveData<List<Movie>>
         get() = _movies

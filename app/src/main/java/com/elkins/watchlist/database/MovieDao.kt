@@ -17,7 +17,7 @@ interface MovieDao {
             "WHERE CASE " +
             "WHEN :showWatched = 0 THEN haveSeen = 0 " +
             "WHEN :showWatched = 1 THEN haveSeen = 1 OR haveSeen = 0 END " +
-            "ORDER BY " +
+            "ORDER BY haveSeen, " +
             "CASE WHEN :sortType = 0 AND :sortAscending = true THEN title END ASC, " +
             "CASE WHEN :sortType = 0 AND :sortAscending = false THEN title END DESC, " +
             "CASE WHEN :sortType = 1 AND :sortAscending = true THEN releaseDate END ASC, " +
