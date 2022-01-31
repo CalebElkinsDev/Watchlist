@@ -54,6 +54,7 @@ class MovieSearchFragment() : Fragment() {
 
         // Create and assign a new adapter for the search results list
         searchAdapter = SearchResultListAdapter(AddClickListener { searchResult, position ->
+            // Get movie details and add the Movie to the watchlist
             viewModel.addMovieToRepository(searchResult, position)
         }, DetailsClickListener {
             viewModel.getMovieDetailsAndBeginNavigation(it)
@@ -77,6 +78,14 @@ class MovieSearchFragment() : Fragment() {
         // Observer for notifying adapter when an item has been removed
         viewModel.lastRemovedIndex.observe(viewLifecycleOwner, {
             searchAdapter.notifyItemRemoved(it)
+        })
+
+        // Display the toast message posted in the view model's LiveData toast event variable
+        viewModel.toastMessageEvent.observe(viewLifecycleOwner, { resourceId ->
+            resourceId?.let {
+                Toast.makeText(requireActivity(), getString(it), Toast.LENGTH_LONG).show()
+                viewModel.toastMessageEventComplete() // Notifiy view model that event was handled
+            }
         })
 
         // Begin searching and hide the keyboard if it is visible

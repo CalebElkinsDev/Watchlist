@@ -19,6 +19,10 @@ class MovieRepository(private val dataSource: MovieDao) {
         return dataSource.getMovies(ascending,sortType. sqlValue, showWatched)
     }
 
+    suspend fun getMovie(id: String) : Movie? {
+        return dataSource.getMovie(id)
+    }
+
     suspend fun addMovie(movie: Movie) {
         withContext(Dispatchers.IO) {
             dataSource.insert(movie)

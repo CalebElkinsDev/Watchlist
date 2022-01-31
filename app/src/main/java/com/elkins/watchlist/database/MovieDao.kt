@@ -29,7 +29,7 @@ interface MovieDao {
 
 
     @Query("SELECT * FROM movies_table WHERE id = :id")
-    fun getMovie(id: Int): LiveData<Movie>
+    suspend fun getMovie(id: String): Movie?
 
     @Query("UPDATE movies_table SET userScore=:newScore WHERE id=:id")
     fun updateMovieScore(newScore: Int, id: String)

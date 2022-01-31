@@ -8,6 +8,8 @@
     <string name="search_button">Search</string>
     <string name="search_fragment_title">Find New Movies</string>
     <string name="search_no_results">No Results</string>
+    <string name="search_itemAlreadyAdded">Movie already in watch list</string>
+    <string name="search_movieAdded">Movie added to list</string>
 
     <!-- Details Fragment -->
     <string name="details_appbar_placeholder_title">Movie Details</string>

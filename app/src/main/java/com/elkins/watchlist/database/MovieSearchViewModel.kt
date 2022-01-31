@@ -3,6 +3,7 @@ package com.elkins.watchlist.database
 import android.util.Log
 import androidx.lifecycle.*
 import com.elkins.watchlist.MovieRepository
+import com.elkins.watchlist.R
 import com.elkins.watchlist.model.Movie
 import com.elkins.watchlist.network.ImdbApi.retrofitService
 import com.elkins.watchlist.network.MovieResponse
@@ -29,6 +30,10 @@ class MovieSearchViewModel(private val repository: MovieRepository) : ViewModel(
     val movieDetailsObject: LiveData<Movie?>
         get() = _movieDetailsObject
 
+    private var _toastMessageEvent = MutableLiveData<Int?>(null) // Posts the string resource ID
+    val toastMessageEvent: LiveData<Int?>
+        get() = _toastMessageEvent
+
 
     fun searchForMovie(searchString: String) {
         viewModelScope.launch {
@@ -51,6 +56,13 @@ class MovieSearchViewModel(private val repository: MovieRepository) : ViewModel(
 
     fun addMovieToRepository(searchResult: SearchResult, position: Int) {
         viewModelScope.launch {
+            // Determine if movie is already in the user's watchlist
+            val existingMovie = repository.getMovie(searchResult.id)
+            if(existingMovie != null) {
+                _toastMessageEvent.postValue(R.string.search_itemAlreadyAdded) // TODO
+                return@launch
+            }
+
             val response: MovieResponse = retrofitService.getMovieFromId(searchResult.id)
             Log.d("Network", "Response: = $response")
             val newMovie = response.toDataBaseModel() // Convert network object to database model
@@ -78,6 +90,11 @@ class MovieSearchViewModel(private val repository: MovieRepository) : ViewModel(
     // Nullify the LiveData once navigation is handled to prevent repeated observer notifies
     fun navigationToDetailsComplete() {
         _movieDetailsObject.value = null
+    }
+
+    // Nullify the LiveData once the toast message has been handled by observer
+    fun toastMessageEventComplete() {
+        _toastMessageEvent.value = null
     }
 }
 
