@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package com.elkins.watchlist.utility
 
 import android.app.Activity

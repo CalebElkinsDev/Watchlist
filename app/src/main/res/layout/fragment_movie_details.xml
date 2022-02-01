@@ -81,7 +81,7 @@
                 android:layout_height="330dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:contentDescription="@string/details_posterImageViewDescription"
+                android:contentDescription="@string/general_poster_contentDesc"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/topDivider"
                 app:thumbnail="@{movie.imageUrl}"

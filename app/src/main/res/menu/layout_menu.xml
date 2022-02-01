@@ -2,8 +2,8 @@
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/layoutButton"
+        android:id="@+id/settingsButton"
         android:icon="@android:drawable/arrow_down_float"
-        android:title="layoutButton"
+        android:title="@string/menu_settingsTitle"
         app:showAsAction="always" />
 </menu>

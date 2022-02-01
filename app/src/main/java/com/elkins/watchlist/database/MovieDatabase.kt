@@ -1,5 +1,6 @@
 package com.elkins.watchlist.database
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
 import androidx.room.*
@@ -42,24 +43,25 @@ abstract class MovieDatabase : RoomDatabase() {
 
 class Converters {
 
+    @SuppressLint("SimpleDateFormat") // Locale not used with API yet
     private val inputFormat = SimpleDateFormat("yyyy-MM-dd")
 
     @TypeConverter
     fun fromDate(value: Date?): String {
-        if(value != null) {
-            return inputFormat.format(value)
+        return if(value != null) {
+            inputFormat.format(value)
         } else {
-            return "N/A"
+            "N/A"
         }
     }
 
     @TypeConverter
     fun toDate(value: String?): Date? {
-        try {
-            return inputFormat.parse(value)
+        return try {
+            inputFormat.parse(value)
         } catch (e: Exception) {
             Log.e("Parse Date", "${e.printStackTrace()}")
-            return null
+            null
         }
     }
 }

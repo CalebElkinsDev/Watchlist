@@ -28,6 +28,7 @@ fun fetchImage(view: ImageView, src: String?) {
     }
 }
 
+@SuppressLint("SimpleDateFormat") // Locale not used with API yet
 private val outputFormat = SimpleDateFormat("yyyy, MMMM d")
 @BindingAdapter("releaseDate")
 fun formatDate(view: TextView, date: Date?) {

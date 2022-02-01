@@ -10,7 +10,7 @@ import kotlinx.coroutines.launch
 /*
  * ItemTouchHelper callback for deleting swiped items in the movie list
  *
- * TODO: Add undo option/snackbar
+ * TODO: Add undo option/snack bar
  */
 class SwipeMovieCallback(private val adapter: MovieListAdapter,
                          private val repository: MovieRepository)

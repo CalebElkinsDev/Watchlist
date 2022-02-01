@@ -1,9 +1,7 @@
-package com.elkins.watchlist.database
+package com.elkins.watchlist
 
 import android.util.Log
 import androidx.lifecycle.*
-import com.elkins.watchlist.MovieRepository
-import com.elkins.watchlist.R
 import com.elkins.watchlist.model.Movie
 import com.elkins.watchlist.network.*
 import com.elkins.watchlist.network.ImdbApi.retrofitService

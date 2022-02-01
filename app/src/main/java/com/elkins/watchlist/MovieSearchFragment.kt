@@ -15,8 +15,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.elkins.watchlist.database.MovieDatabase
-import com.elkins.watchlist.database.MovieSearchViewModel
-import com.elkins.watchlist.database.MovieSearchViewModelFactory
 import com.elkins.watchlist.databinding.FragmentMovieSearchBinding
 import com.elkins.watchlist.model.Movie
 import com.elkins.watchlist.network.SearchResponse
@@ -25,7 +23,7 @@ import com.elkins.watchlist.utility.Status
 import com.elkins.watchlist.utility.setSupportBarTitle
 
 
-class MovieSearchFragment() : Fragment() {
+class MovieSearchFragment : Fragment() {
 
     private lateinit var binding: FragmentMovieSearchBinding
     private lateinit var viewModel: MovieSearchViewModel
@@ -41,7 +39,7 @@ class MovieSearchFragment() : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_movie_search, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
@@ -68,7 +66,7 @@ class MovieSearchFragment() : Fragment() {
     }
 
     private fun initializeViewModel() {
-        // Get a reference to the database and setup the viewmodel with the dao
+        // Get a reference to the database and setup the view model with the dao
         val database = MovieDatabase.getInstance(requireContext())
         repository = MovieRepository(database.movieDao)
         val viewModelFactory = MovieSearchViewModelFactory(repository)

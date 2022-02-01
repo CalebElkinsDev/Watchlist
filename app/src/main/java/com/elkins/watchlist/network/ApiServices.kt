@@ -1,3 +1,5 @@
+@file:Suppress("SpellCheckingInspection")
+
 package com.elkins.watchlist.network
 
 import com.squareup.moshi.Moshi

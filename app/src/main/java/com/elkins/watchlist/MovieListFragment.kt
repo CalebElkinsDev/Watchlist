@@ -40,7 +40,7 @@ class MovieListFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_movie_list, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
@@ -68,7 +68,7 @@ class MovieListFragment : Fragment() {
     }
 
     private fun initializeViewModel() {
-        // Get a reference to the database and setup the viewmodel with the dao
+        // Get a reference to the database and setup the view model with the dao
         val database = MovieDatabase.getInstance(requireContext())
         repository = MovieRepository(database.movieDao)
         val viewModelFactory = MovieListViewModelFactory(repository)
@@ -141,7 +141,7 @@ class MovieListFragment : Fragment() {
 
     private fun initializeSortSpinner() {
         val sortAdapter = ArrayAdapter.createFromResource(requireContext(),
-            R.array.sort_type,
+            R.array.sort_types,
             android.R.layout.simple_spinner_item).also {
             it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         }

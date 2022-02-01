@@ -2,7 +2,7 @@
 buildscript {
     ext {
         kotlin_version = "1.6.10"
-        nav_version = '2.3.5'
+        nav_version = '2.4.0'
         version_room = '2.4.1'
         version_moshi = '1.12.0'
         version_retrofit = '2.9.0'
@@ -12,7 +12,7 @@ buildscript {
 
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:7.0.4'
@@ -28,7 +28,7 @@ buildscript {
 allprojects {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
 }
 

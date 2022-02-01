@@ -30,6 +30,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_launcher_background"
             app:thumbnail="@{movie.imageUrl}"
+            android:contentDescription="@string/general_poster_contentDesc"
             tools:srcCompat="@tools:sample/avatars" />
 
         <CheckBox

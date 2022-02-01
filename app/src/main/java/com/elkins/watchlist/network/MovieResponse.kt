@@ -31,11 +31,11 @@ data class MovieResponse (
     ) {
 
     private fun parseDate(inDate: String): Date? {
-        try {
-            return inputFormat.parse(inDate)
+        return try {
+            inputFormat.parse(inDate)
         } catch (e: ParseException) {
             Log.e("Parse", e.message.toString())
-            return null
+            null
         }
     }
 

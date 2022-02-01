@@ -1,7 +1,17 @@
 <resources>
     <string name="app_name">Watch List</string>
 
-    <string name="api_key">k_akzini69</string>
+    <!-- Movie List Fragment -->
+    <string name="list_layoutButton_contentDesc">Change movie layout</string>
+    <string name="list_sortOrderButton_contentDesc">Change sort order</string>
+    <string name="list_addMovieFAB_contentDesc">Add movie</string>
+    <string name="list_watchedMoviesTotalLabel">Watched :</string>
+    <string name="list_notWatchedMoviesTotalLabel">Not Watched:</string>
+    <string-array name="sort_types">
+        <item>Title</item>
+        <item>Release Date</item>
+        <item>Date Added</item>
+    </string-array>
 
     <!-- Search Fragment-->
     <string name="searchbar_hint">Search</string>
@@ -10,6 +20,9 @@
     <string name="search_no_results">No Results</string>
     <string name="search_itemAlreadyAdded">Movie already in watch list</string>
     <string name="search_movieAdded">Movie added to list</string>
+
+    <!-- Search Results Item -->
+    <string name="searchItem_addFAB_contentDesc">Add movie to list</string>
 
     <!-- Details Fragment -->
     <string name="details_appbar_placeholder_title">Movie Details</string>
@@ -20,18 +33,11 @@
     <string name="details_directorsLabel">Director: </string>
     <string name="details_starringLabel">Starring: </string>
     <string name="details_genresLabel">Genres: </string>
-    <string name="details_posterImageViewDescription">Movie Poster Image</string>
 
-    <string-array name="filter_types">
-        <item>All</item>
-        <item>Not seen</item>
-        <item>Seen</item>
-    </string-array>
+    <!-- Menu -->
+    <string name="menu_settingsTitle">Settings</string>
 
-    <string-array name="sort_type">
-        <item>Title</item>
-        <item>Release Date</item>
-        <item>Date Added</item>
-    </string-array>
+    <!-- General Strings -->
+    <string name="general_poster_contentDesc">Movie poster</string>
 
 </resources>
