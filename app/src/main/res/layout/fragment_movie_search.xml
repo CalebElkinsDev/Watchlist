@@ -54,14 +54,6 @@
             android:layout_height="0dp"
             android:layout_weight="1">
 
-            <ProgressBar
-                android:id="@+id/loadingBar"
-                style="?android:attr/progressBarStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:visibility="invisible"/>
-
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/search_results_recycler"
                 android:layout_width="match_parent"
@@ -69,10 +61,19 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 tools:listitem="@layout/movie_list_item"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
-            </androidx.recyclerview.widget.RecyclerView>
+            <ProgressBar
+                android:id="@+id/loadingBar"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="invisible"
+                tools:visibility="visible"/>
+
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     </LinearLayout>
+
 </layout>

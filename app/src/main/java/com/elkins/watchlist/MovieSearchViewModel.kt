@@ -5,13 +5,11 @@ import androidx.lifecycle.*
 import com.elkins.watchlist.MovieRepository
 import com.elkins.watchlist.R
 import com.elkins.watchlist.model.Movie
+import com.elkins.watchlist.network.*
 import com.elkins.watchlist.network.ImdbApi.retrofitService
-import com.elkins.watchlist.network.MovieResponse
-import com.elkins.watchlist.network.NetworkResponseHandler
-import com.elkins.watchlist.network.SearchResponse
-import com.elkins.watchlist.network.SearchResult
 import com.elkins.watchlist.utility.Resource
 import kotlinx.coroutines.launch
+import java.io.IOException
 import java.util.*
 
 class MovieSearchViewModel(private val repository: MovieRepository) : ViewModel() {
@@ -38,6 +36,8 @@ class MovieSearchViewModel(private val repository: MovieRepository) : ViewModel(
     fun searchForMovie(searchString: String) {
         viewModelScope.launch {
             try {
+                ImdbApi.cancelRequests() // Cancel existing requests
+
                 val response: SearchResponse = retrofitService.searchForMovie(searchString, "feature")
                 _results.value = NetworkResponseHandler.handleSuccess(response)
 //                if(response.results!!.isEmpty()) {
@@ -81,9 +81,16 @@ class MovieSearchViewModel(private val repository: MovieRepository) : ViewModel(
     // Get a Movie object from the selected SearchResult object and update the LiveData to fire navigation from observer
     fun getMovieDetailsAndBeginNavigation(searchResult: SearchResult){
         viewModelScope.launch {
-            val response: MovieResponse = retrofitService.getMovieFromId(searchResult.id)
-            val newMovie = response.toDataBaseModel() // Convert network object to database model
-            _movieDetailsObject.value = newMovie // Change to this notifies a navigation change
+            try {
+                ImdbApi.cancelRequests() // Cancel previous requests
+
+                val response: MovieResponse = retrofitService.getMovieFromId(searchResult.id)
+                val newMovie = response.toDataBaseModel() // Convert network object to database model
+                _movieDetailsObject.value = newMovie // Change to this notifies a navigation change
+
+            } catch (e: IOException) {
+                Log.e("Network", "${e.printStackTrace()}") // TODO add interceptors to handle errors and canceling requests
+            }
         }
     }
 
@@ -95,6 +102,17 @@ class MovieSearchViewModel(private val repository: MovieRepository) : ViewModel(
     // Nullify the LiveData once the toast message has been handled by observer
     fun toastMessageEventComplete() {
         _toastMessageEvent.value = null
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+
+        // Cancel existing network requests when view model is destroyed
+        try {
+            ImdbApi.cancelRequests()
+        } catch (e: IOException) {
+            Log.e("Network", "${e.printStackTrace()}") // TODO add interceptors to handle errors and canceling requests
+        }
     }
 }
 

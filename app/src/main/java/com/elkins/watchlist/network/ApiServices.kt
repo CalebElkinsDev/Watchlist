@@ -20,12 +20,14 @@ private val moshi = Moshi.Builder()
     .addLast(KotlinJsonAdapterFactory())
     .build()
 
+private val client = OkHttpClient().newBuilder()
+    .connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)
+    .readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)
+    .build()
+
 private val retrofit = Retrofit.Builder()
     .addConverterFactory(MoshiConverterFactory.create(moshi))
-    .client(OkHttpClient().newBuilder()
-        .connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)
-        .readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)
-        .build())
+    .client(client)
     .baseUrl(BASE_URL)
     .build()
 
@@ -42,5 +44,16 @@ interface ApiServices {
 object ImdbApi {
     val retrofitService: ApiServices by lazy {
         retrofit.create(ApiServices::class.java)
+    }
+
+    // Cancel all running and queried network calls
+    fun cancelRequests() {
+        for(call in client.dispatcher().queuedCalls()) {
+            call.cancel()
+        }
+
+        for(call in client.dispatcher().runningCalls()) {
+            call.cancel()
+        }
     }
 }

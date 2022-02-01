@@ -82,6 +82,7 @@ class MovieSearchFragment() : Fragment() {
             viewModel.addMovieToRepository(searchResult, position)
         }, DetailsClickListener {
             viewModel.getMovieDetailsAndBeginNavigation(it)
+            binding.loadingBar.visibility = View.VISIBLE // Display progressbar
         })
 
         binding.searchResultsRecycler.adapter = searchAdapter
@@ -96,6 +97,7 @@ class MovieSearchFragment() : Fragment() {
         // Observe the LiveData Movie object that is created when navigation is requested
         viewModel.movieDetailsObject.observe(viewLifecycleOwner, {
             it?.let {
+                binding.loadingBar.visibility = View.INVISIBLE // Disable loading bar
                 navigateToMovieDetails(it)
                 viewModel.navigationToDetailsComplete() // Let view model know navigation is handled
             }
