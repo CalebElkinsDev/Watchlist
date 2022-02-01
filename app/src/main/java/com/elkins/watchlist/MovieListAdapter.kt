@@ -31,11 +31,16 @@ class MovieListAdapter(private val updateScoreListener: UpdateMovieClickListener
     override fun onBindViewHolder(holder: MovieListViewHolder, position: Int) {
         holder.bind(getItem(position), updateScoreListener, updateFollowingListener)
         holder.itemView.setOnClickListener {
-            movieDetailsListener.onClick(currentList[position])
+            val movieRef: Movie? = when(currentMovieLayout) {
+                MovieLayoutType.FULL -> (holder.binding as MovieListItemBinding).movie
+                MovieLayoutType.SIMPLE -> (holder.binding as MovieListItemSimpleBinding).movie
+                MovieLayoutType.POSTER -> (holder.binding as MovieListItemPosterBinding).movie
+            }
+            movieDetailsListener.onClick(movieRef!!)
         }
     }
 
-    class MovieListViewHolder(private val binding: ViewDataBinding) : RecyclerView.ViewHolder(binding.root) {
+    class MovieListViewHolder(val binding: ViewDataBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: Movie, updateScoreListener: UpdateMovieClickListener,
                       updateFollowingListener: UpdateMovieClickListener) {
