@@ -28,15 +28,20 @@
 
                 <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/list_filterSwitch"
+                    style="@style/MovieListSwitch"
                     android:layout_width="wrap_content"
-                    android:layout_height="16dp"
+                    android:layout_height="24dp"
                     android:layout_marginStart="16dp"
-                    android:textColor="?attr/colorOnPrimary"
-                    android:checked="true"
-                    android:text="Watched"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:checked="false"
+                    android:textOff="@string/list_listTypeNotSeen"
+                    android:textOn="@string/list_listTypeSeen"
+                    app:showText="true"
+                    app:splitTrack="true"
+                    app:thumbTextPadding="8dp"
+                    app:trackTint="@color/primaryLightColor" />
 
                 <Spinner
                     android:id="@+id/list_typeSpinner"

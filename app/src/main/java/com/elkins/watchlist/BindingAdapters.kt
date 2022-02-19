@@ -22,7 +22,7 @@ fun fetchImage(view: ImageView, src: String?) {
             .load(uri)
             .apply(RequestOptions()
                 .placeholder(R.drawable.ic_launcher_foreground) // TODO Create placeholder image
-                .error(R.color.black))  // TODO Create error image
+                .error(R.color.backgroundColor))  // TODO Create error image
             .thumbnail(0.1f)
             .into(view)
     }

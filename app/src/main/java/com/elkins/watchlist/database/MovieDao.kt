@@ -13,10 +13,13 @@ interface MovieDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(movie: Movie)
 
+    // Old query for selecting either unwatched movies or unwatched AND watched
+//    "WHERE CASE " +
+//    "WHEN :showWatched = 0 THEN haveSeen = 0 " +
+//    "WHEN :showWatched = 1 THEN haveSeen = 1 OR haveSeen = 0 END " +
+
     @Query("SELECT * FROM movies_table " +
-            "WHERE CASE " +
-            "WHEN :showWatched = 0 THEN haveSeen = 0 " +
-            "WHEN :showWatched = 1 THEN haveSeen = 1 OR haveSeen = 0 END " +
+            "WHERE haveSeen = :showWatched " +
             "ORDER BY haveSeen, " +
             "CASE WHEN :sortType = 0 AND :sortAscending = true THEN title END ASC, " +
             "CASE WHEN :sortType = 0 AND :sortAscending = false THEN title END DESC, " +
