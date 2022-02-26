@@ -34,51 +34,16 @@
                 android:textAppearance="@style/TitleText"
                 android:textColor="@color/primaryTextColor"
                 android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/item_seenCheckBox"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="Movie Title Goes Here that keeps going on and on and on" />
 
-            <TextView
-                android:id="@+id/item_dateTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/secondaryTextColor"
-                app:layout_constraintEnd_toStartOf="@+id/item_runtimeTextView"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/item_titleTextView"
-                app:releaseDate="@{movie.releaseDate}"
-                tools:text="4-1-2000" />
-
-            <TextView
-                android:id="@+id/item_runtimeTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@{movie.runtime}"
-                android:textColor="@color/secondaryTextColor"
-                app:layout_constraintEnd_toStartOf="@+id/item_contentRatingTextView"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/item_dateTextView"
-                app:layout_constraintTop_toBottomOf="@+id/item_titleTextView"
-                tools:text="1h 30 min" />
-
-            <TextView
-                android:id="@+id/item_contentRatingTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@{movie.contentRating}"
-                android:textColor="@color/secondaryTextColor"
-                app:layout_constraintEnd_toStartOf="@+id/item_seenCheckBox"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/item_runtimeTextView"
-                app:layout_constraintTop_toBottomOf="@+id/item_titleTextView"
-                tools:text="PG-13" />
-
             <CheckBox
                 android:id="@+id/item_seenCheckBox"
                 android:layout_width="wrap_content"
-                android:layout_height="42dp"
+                android:layout_height="32dp"
                 android:layout_marginEnd="-20dp"
                 android:checked="@{movie.haveSeen}"
                 android:gravity="center_vertical"

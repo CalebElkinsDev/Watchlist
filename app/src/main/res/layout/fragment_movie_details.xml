@@ -162,42 +162,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="@{navigatedFromList ? View.VISIBLE : View.GONE}"
-                app:layout_constraintBottom_toTopOf="@+id/haveSeenLabel"
+                app:layout_constraintBottom_toBottomOf="@+id/posterImageView"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@id/posterImageView"
                 app:layout_constraintTop_toBottomOf="@+id/userRatingLabel"
                 app:userScore="@{movie.userScore}"
                 tools:text="0" />
-
-            <TextView
-                android:id="@+id/haveSeenLabel"
-                style="@style/DetailsLabelTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@string/details_haveSeenLabel"
-                android:visibility="@{navigatedFromList ? View.VISIBLE : View.GONE}"
-                app:layout_constraintBottom_toTopOf="@+id/item_seenCheckBox"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@id/posterImageView"
-                app:layout_constraintTop_toBottomOf="@+id/userRatingTextView" />
-
-            <CheckBox
-                android:id="@+id/item_seenCheckBox"
-                android:layout_width="33dp"
-                android:layout_height="32dp"
-                android:checked="@{movie.haveSeen}"
-                android:visibility="@{navigatedFromList ? View.VISIBLE : View.GONE}"
-                android:gravity="center_vertical"
-                android:scaleX="1"
-                android:scaleY="1"
-                app:layout_constraintBottom_toBottomOf="@+id/posterImageView"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@id/posterImageView"
-                app:layout_constraintTop_toBottomOf="@+id/haveSeenLabel" />
 
             <TextView
                 android:id="@+id/directorLabel"

@@ -30,7 +30,7 @@ class MovieListViewModel(private val repository: MovieRepository) : ViewModel() 
         get() = _notWatchedMoviesCount
 
     private var sortAscending = true
-    private var showWatched = true
+    private var showWatched = false
     private var sortType = SortType.TITLE
 
     /* Live data containing sort and filter options. Used for mapping the observed _movies LiveData
