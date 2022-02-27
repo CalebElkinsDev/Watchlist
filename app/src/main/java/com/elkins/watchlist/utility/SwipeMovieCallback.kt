@@ -2,8 +2,8 @@ package com.elkins.watchlist.utility
 
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.elkins.watchlist.MovieListAdapter
-import com.elkins.watchlist.MovieRepository
+import com.elkins.watchlist.list_fragment.MovieListAdapter
+import com.elkins.watchlist.database.MovieRepository
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -13,7 +13,8 @@ import kotlinx.coroutines.launch
  * TODO: Add undo option/snack bar
  */
 class SwipeMovieCallback(private val adapter: MovieListAdapter,
-                         private val repository: MovieRepository)
+                         private val repository: MovieRepository
+)
     : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {

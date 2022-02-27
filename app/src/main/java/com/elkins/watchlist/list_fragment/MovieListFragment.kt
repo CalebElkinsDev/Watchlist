@@ -1,4 +1,4 @@
-package com.elkins.watchlist
+package com.elkins.watchlist.list_fragment
 
 import android.os.Bundle
 import android.util.Log
@@ -15,8 +15,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.elkins.watchlist.MovieRepository.SortType
+import com.elkins.watchlist.R
+import com.elkins.watchlist.database.MovieRepository.SortType
 import com.elkins.watchlist.database.MovieDatabase
+import com.elkins.watchlist.database.MovieRepository
 import com.elkins.watchlist.databinding.FragmentMovieListBinding
 import com.elkins.watchlist.model.Movie
 import com.elkins.watchlist.utility.MovieLayoutType
@@ -101,8 +103,12 @@ class MovieListFragment : Fragment() {
         // Handled with view model live data to survive configuration changes
         viewModel.currentListType.observe(viewLifecycleOwner, {
             binding.listLayoutChangeButton.background = when(it) {
-                MovieLayoutType.SIMPLE -> ContextCompat.getDrawable(requireActivity(), R.drawable.ic_layout_simple)
-                MovieLayoutType.POSTER -> ContextCompat.getDrawable(requireActivity(), R.drawable.ic_layout_poster)
+                MovieLayoutType.SIMPLE -> ContextCompat.getDrawable(requireActivity(),
+                    R.drawable.ic_layout_simple
+                )
+                MovieLayoutType.POSTER -> ContextCompat.getDrawable(requireActivity(),
+                    R.drawable.ic_layout_poster
+                )
                 else -> ContextCompat.getDrawable(requireActivity(), R.drawable.ic_layout_normal)
             }
             setListLayout(it)

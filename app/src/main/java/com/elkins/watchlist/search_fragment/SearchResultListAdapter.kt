@@ -1,4 +1,4 @@
-package com.elkins.watchlist
+package com.elkins.watchlist.search_fragment
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -9,8 +9,11 @@ import com.elkins.watchlist.databinding.SearchListItemBinding
 import com.elkins.watchlist.network.SearchResult
 
 class SearchResultListAdapter(private val addClickListener: AddClickListener,
-                              private val detailsClickListener: DetailsClickListener)
-    : ListAdapter<SearchResult, SearchResultListAdapter.SearchResultViewHolder>(MovieSearchDiffCallback()) {
+                              private val detailsClickListener: DetailsClickListener
+)
+    : ListAdapter<SearchResult, SearchResultListAdapter.SearchResultViewHolder>(
+    MovieSearchDiffCallback()
+) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchResultViewHolder {
         return SearchResultViewHolder.from(parent)

@@ -1,7 +1,8 @@
-package com.elkins.watchlist
+package com.elkins.watchlist.list_fragment
 
 import androidx.lifecycle.*
-import com.elkins.watchlist.MovieRepository.SortType
+import com.elkins.watchlist.database.MovieRepository
+import com.elkins.watchlist.database.MovieRepository.SortType
 import com.elkins.watchlist.model.Movie
 import com.elkins.watchlist.utility.MovieLayoutType
 import kotlinx.coroutines.launch

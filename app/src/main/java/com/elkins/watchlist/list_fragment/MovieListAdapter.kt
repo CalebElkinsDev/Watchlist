@@ -1,4 +1,4 @@
-package com.elkins.watchlist
+package com.elkins.watchlist.list_fragment
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -14,7 +14,8 @@ import com.elkins.watchlist.utility.MovieLayoutType
 
 class MovieListAdapter(private val updateScoreListener: UpdateMovieClickListener,
                        private val updateFollowingListener: UpdateMovieClickListener,
-                       private val movieDetailsListener: UpdateMovieClickListener)
+                       private val movieDetailsListener: UpdateMovieClickListener
+)
     : ListAdapter<Movie, MovieListAdapter.MovieListViewHolder>(MovieDiffCallback()) {
 
     private var currentMovieLayout = MovieLayoutType.FULL
@@ -43,7 +44,8 @@ class MovieListAdapter(private val updateScoreListener: UpdateMovieClickListener
     class MovieListViewHolder(val binding: ViewDataBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: Movie, updateScoreListener: UpdateMovieClickListener,
-                      updateFollowingListener: UpdateMovieClickListener) {
+                 updateFollowingListener: UpdateMovieClickListener
+        ) {
 
             // Handle binding based on the the type of layout that was inflated
             when(binding) {

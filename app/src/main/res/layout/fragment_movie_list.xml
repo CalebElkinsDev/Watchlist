@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.elkins.watchlist.MovieListViewModel" />
+            type="com.elkins.watchlist.list_fragment.MovieListViewModel" />
     </data>
 
     <LinearLayout
@@ -147,7 +147,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            tools:context=".MovieListFragment"
+            tools:context=".list_fragment.MovieListFragment"
             android:background="?attr/backgroundColor">
 
             <androidx.recyclerview.widget.RecyclerView

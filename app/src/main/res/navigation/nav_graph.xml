@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/movieListFragment"
-        android:name="com.elkins.watchlist.MovieListFragment"
+        android:name="com.elkins.watchlist.list_fragment.MovieListFragment"
         android:label="fragment_movie_list"
         tools:layout="@layout/fragment_movie_list" >
         <action
@@ -32,7 +32,7 @@
     </fragment>
     <fragment
         android:id="@+id/movieSearchFragment"
-        android:name="com.elkins.watchlist.MovieSearchFragment"
+        android:name="com.elkins.watchlist.search_fragment.MovieSearchFragment"
         android:label="fragment_movie_search"
         tools:layout="@layout/fragment_movie_search" >
         <action

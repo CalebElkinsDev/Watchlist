@@ -1,7 +1,6 @@
-package com.elkins.watchlist
+package com.elkins.watchlist.database
 
 import androidx.lifecycle.LiveData
-import com.elkins.watchlist.database.MovieDao
 import com.elkins.watchlist.model.Movie
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

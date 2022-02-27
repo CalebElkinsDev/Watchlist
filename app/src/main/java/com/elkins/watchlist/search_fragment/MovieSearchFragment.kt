@@ -1,4 +1,4 @@
-package com.elkins.watchlist
+package com.elkins.watchlist.search_fragment
 
 import android.app.Activity
 import android.content.Context
@@ -14,7 +14,9 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.elkins.watchlist.R
 import com.elkins.watchlist.database.MovieDatabase
+import com.elkins.watchlist.database.MovieRepository
 import com.elkins.watchlist.databinding.FragmentMovieSearchBinding
 import com.elkins.watchlist.model.Movie
 import com.elkins.watchlist.network.SearchResponse
