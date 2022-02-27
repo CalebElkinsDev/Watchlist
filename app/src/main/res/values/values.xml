@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="layout_transition_duration_quick">200</integer>
+    <integer name="layout_transition_duration_normal">400</integer>
+</resources>
