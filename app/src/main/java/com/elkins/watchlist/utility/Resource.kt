@@ -27,18 +27,23 @@ enum class Status {
  * A generic class that holds a value with its loading status.
  * @param <T>
 </T> */
-data class Resource<out T>(val status: Status, val data: T?, val message: String?) {
+data class Resource<out T>(val status: Status, val data: T?, val message: String?, val errorType: NetworkErrorType?) {
+
+    enum class NetworkErrorType {
+        HTTP_EXCEPTION, SOCKET_TIMEOUT, UNKNOWN_HOST, NO_RESULTS, OTHER
+    }
+
     companion object {
         fun <T> success(data: T?): Resource<T> {
-            return Resource(Status.SUCCESS, data, null)
+            return Resource(Status.SUCCESS, data, null, null)
         }
 
-        fun <T> error(msg: String, data: T?): Resource<T> {
-            return Resource(Status.ERROR, data, msg)
+        fun <T> error(errorType: NetworkErrorType, msg: String, data: T?): Resource<T> {
+            return Resource(Status.ERROR, data, msg, errorType)
         }
 
         fun <T> loading(data: T?): Resource<T> {
-            return Resource(Status.LOADING, data, null)
+            return Resource(Status.LOADING, data, null, null)
         }
     }
 }

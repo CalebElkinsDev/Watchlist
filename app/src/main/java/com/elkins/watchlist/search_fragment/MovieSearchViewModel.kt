@@ -10,6 +10,7 @@ import com.elkins.watchlist.network.ImdbApi.retrofitService
 import com.elkins.watchlist.utility.Resource
 import kotlinx.coroutines.launch
 import java.io.IOException
+import java.net.UnknownHostException
 import java.util.*
 
 class MovieSearchViewModel(private val repository: MovieRepository) : ViewModel() {
@@ -40,15 +41,8 @@ class MovieSearchViewModel(private val repository: MovieRepository) : ViewModel(
 
                 val response: SearchResponse = retrofitService.searchForMovie(searchString, "feature")
                 _results.value = NetworkResponseHandler.handleSuccess(response)
-//                if(response.results!!.isEmpty()) {
-//                    Log.d("Network", "In Try, empty results")
-//                    _results.value = NetworkResponseHandler.handleEmptyResults()
-//                } else {
-//                    Log.d("Network", "In try, handle success")
-//                    _results.value = NetworkResponseHandler.handleSuccess(response)
-//                }
             } catch (e: Exception) {
-                Log.e("Network", "${e.printStackTrace()}")
+                Log.e("Network Error", "${e.printStackTrace()}")
                 _results.value = NetworkResponseHandler.handleException(e)
             }
         }
@@ -88,8 +82,12 @@ class MovieSearchViewModel(private val repository: MovieRepository) : ViewModel(
                 val newMovie = response.toDataBaseModel() // Convert network object to database model
                 _movieDetailsObject.value = newMovie // Change to this notifies a navigation change
 
+            } catch (e: UnknownHostException) {
+                _toastMessageEvent.postValue(R.string.network_no_internet_message)
+                Log.e("Network Error", "${e.printStackTrace()}")
             } catch (e: IOException) {
-                Log.e("Network", "${e.printStackTrace()}") // TODO add interceptors to handle errors and canceling requests
+                _toastMessageEvent.postValue(R.string.network_error_message)
+                Log.e("Network Error", "${e.printStackTrace()}")
             }
         }
     }
@@ -111,7 +109,7 @@ class MovieSearchViewModel(private val repository: MovieRepository) : ViewModel(
         try {
             ImdbApi.cancelRequests()
         } catch (e: IOException) {
-            Log.e("Network", "${e.printStackTrace()}") // TODO add interceptors to handle errors and canceling requests
+            Log.e("Request Cancelled", "${e.printStackTrace()}")
         }
     }
 }

@@ -39,6 +39,10 @@
     <!-- Menu -->
     <string name="menu_settingsTitle">Settings</string>
 
+    <!-- Errors -->
+    <string name="network_error_message">Network Error</string>
+    <string name="network_no_internet_message">No Internet Connection</string>
+
     <!-- General Strings -->
     <string name="general_poster_contentDesc">Movie poster</string>
 

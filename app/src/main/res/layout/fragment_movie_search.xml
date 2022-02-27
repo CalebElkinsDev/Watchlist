@@ -72,6 +72,16 @@
                 android:visibility="invisible"
                 tools:visibility="visible"/>
 
+            <ImageView
+                android:id="@+id/networkErrorImage"
+                android:visibility="gone"
+                android:padding="128dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:srcCompat="@drawable/ic_no_internet"
+                app:tint="@color/primaryTextColor"
+                tools:visibility="visible"/>
+
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     </LinearLayout>

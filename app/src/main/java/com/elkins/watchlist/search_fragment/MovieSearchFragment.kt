@@ -54,6 +54,7 @@ class MovieSearchFragment : Fragment() {
         binding.searchSearchButton.setOnClickListener {
             hideKeyboard(requireActivity())
             getQueryAndSearch()
+            binding.networkErrorImage.visibility = View.GONE // Hide network error image
         }
 
         // begin searching if the enter key is pressed on the virtual keyboard
@@ -113,6 +114,7 @@ class MovieSearchFragment : Fragment() {
             resourceId?.let {
                 Toast.makeText(requireActivity(), getString(it), Toast.LENGTH_LONG).show()
                 viewModel.toastMessageEventComplete() // Notify view model that event was handled
+                binding.loadingBar.visibility = View.INVISIBLE // Disable loading bar
             }
         })
     }
@@ -134,11 +136,24 @@ class MovieSearchFragment : Fragment() {
             }
             Status.ERROR -> {
                 binding.loadingBar.visibility = View.INVISIBLE
-                // Show error message
+
                 Log.d("Error", "Observe Status ERROR. ${resource.message}")
+                // Handle different error types
+                when(resource.errorType) {
+                    Resource.NetworkErrorType.UNKNOWN_HOST -> {
+                        binding.networkErrorImage.setImageResource(R.drawable.ic_no_internet)
+                        binding.networkErrorImage.visibility = View.VISIBLE
+                        Toast.makeText(requireActivity(), R.string.network_no_internet_message, Toast.LENGTH_LONG).show()
+                    }
+                    else -> {
+                        binding.networkErrorImage.setImageResource(R.drawable.ic_error)
+                        binding.networkErrorImage.visibility = View.VISIBLE
+                        Toast.makeText(requireActivity(), R.string.network_error_message, Toast.LENGTH_LONG).show()
+                    }
+                }
             }
             Status.LOADING -> {
-                Log.d("Loading", "Should not see. Case not utilized")
+                Log.d("Loading", "Should not see. Case not utilized yet")
             }
         }
     }
