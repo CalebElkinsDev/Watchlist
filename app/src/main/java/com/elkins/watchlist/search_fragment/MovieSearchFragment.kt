@@ -2,7 +2,9 @@ package com.elkins.watchlist.search_fragment
 
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import android.provider.CalendarContract
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +12,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -23,6 +26,7 @@ import com.elkins.watchlist.network.SearchResponse
 import com.elkins.watchlist.utility.Resource
 import com.elkins.watchlist.utility.Status
 import com.elkins.watchlist.utility.setSupportBarTitle
+import java.util.*
 
 
 class MovieSearchFragment : Fragment() {
@@ -117,6 +121,80 @@ class MovieSearchFragment : Fragment() {
                 binding.loadingBar.visibility = View.INVISIBLE // Disable loading bar
             }
         })
+
+        // Observe the Movie that is added to the database
+        viewModel.movieAddedToDatabase.observe(viewLifecycleOwner, { movie ->
+            movie?.let {
+                Toast.makeText(requireActivity(), R.string.search_movieAdded, Toast.LENGTH_SHORT).show()
+
+                // Check if movie has not been released yet. If not, prompt to add calendar event
+                if (checkIfMovieIsUnreleased(movie)) {
+                    promptToAddCalendarEvent(movie)
+                }
+            }
+        })
+    }
+
+    // Determine if the movie added has a future release date
+    private fun checkIfMovieIsUnreleased(movie: Movie): Boolean {
+        movie.releaseDate?.let {
+            val currentTime = Calendar.getInstance().timeInMillis
+            val releaseCalendar = Calendar.getInstance()
+            releaseCalendar.time = it
+
+            return currentTime < releaseCalendar.timeInMillis
+        }
+        return false
+    }
+
+    // Create a dialog window to ask the user if they want to add a calendar event for the movie
+    private fun promptToAddCalendarEvent(movie: Movie) {
+
+        val dialogBuilder: AlertDialog.Builder? = activity?.let {
+            AlertDialog.Builder(it)
+        }
+
+        dialogBuilder?.apply {
+            setMessage(R.string.calendar_event_dialog_message)
+            setPositiveButton(R.string.calendar_event_dialog_add) { _, _ ->
+                startCalendarEventIntent(movie)
+            }
+            setNegativeButton(R.string.calendar_event_dialog_cancel) { _, _ ->
+
+            }
+        }
+
+        val dialog: AlertDialog? = dialogBuilder?.create()
+        dialog?.show()
+    }
+
+    // Send the user to their calendar application to add the unreleased movie's release date as an event
+    private fun startCalendarEventIntent(movie: Movie) {
+
+        val calendar = Calendar.getInstance()
+        movie.releaseDate?.let {
+            calendar.time = it
+        }
+
+        val year = calendar.get(Calendar.YEAR)
+        val month = calendar.get(Calendar.MONTH)
+        val day = calendar.get(Calendar.DAY_OF_MONTH)
+
+        // Set the event's initial values
+        val startMillis: Long = calendar.timeInMillis
+        val endMillis: Long = calendar.run {
+            set(year, month, day, 13, 0)
+            timeInMillis
+        }
+        val intent = Intent(Intent.ACTION_INSERT)
+            .setData(CalendarContract.Events.CONTENT_URI)
+            .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, startMillis)
+            //.putExtra(CalendarContract.EXTRA_EVENT_END_TIME, endMillis)
+            .putExtra(CalendarContract.Events.TITLE, movie.title)
+            .putExtra(CalendarContract.Events.DESCRIPTION, R.string.calendar_event_description)
+
+        // Start the Calendar activity
+        startActivity(intent)
     }
 
     // Helper function for handling the different response types(Success, Error) of the search live data

@@ -33,6 +33,11 @@ class MovieSearchViewModel(private val repository: MovieRepository) : ViewModel(
     val toastMessageEvent: LiveData<Int?>
         get() = _toastMessageEvent
 
+    // Used to trigger events when a movie is added to the local database
+    private val _movieAddedToDatabase = MutableLiveData<Movie?>(null)
+    val movieAddedToDatabase: LiveData<Movie?>
+        get() = _movieAddedToDatabase
+
 
     fun searchForMovie(searchString: String) {
         viewModelScope.launch {
@@ -62,6 +67,8 @@ class MovieSearchViewModel(private val repository: MovieRepository) : ViewModel(
             val newMovie = response.toDataBaseModel() // Convert network object to database model
             newMovie.dateAdded = Calendar.getInstance().time // Set the dateAdded to be the current time
             repository.addMovie(newMovie) // Add the new movie to the repo after setting the time
+
+            _movieAddedToDatabase.value = newMovie
 
             // Remove the added movie from the results and resubmit
             val editedSearchResponse = _results.value?.data

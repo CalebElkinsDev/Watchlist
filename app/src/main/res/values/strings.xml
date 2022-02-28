@@ -23,6 +23,11 @@
     <string name="search_itemAlreadyAdded">Movie already in watch list</string>
     <string name="search_movieAdded">Movie added to list</string>
 
+    <string name="calendar_event_dialog_message">Add calendar event for movie release?</string>
+    <string name="calendar_event_dialog_add">Add Event</string>
+    <string name="calendar_event_dialog_cancel">No Thanks</string>
+    <string name="calendar_event_description">Release Date</string>
+
     <!-- Search Results Item -->
     <string name="searchItem_addFAB_contentDesc">Add movie to list</string>
 
