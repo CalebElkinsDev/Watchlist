@@ -62,8 +62,8 @@ fun getScoreColor(view: TextView, score: String? = "N/A") {
 }
 
 @BindingAdapter("userScore")
-fun convertUserScore(view: TextView, score: Int) {
-    if(score == 0) {
+fun convertUserScore(view: TextView, score: Float) {
+    if(score == 0.0f) {
         view.text = "N/A"
     } else {
         view.text = score.toString()

@@ -54,7 +54,7 @@ class MovieListAdapter(private val updateScoreListener: UpdateMovieClickListener
 
                     // Update the user's score for the movie
                     binding.itemRatingBar.setOnRatingBarChangeListener { _, score, _ ->
-                        item.userScore = score.toInt()
+                        item.userScore = score
                         updateScoreListener.onClick(item)
                     }
 

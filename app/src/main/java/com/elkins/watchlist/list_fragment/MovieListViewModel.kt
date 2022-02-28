@@ -71,7 +71,7 @@ class MovieListViewModel(private val repository: MovieRepository) : ViewModel() 
     }
 
     // Update a movie if its rating or seen status has changed
-    fun updateMovieScore(newScore: Int, id: String) {
+    fun updateMovieScore(newScore: Float, id: String) {
         viewModelScope.launch {
             repository.updateMovieScore(newScore, id)
         }

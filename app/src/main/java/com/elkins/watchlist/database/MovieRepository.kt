@@ -36,7 +36,7 @@ class MovieRepository(private val dataSource: MovieDao) {
         }
     }
 
-    suspend fun updateMovieScore(newScore: Int, id: String) {
+    suspend fun updateMovieScore(newScore: Float, id: String) {
         withContext(Dispatchers.IO) {
             dataSource.updateMovieScore(newScore, id)
         }

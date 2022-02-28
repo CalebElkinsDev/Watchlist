@@ -39,7 +39,7 @@ interface MovieDao {
     suspend fun getMovie(id: String): Movie?
 
     @Query("UPDATE movies_table SET userScore=:newScore WHERE id=:id")
-    fun updateMovieScore(newScore: Int, id: String)
+    fun updateMovieScore(newScore: Float, id: String)
 
     @Query("UPDATE movies_table SET haveSeen=:haveSeen WHERE id=:id")
     fun updateHaveSeenMovie(haveSeen: Boolean, id: String)
