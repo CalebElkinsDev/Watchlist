@@ -176,20 +176,11 @@ class MovieSearchFragment : Fragment() {
             calendar.time = it
         }
 
-        val year = calendar.get(Calendar.YEAR)
-        val month = calendar.get(Calendar.MONTH)
-        val day = calendar.get(Calendar.DAY_OF_MONTH)
-
         // Set the event's initial values
         val startMillis: Long = calendar.timeInMillis
-        val endMillis: Long = calendar.run {
-            set(year, month, day, 13, 0)
-            timeInMillis
-        }
         val intent = Intent(Intent.ACTION_INSERT)
             .setData(CalendarContract.Events.CONTENT_URI)
             .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, startMillis)
-            //.putExtra(CalendarContract.EXTRA_EVENT_END_TIME, endMillis)
             .putExtra(CalendarContract.Events.TITLE, movie.title)
             .putExtra(CalendarContract.Events.DESCRIPTION, R.string.calendar_event_description)
 
