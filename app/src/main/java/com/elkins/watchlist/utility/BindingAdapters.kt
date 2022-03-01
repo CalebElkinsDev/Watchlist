@@ -1,4 +1,4 @@
-package com.elkins.watchlist
+package com.elkins.watchlist.utility
 
 import android.annotation.SuppressLint
 import android.util.Log
@@ -8,6 +8,7 @@ import androidx.core.net.toUri
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.elkins.watchlist.R
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -20,8 +21,8 @@ fun fetchImage(view: ImageView, src: String?) {
         Glide.with(view.context)
             .load(uri)
             .apply(RequestOptions()
-                .placeholder(R.drawable.ic_launcher_foreground) // TODO Create placeholder image
-                .error(R.color.backgroundColor))  // TODO Create error image
+                .placeholder(R.drawable.ic_baseline_theaters_24)
+                .error(R.drawable.ic_baseline_image_not_supported_24))
             .thumbnail(0.1f)
             .into(view)
     }
