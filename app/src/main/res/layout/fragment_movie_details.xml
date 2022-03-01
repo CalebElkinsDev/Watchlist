@@ -139,7 +139,6 @@
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@id/posterImageView"
                 app:layout_constraintTop_toBottomOf="@+id/metacriticLabel"
-                app:metacriticColor="@{movie.metacriticRating}"
                 tools:text="10" />
 
             <TextView
