@@ -24,7 +24,6 @@ class MovieListAdapter(private val updateScoreListener: UpdateMovieClickListener
         currentMovieLayout = layoutType
     }
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieListViewHolder {
         return MovieListViewHolder.from(parent, currentMovieLayout)
     }

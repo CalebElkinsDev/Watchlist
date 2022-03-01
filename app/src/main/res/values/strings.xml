@@ -14,6 +14,8 @@
         <item>Release Date</item>
         <item>Date Added</item>
     </string-array>
+    <string name="list_movie_removed_snackbar_message">Movie Removed</string>
+    <string name="list_movie_removed_snackbar_action">UNDO</string>
 
     <!-- Search Fragment-->
     <string name="searchbar_hint">Search</string>

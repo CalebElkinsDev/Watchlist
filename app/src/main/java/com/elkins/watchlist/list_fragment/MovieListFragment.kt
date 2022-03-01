@@ -15,15 +15,19 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.elkins.watchlist.R
-import com.elkins.watchlist.database.MovieRepository.SortType
 import com.elkins.watchlist.database.MovieDatabase
 import com.elkins.watchlist.database.MovieRepository
+import com.elkins.watchlist.database.MovieRepository.SortType
 import com.elkins.watchlist.databinding.FragmentMovieListBinding
 import com.elkins.watchlist.model.Movie
 import com.elkins.watchlist.utility.MovieLayoutType
 import com.elkins.watchlist.utility.SwipeMovieCallback
 import com.elkins.watchlist.utility.setSupportBarTitle
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 
 class MovieListFragment : Fragment() {
@@ -49,6 +53,7 @@ class MovieListFragment : Fragment() {
 
         initializeViewModel()
         initializeRecyclerView()
+        setupMovieSwipeCallback()
         initializeLiveDataObservers()
 
         /* Setup spinners for filtering and sorting the list */
@@ -92,9 +97,47 @@ class MovieListFragment : Fragment() {
 
         // Assign the list adapter to the recycler view
         binding.movieListRecycler.adapter = movieListAdapter
+    }
 
+    private fun setupMovieSwipeCallback() {
         // Create a callback for deleting movies when swiped
-        val swipeCallback = ItemTouchHelper(SwipeMovieCallback(movieListAdapter, repository))
+        val swipeCallback = ItemTouchHelper(object : SwipeMovieCallback() {
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                // Get the movie at the swiped view holder's position
+                val movie = movieListAdapter.currentList[viewHolder.absoluteAdapterPosition]
+
+                // Call the repository's delete method supplying the id of the swiped movie
+                GlobalScope.launch {
+                    repository.deleteMovie(movie.id)
+
+                    val snackBar = Snackbar.make(binding.root,
+                        R.string.list_movie_removed_snackbar_message, Snackbar.LENGTH_LONG)
+
+                    snackBar.apply {
+                        setAction(R.string.list_movie_removed_snackbar_action) {
+                            // Add the movie back to the database if the user presses the action button
+                            GlobalScope.launch {
+                                repository.addMovie(movie)
+                            }
+                        }
+                        setTextColor(resources.getColor(R.color.secondaryTextColor))
+                        setActionTextColor(resources.getColor(R.color.primaryTextColor))
+                    }
+                    snackBar.show()
+                }
+            }
+
+            // Not utilized
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                Log.d("Item Swipe","Not yet implemented")
+                return false
+            }
+        })
         swipeCallback.attachToRecyclerView(binding.movieListRecycler)
     }
 
