@@ -131,6 +131,8 @@ class MovieSearchFragment : Fragment() {
                 if (checkIfMovieIsUnreleased(movie)) {
                     promptToAddCalendarEvent(movie)
                 }
+
+                viewModel.movieAddedToDatabaseProcessed()
             }
         })
     }

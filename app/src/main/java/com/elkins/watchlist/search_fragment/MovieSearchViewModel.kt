@@ -109,6 +109,11 @@ class MovieSearchViewModel(private val repository: MovieRepository) : ViewModel(
         _toastMessageEvent.value = null
     }
 
+    // Nullify the added movie live data once it has been handled
+    fun movieAddedToDatabaseProcessed() {
+        _movieAddedToDatabase.value = null
+    }
+
     override fun onCleared() {
         super.onCleared()
 
