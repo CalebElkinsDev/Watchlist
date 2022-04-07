@@ -86,8 +86,12 @@ class MovieSearchFragment : Fragment() {
             // Get movie details and add the Movie to the watchlist
             viewModel.addMovieToRepository(searchResult, position)
         }, DetailsClickListener {
-            viewModel.getMovieDetailsAndBeginNavigation(it)
-            binding.loadingBar.visibility = View.VISIBLE // Display progressbar
+            if(viewModel.movieAddedToDatabase.value == null) {
+                viewModel.getMovieDetailsAndBeginNavigation(it)
+                binding.loadingBar.visibility = View.VISIBLE // Display progressbar
+            } else {
+                Log.e("Details", "Tried to open details while adding movie")
+            }
         })
 
         binding.searchResultsRecycler.adapter = searchAdapter

@@ -15,6 +15,8 @@ import java.util.*
 
 class MovieSearchViewModel(private val repository: MovieRepository) : ViewModel() {
 
+    private var addingMovie = false
+
     // Live data list of movies found from search
     private var _results = MutableLiveData<Resource<SearchResponse>>()
     val results: LiveData<Resource<SearchResponse>>
@@ -55,6 +57,9 @@ class MovieSearchViewModel(private val repository: MovieRepository) : ViewModel(
 
     fun addMovieToRepository(searchResult: SearchResult, position: Int) {
         viewModelScope.launch {
+
+            addingMovie = true
+
             // Determine if movie is already in the user's watchlist
             val existingMovie = repository.getMovie(searchResult.id)
             if(existingMovie != null) {
@@ -65,10 +70,10 @@ class MovieSearchViewModel(private val repository: MovieRepository) : ViewModel(
             val response: MovieResponse = retrofitService.getMovieFromId(searchResult.id)
             Log.d("Network", "Response: = $response")
             val newMovie = response.toDataBaseModel() // Convert network object to database model
+            _movieAddedToDatabase.value = newMovie
+
             newMovie.dateAdded = Calendar.getInstance().time // Set the dateAdded to be the current time
             repository.addMovie(newMovie) // Add the new movie to the repo after setting the time
-
-            _movieAddedToDatabase.value = newMovie
 
             // Remove the added movie from the results and resubmit
             val editedSearchResponse = _results.value?.data
@@ -76,14 +81,20 @@ class MovieSearchViewModel(private val repository: MovieRepository) : ViewModel(
             _results.value = Resource.success(editedSearchResponse)
 
             _lastRemovedIndex.value = position // Notify observers that an item has been removed
+
+            addingMovie = false
         }
     }
 
     // Get a Movie object from the selected SearchResult object and update the LiveData to fire navigation from observer
     fun getMovieDetailsAndBeginNavigation(searchResult: SearchResult){
+        // Do nothing if a movie is currently being added
+        if(addingMovie) return
+
         viewModelScope.launch {
             try {
                 ImdbApi.cancelRequests() // Cancel previous requests
+                Log.d("CANCEL", "getMovieDetailsAndBeginNavigation; imdb cancel")
 
                 val response: MovieResponse = retrofitService.getMovieFromId(searchResult.id)
                 val newMovie = response.toDataBaseModel() // Convert network object to database model
@@ -112,6 +123,7 @@ class MovieSearchViewModel(private val repository: MovieRepository) : ViewModel(
     // Nullify the added movie live data once it has been handled
     fun movieAddedToDatabaseProcessed() {
         _movieAddedToDatabase.value = null
+        Log.d("LiveData", "MovieAddedToDatabase set to null")
     }
 
     override fun onCleared() {
