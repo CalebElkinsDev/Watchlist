@@ -47,11 +47,13 @@ class MovieListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
+        initializeViewModel()
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_movie_list, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
 
-        initializeViewModel()
+
         initializeRecyclerView()
         setupMovieSwipeCallback()
         initializeLiveDataObservers()
@@ -74,11 +76,20 @@ class MovieListFragment : Fragment() {
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // Update UI to match shared preferences after initialization
+        binding.listFilterSwitch.isChecked = viewModel.getShowWatched()
+        binding.listSortOrderToggleButton.isChecked = viewModel.getSortAscending()
+        binding.listTypeSpinner.setSelection(viewModel.getSortType().ordinal)
+    }
+
     private fun initializeViewModel() {
         // Get a reference to the database and setup the view model with the dao
         val database = MovieDatabase.getInstance(requireContext())
         repository = MovieRepository(database.movieDao)
-        val viewModelFactory = MovieListViewModelFactory(repository)
+        val viewModelFactory = MovieListViewModelFactory(repository, activity!!.application)
         viewModel = ViewModelProvider(requireActivity(), viewModelFactory).get(MovieListViewModel::class.java)
     }
 
