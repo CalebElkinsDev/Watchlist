@@ -14,8 +14,7 @@ import com.elkins.watchlist.utility.MovieLayoutType
 
 class MovieListAdapter(private val updateScoreListener: UpdateMovieClickListener,
                        private val updateFollowingListener: UpdateMovieClickListener,
-                       private val movieDetailsListener: UpdateMovieClickListener
-)
+                       private val movieDetailsListener: UpdateMovieClickListener)
     : ListAdapter<Movie, MovieListAdapter.MovieListViewHolder>(MovieDiffCallback()) {
 
     private var currentMovieLayout = MovieLayoutType.FULL
@@ -43,8 +42,7 @@ class MovieListAdapter(private val updateScoreListener: UpdateMovieClickListener
     class MovieListViewHolder(val binding: ViewDataBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: Movie, updateScoreListener: UpdateMovieClickListener,
-                 updateFollowingListener: UpdateMovieClickListener
-        ) {
+                 updateFollowingListener: UpdateMovieClickListener) {
 
             // Handle binding based on the the type of layout that was inflated
             when(binding) {
@@ -82,7 +80,6 @@ class MovieListAdapter(private val updateScoreListener: UpdateMovieClickListener
                     binding.executePendingBindings()
                 }
             }
-
         }
 
         companion object {
@@ -113,6 +110,7 @@ class MovieListAdapter(private val updateScoreListener: UpdateMovieClickListener
     }
 }
 
+/** Simple callback class used for handling clicks on items in the list. */
 class UpdateMovieClickListener(val clickListener: (movie: Movie) -> Unit) {
     fun onClick(movie: Movie) = clickListener(movie)
 }

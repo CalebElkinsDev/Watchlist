@@ -29,8 +29,8 @@
     </style>
 
     <style name="SortingSpinnerItemStyle" parent="TextAppearance.AppCompat.Widget.TextView.SpinnerItem">
-        <item name="android:textColor">?attr/colorOnSecondary</item>
-        <item name="android:textSize">@dimen/text_small</item>
+        <item name="android:textColor">?attr/colorOnPrimary</item>
+        <item name="android:textSize">@dimen/text_medium</item>
     </style>
 
     <style name="DetailsLabelTextView" parent="Widget.AppCompat.TextView">
@@ -42,4 +42,17 @@
         <item name="android:textSize">@dimen/text_medium</item>
         <item name="android:textColor">?attr/colorOnSecondary</item>
     </style>
+
+
+    <style name="MovieListSwitch" parent="Widget.AppCompat.CompoundButton.Switch">
+        <item name="colorControlActivated">@color/primaryLightColor</item>
+        <item name="colorControlNormal">@color/primaryLightColor</item>
+        <item name="android:thumb">@drawable/switch_thumb</item>
+        <item name="switchTextAppearance">@style/MovieListSwitchTrack</item>
+    </style>
+
+    <style name="MovieListSwitchTrack" parent="TextAppearance.AppCompat.Widget.Switch">
+        <item name="android:textColor">?attr/colorOnPrimary</item>
+    </style>
+
 </resources>

@@ -89,7 +89,7 @@ class MovieListFragment : Fragment() {
         // Get a reference to the database and setup the view model with the dao
         val database = MovieDatabase.getInstance(requireContext())
         repository = MovieRepository(database.movieDao)
-        val viewModelFactory = MovieListViewModelFactory(repository, activity!!.application)
+        val viewModelFactory = MovieListViewModelFactory(repository, requireActivity().application)
         viewModel = ViewModelProvider(requireActivity(), viewModelFactory).get(MovieListViewModel::class.java)
     }
 
@@ -169,11 +169,11 @@ class MovieListFragment : Fragment() {
         })
 
         // Observe the total seen movies count
-        viewModel.watchedMoviesCount.observe(viewLifecycleOwner, {
+        viewModel.watchedMoviesCount.observe(viewLifecycleOwner) {
             it?.let {
                 binding.listSeenMovieTotalTextView.text = it.toString()
             }
-        })
+        }
 
         // Observe the total non sen movies count
         viewModel.notWatchedMoviesCount.observe(viewLifecycleOwner, {
