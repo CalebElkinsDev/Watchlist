@@ -13,11 +13,17 @@ interface MovieDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(movie: Movie)
 
-    // Old query for selecting either unwatched movies or unwatched AND watched
-//    "WHERE CASE " +
-//    "WHEN :showWatched = 0 THEN haveSeen = 0 " +
-//    "WHEN :showWatched = 1 THEN haveSeen = 1 OR haveSeen = 0 END " +
-
+    /**
+     * Main query for populating the watch list and seen list.
+     *
+     * Queries the database for all movies that fit the user's current filters and preferences.
+     * LiveData is returned and observed for dynamic changes to RecyclerViews when filters change.
+     *
+     * Cannot Resolve Symbol errors for 'true' and 'false' after updating dependencies,
+     * but query still works correctly */
+    @Suppress("AndroidUnresolvedRoomSqlReference", "AndroidUnresolvedRoomSqlReference",
+        "AndroidUnresolvedRoomSqlReference", "AndroidUnresolvedRoomSqlReference",
+        "AndroidUnresolvedRoomSqlReference")
     @Query("SELECT * FROM movies_table " +
             "WHERE haveSeen = :showWatched " +
             "ORDER BY haveSeen, " +

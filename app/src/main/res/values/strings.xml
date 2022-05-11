@@ -38,13 +38,9 @@
     <string name="details_imdbRatingLabel">IMDb Rating</string>
     <string name="details_metacriticRatingLabel">MetaCritic Score</string>
     <string name="details_userScoreLabel">Your Rating</string>
-    <string name="details_haveSeenLabel">Watched?</string>
     <string name="details_directorsLabel">Director: </string>
     <string name="details_starringLabel">Starring: </string>
     <string name="details_genresLabel">Genres: </string>
-
-    <!-- Menu -->
-    <string name="menu_settingsTitle">Settings</string>
 
     <!-- Errors -->
     <string name="network_error_message">Network Error</string>
@@ -52,5 +48,6 @@
 
     <!-- General Strings -->
     <string name="general_poster_contentDesc">Movie poster</string>
+    <string name="network_error">Network Error</string>
 
 </resources>

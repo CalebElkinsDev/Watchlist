@@ -80,7 +80,8 @@
                 android:layout_height="match_parent"
                 app:srcCompat="@drawable/ic_no_internet"
                 app:tint="@color/primaryTextColor"
-                tools:visibility="visible"/>
+                tools:visibility="visible"
+                android:contentDescription="@string/network_error" />
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

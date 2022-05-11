@@ -10,7 +10,7 @@ import java.util.*
 
 
 private val inputFormat by lazy {
-    SimpleDateFormat("yyyy-MM-dd")
+    SimpleDateFormat("yyyy-MM-dd", Locale.US)
 }
 
 @JsonClass(generateAdapter = false)

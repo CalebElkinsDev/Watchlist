@@ -99,37 +99,38 @@ class MovieSearchFragment : Fragment() {
 
     private fun initializeLiveDataObservers() {
         // Observe the Resource ive data of the view model
-        viewModel.results.observe(viewLifecycleOwner, { resource ->
+        viewModel.results.observe(viewLifecycleOwner) { resource ->
             handleResourceSearchResponses(resource)
-        })
+        }
 
         // Observe the LiveData Movie object that is created when navigation is requested
-        viewModel.movieDetailsObject.observe(viewLifecycleOwner, {
+        viewModel.movieDetailsObject.observe(viewLifecycleOwner) {
             it?.let {
                 binding.loadingBar.visibility = View.INVISIBLE // Disable loading bar
                 navigateToMovieDetails(it)
                 viewModel.navigationToDetailsComplete() // Let view model know navigation is handled
             }
-        })
+        }
 
         // Observer for notifying adapter when an item has been removed
-        viewModel.lastRemovedIndex.observe(viewLifecycleOwner, {
+        viewModel.lastRemovedIndex.observe(viewLifecycleOwner) {
             searchAdapter.notifyItemRemoved(it)
-        })
+        }
 
         // Display the toast message posted in the view model's LiveData toast event variable
-        viewModel.toastMessageEvent.observe(viewLifecycleOwner, { resourceId ->
+        viewModel.toastMessageEvent.observe(viewLifecycleOwner) { resourceId ->
             resourceId?.let {
                 Toast.makeText(requireActivity(), getString(it), Toast.LENGTH_LONG).show()
                 viewModel.toastMessageEventComplete() // Notify view model that event was handled
                 binding.loadingBar.visibility = View.INVISIBLE // Disable loading bar
             }
-        })
+        }
 
         // Observe the Movie that is added to the database
-        viewModel.movieAddedToDatabase.observe(viewLifecycleOwner, { movie ->
+        viewModel.movieAddedToDatabase.observe(viewLifecycleOwner) { movie ->
             movie?.let {
-                Toast.makeText(requireActivity(), R.string.search_movieAdded, Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireActivity(), R.string.search_movieAdded, Toast.LENGTH_SHORT)
+                    .show()
 
                 // Check if movie has not been released yet. If not, prompt to add calendar event
                 if (checkIfMovieIsUnreleased(movie)) {
@@ -138,7 +139,7 @@ class MovieSearchFragment : Fragment() {
 
                 viewModel.movieAddedToDatabaseProcessed()
             }
-        })
+        }
     }
 
     // Determine if the movie added has a future release date

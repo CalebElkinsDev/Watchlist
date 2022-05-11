@@ -30,7 +30,7 @@ enum class Status {
 data class Resource<out T>(val status: Status, val data: T?, val message: String?, val errorType: NetworkErrorType?) {
 
     enum class NetworkErrorType {
-        HTTP_EXCEPTION, SOCKET_TIMEOUT, UNKNOWN_HOST, NO_RESULTS, OTHER
+        HTTP_EXCEPTION, SOCKET_TIMEOUT, UNKNOWN_HOST, OTHER
     }
 
     companion object {
@@ -40,10 +40,6 @@ data class Resource<out T>(val status: Status, val data: T?, val message: String
 
         fun <T> error(errorType: NetworkErrorType, msg: String, data: T?): Resource<T> {
             return Resource(Status.ERROR, data, msg, errorType)
-        }
-
-        fun <T> loading(data: T?): Resource<T> {
-            return Resource(Status.LOADING, data, null, null)
         }
     }
 }

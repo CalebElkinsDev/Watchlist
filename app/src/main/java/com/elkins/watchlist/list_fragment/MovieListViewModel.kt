@@ -2,7 +2,6 @@ package com.elkins.watchlist.list_fragment
 
 import android.app.Application
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.*
 import com.elkins.watchlist.database.MovieRepository
 import com.elkins.watchlist.database.MovieRepository.SortType
@@ -131,12 +130,12 @@ class MovieListViewModel(private val repository: MovieRepository, application: A
             putString(PREF_LIST_TYPE, _currentListType.value.toString())
             apply()
         }
-        Log.d("abcdef", _currentListType.value.toString())
     }
 }
 
 // ViewModelFactory for creating a MovieViewModel with a repository
-class MovieListViewModelFactory(private val repository: MovieRepository, val application: Application)
+class MovieListViewModelFactory(private val repository: MovieRepository,
+                                private val application: Application)
     : ViewModelProvider.Factory { override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if(modelClass.isAssignableFrom(MovieListViewModel::class.java)) {
             return MovieListViewModel(repository, application) as T

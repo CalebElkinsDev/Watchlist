@@ -33,9 +33,5 @@ open class NetworkResponseHandler {
                 }
             }
         }
-
-        fun <T: Any> handleEmptyResults(): Resource<T> {
-            return Resource.error(Resource.NetworkErrorType.NO_RESULTS,"No Results", null)
-        }
     }
 }

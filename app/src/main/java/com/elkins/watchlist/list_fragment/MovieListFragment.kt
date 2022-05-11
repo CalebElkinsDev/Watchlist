@@ -155,18 +155,20 @@ class MovieListFragment : Fragment() {
     private fun initializeLiveDataObservers() {
         // Handle updates to listType live data by updating the UI and updating the recycler view
         // Handled with view model live data to survive configuration changes
-        viewModel.currentListType.observe(viewLifecycleOwner, {
-            binding.listLayoutChangeButton.background = when(it) {
-                MovieLayoutType.SIMPLE -> ContextCompat.getDrawable(requireActivity(),
+        viewModel.currentListType.observe(viewLifecycleOwner) {
+            binding.listLayoutChangeButton.background = when (it) {
+                MovieLayoutType.SIMPLE -> ContextCompat.getDrawable(
+                    requireActivity(),
                     R.drawable.ic_layout_simple
                 )
-                MovieLayoutType.POSTER -> ContextCompat.getDrawable(requireActivity(),
+                MovieLayoutType.POSTER -> ContextCompat.getDrawable(
+                    requireActivity(),
                     R.drawable.ic_layout_poster
                 )
                 else -> ContextCompat.getDrawable(requireActivity(), R.drawable.ic_layout_normal)
             }
             setListLayout(it)
-        })
+        }
 
         // Observe the total seen movies count
         viewModel.watchedMoviesCount.observe(viewLifecycleOwner) {
@@ -176,21 +178,21 @@ class MovieListFragment : Fragment() {
         }
 
         // Observe the total non sen movies count
-        viewModel.notWatchedMoviesCount.observe(viewLifecycleOwner, {
+        viewModel.notWatchedMoviesCount.observe(viewLifecycleOwner) {
             it?.let {
                 binding.listUnseenMoviesTextView.text = it.toString()
             }
-        })
+        }
 
         setObserverForCurrentList()
     }
 
     /* Function to (re)initialize observation of the current movie list LiveData of the view model*/
     private fun setObserverForCurrentList() {
-        viewModel.movies.observe(viewLifecycleOwner, { movies ->
+        viewModel.movies.observe(viewLifecycleOwner) { movies ->
             Log.d("Database", "View model observer fired")
             movieListAdapter.submitList(movies)
-        })
+        }
     }
 
     private fun initializeFilterSwitch() {

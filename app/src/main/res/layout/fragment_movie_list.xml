@@ -71,7 +71,8 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:srcCompat="@android:drawable/arrow_down_float"
                     android:contentDescription="@string/list_sortOrderButton_contentDesc"
-                    tools:ignore="TouchTargetSizeCheck" />
+                    tools:ignore="TouchTargetSizeCheck,UnusedAttribute"
+                    tools:targetApi="m" />
 
                 <ImageButton
                     android:id="@+id/list_layoutChangeButton"
@@ -86,8 +87,9 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    android:contentDescription="@string/list_layoutButton_contentDesc" />
-
+                    android:contentDescription="@string/list_layoutButton_contentDesc"
+                    tools:targetApi="m"
+                    tools:ignore="UnusedAttribute" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
