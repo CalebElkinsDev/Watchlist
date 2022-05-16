@@ -15,30 +15,45 @@ private const val PREF_SHOW_WATCHED = "showWatched"
 private const val PREF_SORT_TYPE = "sortType"
 private const val PREF_LIST_TYPE = "listType"
 
+
+/** Main ViewModel implementation for displaying and updating the list of movies to the user */
 class MovieListViewModel(private val repository: MovieRepository, application: Application) :
     AndroidViewModel(application) {
 
+    /**
+     * Inner class utilized for passing a suite of list filter options
+     *
+     * @param sortAscending: Orders movies ascending if true based on the sort type
+     * @param sortType: Determines what criteria to order movies by(e.g., Title)
+     * @param showWatched: Seperates movies into 2 lists: "Watchlist" and "Seen"
+     */
     private class SortOptions(var sortAscending: Boolean,
                               var sortType: SortType,
                               var showWatched: Boolean)
 
-    // Live data observed by fragment for updating the recycler view
+
+    // Live data observed by fragment for updating the recycler view's current list
     private val _movies: LiveData<List<Movie>>
     val movies: LiveData<List<Movie>>
         get() = _movies
 
+    // Filter LiveData for changing the layout type of the movies list
     private var _currentListType = MutableLiveData(MovieLayoutType.FULL)
     val currentListType: LiveData<MovieLayoutType>
         get() = _currentListType
 
+    // LiveData containing the current number of movies in the user's "Seen" list
     private lateinit var _watchedMoviesCount: LiveData<Int?>
     val watchedMoviesCount: LiveData<Int?>
         get() = _watchedMoviesCount
 
+    // LiveData containing the current number of movies in the user's "Watchlist"
     private lateinit var _notWatchedMoviesCount: LiveData<Int?>
     val notWatchedMoviesCount: LiveData<Int?>
         get() = _notWatchedMoviesCount
 
+
+    /** The ViewModel's current filter options. Setters available for modifcation in [MovieListFragment] */
     private var sortAscending = true
     fun getSortAscending(): Boolean = sortAscending
     private var showWatched = false
@@ -46,12 +61,15 @@ class MovieListViewModel(private val repository: MovieRepository, application: A
     private var sortType = SortType.TITLE
     fun getSortType(): SortType = sortType
 
-    /* Live data containing sort and filter options. Used for mapping the observed _movies LiveData
-     * with filtered data from the repository */
+
+    /**
+     * Live data containing sort and filter options. Used for mapping the observed _movies LiveData
+     * with filtered data from the repository
+     */
     private var sortOptions = MutableLiveData(SortOptions(sortAscending, sortType, showWatched))
 
-    init {
 
+    init {
         /* Get sort and display values from shared preferences */
         val sharedPref = application.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
         sortAscending = sharedPref.getBoolean(PREF_SORT_ASCENDING, true)
@@ -63,10 +81,12 @@ class MovieListViewModel(private val repository: MovieRepository, application: A
         val listTypeString = sharedPref.getString(PREF_LIST_TYPE, "FULL")?: "FULL"
         _currentListType.postValue(MovieLayoutType.valueOf(listTypeString))
 
-
+        /** Transform the repostirory's movie list based on this viewmodel's current [SortOptions] */
         _movies = Transformations.switchMap(sortOptions) {
             repository.getMovies(it.sortAscending, it.sortType, it.showWatched)
         }
+
+        // Get the number of movies in the two lists from the repository
         viewModelScope.launch {
             _watchedMoviesCount = repository.getWatchedMovieCount()
             _notWatchedMoviesCount = repository.getNotWatchedMovieCount()
@@ -98,19 +118,21 @@ class MovieListViewModel(private val repository: MovieRepository, application: A
         updateSharedPreferences()
     }
 
-    // Update a movie if its rating or seen status has changed
+    // Update a movie if its user rating has changed
     fun updateMovieScore(newScore: Float, id: String) {
         viewModelScope.launch {
             repository.updateMovieScore(newScore, id)
         }
     }
 
+    // Update a movie if its seen status has changed
     fun updateHaveSeenMovie(following: Boolean, id: String) {
         viewModelScope.launch {
             repository.updateHaveSeenMovie(following, id)
         }
     }
 
+    // Used for cyclically changing between the MovieLayoutTypes.
     fun cycleListType() {
         _currentListType.value = when(_currentListType.value) {
             MovieLayoutType.FULL -> MovieLayoutType.SIMPLE

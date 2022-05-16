@@ -3,7 +3,6 @@ package com.elkins.watchlist.database
 import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
-import androidx.databinding.adapters.Converters
 import androidx.room.*
 import com.elkins.watchlist.model.Movie
 import java.text.SimpleDateFormat

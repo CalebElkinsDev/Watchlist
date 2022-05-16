@@ -29,7 +29,7 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-
+/** Main Fragment implementation for displaying the user's movie lists and options. */
 class MovieListFragment : Fragment() {
 
     private lateinit var binding: FragmentMovieListBinding
@@ -49,10 +49,10 @@ class MovieListFragment : Fragment() {
     ): View {
 
         initializeViewModel()
+
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_movie_list, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
-
 
         initializeRecyclerView()
         setupMovieSwipeCallback()
@@ -85,6 +85,7 @@ class MovieListFragment : Fragment() {
         binding.listTypeSpinner.setSelection(viewModel.getSortType().ordinal)
     }
 
+    /** Create or load a [MovieListViewModel] using the application's singleton Database and [MovieRepository] */
     private fun initializeViewModel() {
         // Get a reference to the database and setup the view model with the dao
         val database = MovieDatabase.getInstance(requireContext())
@@ -93,6 +94,11 @@ class MovieListFragment : Fragment() {
         viewModel = ViewModelProvider(requireActivity(), viewModelFactory).get(MovieListViewModel::class.java)
     }
 
+    /**
+     * Initialize the RecyclerView that display the user's "Watchlist" and "Unseen" list of movies.
+     * Adapters for naviating to a bound [Movie] and for updating its database values for
+     * "haveSeen" and "userScore".
+     */
     private fun initializeRecyclerView() {
         // Create and assign a new adapter for the saved movie list
         movieListAdapter = MovieListAdapter(
@@ -110,6 +116,13 @@ class MovieListFragment : Fragment() {
         binding.movieListRecycler.adapter = movieListAdapter
     }
 
+    /**
+     * Create and attach a [SwipeMovieCallback] for deleting a [Movie] from the current list.
+     *
+     * Swiping left(past the threshold) on a list item will remove it from the list. A SnackBar
+     * alerting the user of the change will appear with an option for undoing and adding the movie
+     * back to the list.
+     */
     private fun setupMovieSwipeCallback() {
         // Create a callback for deleting movies when swiped
         val swipeCallback = ItemTouchHelper(object : SwipeMovieCallback() {
@@ -139,19 +152,20 @@ class MovieListFragment : Fragment() {
                 }
             }
 
-            // Not utilized
-            override fun onMove(
-                recyclerView: RecyclerView,
-                viewHolder: RecyclerView.ViewHolder,
-                target: RecyclerView.ViewHolder
-            ): Boolean {
-                Log.d("Item Swipe","Not yet implemented")
+            // Mandatory override: Not utilized/needed
+            override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder): Boolean {
+                Log.d("Item Swipe","Not implemented/used")
                 return false
             }
         })
+
+        // Attach this new swipeCallback the RecyclerView
         swipeCallback.attachToRecyclerView(binding.movieListRecycler)
     }
 
+
+    // Convienence function for intiailazing all LiveData observations performed in this fragment.
     private fun initializeLiveDataObservers() {
         // Handle updates to listType live data by updating the UI and updating the recycler view
         // Handled with view model live data to survive configuration changes
@@ -177,7 +191,7 @@ class MovieListFragment : Fragment() {
             }
         }
 
-        // Observe the total non sen movies count
+        // Observe the total non seen movies count
         viewModel.notWatchedMoviesCount.observe(viewLifecycleOwner) {
             it?.let {
                 binding.listUnseenMoviesTextView.text = it.toString()
@@ -187,20 +201,24 @@ class MovieListFragment : Fragment() {
         setObserverForCurrentList()
     }
 
-    /* Function to (re)initialize observation of the current movie list LiveData of the view model*/
+    // Function to (re)initialize observation of the current movie list LiveData of the view model
     private fun setObserverForCurrentList() {
         viewModel.movies.observe(viewLifecycleOwner) { movies ->
-            Log.d("Database", "View model observer fired")
             movieListAdapter.submitList(movies)
         }
     }
 
+    // Initialize the list SwitchCompat to toggle filter changes in the viewmodel
     private fun initializeFilterSwitch() {
         binding.listFilterSwitch.setOnCheckedChangeListener { _, on ->
             viewModel.setShowWatched(on)
         }
     }
 
+    /**
+     * Create an [ArrayAdapter] for updating the [MovieListViewModel]'s sort type filter and assign
+     * to the spinner of the list layout.
+     */
     private fun initializeSortSpinner() {
         val sortAdapter = ArrayAdapter.createFromResource(requireContext(),
             R.array.sort_types,
@@ -223,6 +241,7 @@ class MovieListFragment : Fragment() {
         }
     }
 
+    // Initialize the list ToggleButton to toggle sort order filter changes in the viewmodel
     private fun initializeSortOrderButton() {
         binding.listSortOrderToggleButton.setOnCheckedChangeListener { _, ascending ->
             // on == ascending
@@ -230,6 +249,15 @@ class MovieListFragment : Fragment() {
         }
     }
 
+    /**
+     * Set the list item layout type for the recycler view.
+     *
+     * Updates the RecyclerView's layoutManager and its [MovieListAdapter]'s current layout type.
+     * The adapter is then reassigned to the Recyclerview to recreate the items with the new layout.
+     *
+     * @param layoutType: Determines which xml file to inflate for ViewHolders in the
+     * [MovieListAdapter] and what type of [RecyclerView.LayoutManager] to use now.
+     */
     private fun setListLayout(layoutType: MovieLayoutType) {
 
         when(layoutType) {
@@ -251,11 +279,19 @@ class MovieListFragment : Fragment() {
         }
     }
 
+    /** Use NavigationComponent and action to open the [com.elkins.watchlist.search_fragment.MovieSearchFragment] */
     private fun openNewMovieSearchFragment() {
         findNavController().navigate(MovieListFragmentDirections
             .actionMovieListFragmentToMovieSearchFragment())
     }
 
+    /**
+     * Use NavigationComponent and safe-args to open [com.elkins.watchlist.MovieDetailsFragment]
+     *
+     * @param movie: A [Movie] object from the recycler view that will be passed as nav-args to the
+     * details fragment. The [com.elkins.watchlist.MovieDetailsFragment] will then display further
+     * details of the movie saved in the local database.
+     * */
     private fun navigateToMovieDetails(movie: Movie) {
         findNavController().navigate(MovieListFragmentDirections
             .actionMovieListFragmentToMovieDetailsFragment(movie, true))
