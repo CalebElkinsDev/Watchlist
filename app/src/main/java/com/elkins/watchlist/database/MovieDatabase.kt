@@ -3,10 +3,14 @@ package com.elkins.watchlist.database
 import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
+import androidx.databinding.adapters.Converters
 import androidx.room.*
 import com.elkins.watchlist.model.Movie
 import java.text.SimpleDateFormat
 import java.util.*
+
+
+/** Singleton Room database that utilies a [MovieDao] and holds a table of [Movie] obecjts*/
 
 private const val DATABASE_NAME = "movie_database"
 
@@ -41,6 +45,7 @@ abstract class MovieDatabase : RoomDatabase() {
     }
 }
 
+/** TypeConverters for storing and retrieving datas in the Imdb API format */
 class Converters {
 
     @SuppressLint("SimpleDateFormat") // Locale not used with API yet

@@ -12,13 +12,26 @@ import com.elkins.watchlist.databinding.MovieListItemSimpleBinding
 import com.elkins.watchlist.model.Movie
 import com.elkins.watchlist.utility.MovieLayoutType
 
+/** ListAdapter implentation for the main movie list of the application.
+ *
+ * Layouts are constructed based on the user's current layout preference stored in a
+ * [MovieLayoutType] variable and stored in preferences. Multiple click listeners are registered
+ * when creating the adapater. One for clicking on the entire ViewHolder, and two more(depending
+ * on layout type) for user variables(haveSeen, userScore).
+ *
+ * @param updateScoreListener: Click listener that updates the user score for the bound [Movie]
+ * @param updateHaveSeenListener: Click listener that updates the "haveSeen" variable of the bound [Movie]
+ * @param movieDetailsListener: Click Listener that starts navigation to the [com.elkins.watchlist.MovieDetailsFragment] with the bound [Movie]
+ */
 class MovieListAdapter(private val updateScoreListener: UpdateMovieClickListener,
-                       private val updateFollowingListener: UpdateMovieClickListener,
+                       private val updateHaveSeenListener: UpdateMovieClickListener,
                        private val movieDetailsListener: UpdateMovieClickListener)
     : ListAdapter<Movie, MovieListAdapter.MovieListViewHolder>(MovieDiffCallback()) {
 
+    // Curent layout-type for the adapater
     private var currentMovieLayout = MovieLayoutType.FULL
 
+    // Public function for changing the layout type
     fun setMovieLayoutType(layoutType: MovieLayoutType) {
         currentMovieLayout = layoutType
     }
@@ -28,7 +41,12 @@ class MovieListAdapter(private val updateScoreListener: UpdateMovieClickListener
     }
 
     override fun onBindViewHolder(holder: MovieListViewHolder, position: Int) {
-        holder.bind(getItem(position), updateScoreListener, updateFollowingListener)
+        /** Use the MovieListViewHolder.bind function to determine how to handle the click
+         * listeners and assign the correct [Movie] object */
+        holder.bind(getItem(position), updateScoreListener, updateHaveSeenListener)
+
+        /** Set the click listener for the entire ViewHolder that navigates to the Details fragment.
+         * "When" statement necessary to corporate between the various layout types. */
         holder.itemView.setOnClickListener {
             val movieRef: Movie? = when(currentMovieLayout) {
                 MovieLayoutType.FULL -> (holder.binding as MovieListItemBinding).movie
@@ -41,8 +59,19 @@ class MovieListAdapter(private val updateScoreListener: UpdateMovieClickListener
 
     class MovieListViewHolder(val binding: ViewDataBinding) : RecyclerView.ViewHolder(binding.root) {
 
+        /**
+         * Bind the current Movie and listeners to this holder.
+         *
+         * Due to the various data-binding layouts used for the adapter, a "when" case is used
+         * to apply the necessary bindings based on current [MovieLayoutType]. Repeated code was
+         * seemingly unavoidable as the "binding" variable could not be used generically.
+         *
+         * @param item: The current [Movie] from the list to bind to
+         * @param updateHaveSeenListener: Listener passed from the parent [MovieListAdapter] for updating "haveSeen"
+         * @param updateScoreListener: Listener passed from the parent [MovieListAdapter] for updating "userScore"
+         */
         fun bind(item: Movie, updateScoreListener: UpdateMovieClickListener,
-                 updateFollowingListener: UpdateMovieClickListener) {
+                 updateHaveSeenListener: UpdateMovieClickListener) {
 
             // Handle binding based on the the type of layout that was inflated
             when(binding) {
@@ -57,7 +86,7 @@ class MovieListAdapter(private val updateScoreListener: UpdateMovieClickListener
 
                     binding.itemSeenCheckBox.setOnCheckedChangeListener { _, checked ->
                         item.haveSeen = checked
-                        updateFollowingListener.onClick(item)
+                        updateHaveSeenListener.onClick(item)
                     }
                     binding.executePendingBindings()
                 }
@@ -66,7 +95,7 @@ class MovieListAdapter(private val updateScoreListener: UpdateMovieClickListener
                     binding.movie = item
                     binding.itemSeenCheckBox.setOnCheckedChangeListener { _, checked ->
                         item.haveSeen = checked
-                        updateFollowingListener.onClick(item)
+                        updateHaveSeenListener.onClick(item)
                     }
                     binding.executePendingBindings()
                 }
@@ -75,7 +104,7 @@ class MovieListAdapter(private val updateScoreListener: UpdateMovieClickListener
                     binding.movie = item
                     binding.itemSeenCheckBox.setOnCheckedChangeListener { _, checked ->
                         item.haveSeen = checked
-                        updateFollowingListener.onClick(item)
+                        updateHaveSeenListener.onClick(item)
                     }
                     binding.executePendingBindings()
                 }
@@ -83,11 +112,15 @@ class MovieListAdapter(private val updateScoreListener: UpdateMovieClickListener
         }
 
         companion object {
-
+            /**
+             * Companion function for instantiating a [MovieListViewHolder]
+             *
+             * @param movieLayoutType: A [MovieLayoutType] that determines what layout to inflate
+             */
             fun from(parent: ViewGroup, movieLayoutType: MovieLayoutType) : MovieListViewHolder {
-
                 val inflater = LayoutInflater.from(parent.context)
-                // Determine what type of layout to inflate based on the movieLayout parameter
+
+                /** Inflate the corresponding DatabindinLayout based on the [MovieLayoutType] */
                 val binding = when(movieLayoutType) {
                     MovieLayoutType.POSTER -> MovieListItemPosterBinding.inflate(inflater, parent, false)
                     MovieLayoutType.SIMPLE -> MovieListItemSimpleBinding.inflate(inflater, parent, false)
@@ -98,6 +131,7 @@ class MovieListAdapter(private val updateScoreListener: UpdateMovieClickListener
         }
     }
 
+    /** Diffutil.ItemCallback for ListAdapter. Compares the [Movie] Id in both cases */
     class MovieDiffCallback : DiffUtil.ItemCallback<Movie>() {
         override fun areItemsTheSame(oldItem: Movie, newItem: Movie): Boolean {
             // Compare the Imdb Id used as the primary key

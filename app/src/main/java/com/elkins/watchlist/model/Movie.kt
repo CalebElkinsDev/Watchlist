@@ -6,6 +6,16 @@ import androidx.room.PrimaryKey
 import kotlinx.parcelize.Parcelize
 import java.util.*
 
+
+/**
+ * Database and domain model class for a movie. Contains most fields from the network request
+ * [com.elkins.watchlist.network.MovieResponse] objects, but with additional user fields.
+ *
+ * @param id: Unique id given by IMDB for finding details about the movie.
+ * @param dateAdded: Initialized to the current date when added to the database
+ * @param haveSeen: Updated by user. Determines if movie is in the "watchlist" or "seen" list
+ * @param userScore: 0-5 star rating given by the user.
+ */
 @Parcelize
 @Entity(tableName = "movies_table")
 data class Movie(

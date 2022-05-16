@@ -1,7 +1,6 @@
 package com.elkins.watchlist
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,9 +33,6 @@ class MovieDetailsFragment : Fragment() {
             // Set the title of the app bar as the title or a placeholder
             val title = movie.fullTitle ?: movie.title ?: getString(R.string.details_appbar_placeholder_title)
             setSupportBarTitle(requireActivity(), title)
-        } else {
-            // TODO: Handle null movie
-            Log.e("Navigation Error", "ERROR ERROR ERROR")
         }
 
         return binding.root
