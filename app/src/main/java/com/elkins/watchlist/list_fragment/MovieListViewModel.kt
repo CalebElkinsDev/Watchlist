@@ -81,7 +81,7 @@ class MovieListViewModel(private val repository: MovieRepository, application: A
         val listTypeString = sharedPref.getString(PREF_LIST_TYPE, "FULL")?: "FULL"
         _currentListType.postValue(MovieLayoutType.valueOf(listTypeString))
 
-        /** Transform the repostirory's movie list based on this viewmodel's current [SortOptions] */
+        /** Transform the repostirory's movie list based on this viewmodel's current sort options */
         _movies = Transformations.switchMap(sortOptions) {
             repository.getMovies(it.sortAscending, it.sortType, it.showWatched)
         }
