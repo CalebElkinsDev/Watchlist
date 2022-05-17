@@ -13,24 +13,27 @@ import java.io.IOException
 import java.net.UnknownHostException
 import java.util.*
 
+/** ViewModel for fetching and storing user network movie searchs. */
 class MovieSearchViewModel(private val repository: MovieRepository) : ViewModel() {
 
     private var addingMovie = false
 
-    // Live data list of movies found from search
+    // LiveData list of movies found from search
     private var _results = MutableLiveData<Resource<SearchResponse>>()
     val results: LiveData<Resource<SearchResponse>>
         get() = _results
 
-    // Live data used for notifying when an item has been removed from the list
+    // LiveData used for notifying when an item has been removed from the list
     private var _lastRemovedIndex = MutableLiveData<Int>()
     val lastRemovedIndex: LiveData<Int>
         get() = _lastRemovedIndex
 
+    /** The [Movie] to open the [com.elkins.watchlist.MovieDetailsFragment] with */
     private var _movieDetailsObject = MutableLiveData<Movie?>(null)
     val movieDetailsObject: LiveData<Movie?>
         get() = _movieDetailsObject
 
+    // LiveData for passing on a String resource to a Toast with in the fragment
     private var _toastMessageEvent = MutableLiveData<Int?>(null) // Posts the string resource ID
     val toastMessageEvent: LiveData<Int?>
         get() = _toastMessageEvent
@@ -41,6 +44,11 @@ class MovieSearchViewModel(private val repository: MovieRepository) : ViewModel(
         get() = _movieAddedToDatabase
 
 
+    /**
+     * Query the IMDB api for movies.
+     *
+     * @param searchString: The user's input for searching(i.e., the movie title)
+     */
     fun searchForMovie(searchString: String) {
         viewModelScope.launch {
             try {
@@ -55,6 +63,15 @@ class MovieSearchViewModel(private val repository: MovieRepository) : ViewModel(
         }
     }
 
+    /**
+     * Attempt to add a movie to the local database from the list of searched movies.
+     *
+     * @param searchResult: The network response object that contains a list of [MovieResponse]
+     * items that are found from the [searchForMovie] function.
+     *
+     * @param position: Used for removing the movie from the search results list if succesfully
+     * added to the database.
+     * */
     fun addMovieToRepository(searchResult: SearchResult, position: Int) {
         viewModelScope.launch {
 

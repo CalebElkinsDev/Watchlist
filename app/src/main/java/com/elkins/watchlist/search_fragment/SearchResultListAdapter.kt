@@ -8,12 +8,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.elkins.watchlist.databinding.SearchListItemBinding
 import com.elkins.watchlist.network.SearchResult
 
+/**
+ * A [ListAdapter] implementation that contains user search result items from the IMDB api.
+ *
+ * @param addClickListener: Click listener used for adding the movie to the local database
+ * @param detailsClickListener: Click listener for navigating to the movie's details page.
+ */
 class SearchResultListAdapter(private val addClickListener: AddClickListener,
-                              private val detailsClickListener: DetailsClickListener
-)
-    : ListAdapter<SearchResult, SearchResultListAdapter.SearchResultViewHolder>(
-    MovieSearchDiffCallback()
-) {
+                              private val detailsClickListener: DetailsClickListener)
+    : ListAdapter<SearchResult, SearchResultListAdapter.SearchResultViewHolder>(MovieSearchDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchResultViewHolder {
         return SearchResultViewHolder.from(parent)
@@ -56,10 +59,15 @@ class SearchResultListAdapter(private val addClickListener: AddClickListener,
     }
 }
 
+/**
+ * Simple click listener interface for returning the [SearchResult] object and its current position.
+ * the position is needed for removing from the list gracefully if database trasaciton is succesful.
+ */
 class AddClickListener(val clickListener: (searchResult: SearchResult, position: Int) -> Unit) {
     fun onClick(searchResult: SearchResult, position: Int) = clickListener(searchResult, position)
 }
 
+/** Simple click listener interface for retrieving the [SearchResult] object bound to a ViewHolder */
 class DetailsClickListener(val clickListener: (searchResult: SearchResult) -> Unit) {
     fun onClick(searchResult: SearchResult) = clickListener(searchResult)
 }

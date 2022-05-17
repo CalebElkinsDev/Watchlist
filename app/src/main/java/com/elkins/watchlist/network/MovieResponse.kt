@@ -9,10 +9,16 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
+// Date format retreived from the IMDB api calls
 private val inputFormat by lazy {
     SimpleDateFormat("yyyy-MM-dd", Locale.US)
 }
 
+/**
+ * Network model of Movie from the IMDB database requests
+ *
+ * @param id: Unique id from IMDB found in [SearchResult] for getting details of a movie.
+ * */
 @JsonClass(generateAdapter = false)
 data class MovieResponse (
     val id: String,

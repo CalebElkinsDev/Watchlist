@@ -29,6 +29,7 @@ import com.elkins.watchlist.utility.setSupportBarTitle
 import java.util.*
 
 
+/** Fragment that offers users the ability to search for movies and add them to the local database */
 class MovieSearchFragment : Fragment() {
 
     private lateinit var binding: FragmentMovieSearchBinding

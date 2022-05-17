@@ -3,6 +3,11 @@ package com.elkins.watchlist.network
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
+/**
+ * Network response object that contains broad details about a movie and its unique ID.
+ *
+ * @param id: The unique ID for the movie used across IMDB api. Used when fetching details.
+ */
 @JsonClass(generateAdapter = false)
 data class SearchResult(
     val id: String,

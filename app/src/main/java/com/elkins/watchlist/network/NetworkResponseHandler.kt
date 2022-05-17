@@ -6,6 +6,10 @@ import retrofit2.HttpException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 
+
+/** Response wrapper class for handling success and the various errors that can occur during api
+ * requests.
+ */
 open class NetworkResponseHandler {
 
     companion object {

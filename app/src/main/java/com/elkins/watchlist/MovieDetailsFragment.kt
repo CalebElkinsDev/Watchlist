@@ -10,7 +10,9 @@ import com.elkins.watchlist.databinding.FragmentMovieDetailsBinding
 import com.elkins.watchlist.model.Movie
 import com.elkins.watchlist.utility.setSupportBarTitle
 
-
+/**
+ * Simple Fragment that accepts a [Movie] from nav-args and displays its details
+ */
 class MovieDetailsFragment : Fragment() {
 
     private lateinit var binding: FragmentMovieDetailsBinding
